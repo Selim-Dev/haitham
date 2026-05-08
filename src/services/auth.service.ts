@@ -8,6 +8,13 @@ export async function registerStudent(input: {
   email: string;
   phone?: string;
   password: string;
+  geo?: {
+    ip?: string;
+    country?: string;
+    countryName?: string;
+    city?: string;
+    region?: string;
+  };
 }): Promise<SessionUser> {
   await connectDB();
 
@@ -30,6 +37,11 @@ export async function registerStudent(input: {
     role: "STUDENT",
     isBlocked: false,
     approvalStatus: "PENDING_APPLICATION",
+    registrationIp: input.geo?.ip,
+    registrationCountry: input.geo?.country,
+    registrationCountryName: input.geo?.countryName,
+    registrationCity: input.geo?.city,
+    registrationRegion: input.geo?.region,
   });
 
   return {

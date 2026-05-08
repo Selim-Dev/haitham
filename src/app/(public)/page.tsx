@@ -5,6 +5,7 @@ import { StatsSection } from "@/components/marketing/stats-section";
 import { BenefitsSection } from "@/components/marketing/benefits-section";
 import { HowItWorksSection } from "@/components/marketing/how-it-works-section";
 import { InstructorSection } from "@/components/marketing/instructor-section";
+import { FeedbacksSection } from "@/components/marketing/feedbacks-section";
 import { FaqSection } from "@/components/marketing/faq-section";
 import { CtaFooterSection } from "@/components/marketing/cta-footer-section";
 import { getFeaturedCourses } from "@/services/course.service";
@@ -25,6 +26,7 @@ export default async function HomePage() {
       <BenefitsSection />
       <HowItWorksSection />
       <InstructorSection />
+      <FeedbacksSection />
       <FaqSection />
       <CtaFooterSection />
     </>

@@ -16,12 +16,19 @@ export type AdminApplicationListItem = {
   applicationSubmittedAt?: Date;
   reviewedAt?: Date;
   createdAt: Date;
+  registrationCountry?: string;
+  registrationCountryName?: string;
 };
 
 export type AdminApplicationDetail = AdminApplicationListItem & {
   answers: Array<{ questionId: string; question: string; answer: string }>;
   adminNote?: string;
   reviewedBy?: { id: string; name: string } | null;
+  registrationIp?: string;
+  registrationCountry?: string;
+  registrationCountryName?: string;
+  registrationCity?: string;
+  registrationRegion?: string;
 };
 
 export async function submitApplication(
@@ -113,6 +120,8 @@ export async function listApplications(filter?: {
     applicationSubmittedAt: u.applicationSubmittedAt,
     reviewedAt: u.reviewedAt,
     createdAt: u.createdAt,
+    registrationCountry: u.registrationCountry,
+    registrationCountryName: u.registrationCountryName,
   }));
 }
 
@@ -147,6 +156,11 @@ export async function getApplicationDetail(
     })),
     adminNote: user.adminNote,
     reviewedBy: reviewer,
+    registrationIp: user.registrationIp,
+    registrationCountry: user.registrationCountry,
+    registrationCountryName: user.registrationCountryName,
+    registrationCity: user.registrationCity,
+    registrationRegion: user.registrationRegion,
   };
 }
 

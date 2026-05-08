@@ -3,6 +3,7 @@ import { ClipboardList } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import { listApplications } from "@/services/application.service";
+import { countryCodeToFlag } from "@/services/geoip.service";
 import {
   APPROVAL_STATUS_AR,
   type ApprovalStatus,
@@ -110,12 +111,28 @@ export default async function AdminApplicationsPage({
                     <ClipboardList className="size-5" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-semibold text-foreground">
-                      {u.name}
+                    <p className="flex items-center gap-2 truncate font-semibold text-foreground">
+                      {u.registrationCountry && (
+                        <span
+                          className="text-base leading-none"
+                          aria-label={
+                            u.registrationCountryName ?? u.registrationCountry
+                          }
+                          title={
+                            u.registrationCountryName ?? u.registrationCountry
+                          }
+                        >
+                          {countryCodeToFlag(u.registrationCountry)}
+                        </span>
+                      )}
+                      <span className="truncate">{u.name}</span>
                     </p>
                     <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-2">
                       <span dir="ltr">{u.email}</span>
                       {u.phone && <span dir="ltr">{u.phone}</span>}
+                      {u.registrationCountryName && (
+                        <span>{u.registrationCountryName}</span>
+                      )}
                       <span>
                         {u.applicationSubmittedAt
                           ? `تم الإرسال: ${formatDate(u.applicationSubmittedAt)}`

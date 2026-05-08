@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, MapPin, Globe2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ApplicationReviewActions } from "@/components/admin/application-review-actions";
 import { getApplicationDetail } from "@/services/application.service";
+import { countryCodeToFlag } from "@/services/geoip.service";
 import {
   APPROVAL_STATUS_AR,
   type ApprovalStatus,
@@ -127,6 +128,14 @@ export default async function AdminApplicationDetailPage({
             </dl>
           </div>
 
+          <GeoCard
+            country={app.registrationCountry}
+            countryName={app.registrationCountryName}
+            city={app.registrationCity}
+            region={app.registrationRegion}
+            ip={app.registrationIp}
+          />
+
           <div className="rounded-2xl border border-[var(--color-border-strong)] bg-card p-5">
             <ApplicationReviewActions
               userId={app.id}
@@ -157,6 +166,78 @@ function Row({
       >
         {value}
       </dd>
+    </div>
+  );
+}
+
+function GeoCard({
+  country,
+  countryName,
+  city,
+  region,
+  ip,
+}: {
+  country?: string;
+  countryName?: string;
+  city?: string;
+  region?: string;
+  ip?: string;
+}) {
+  const hasAny = country || countryName || city || region || ip;
+  if (!hasAny) {
+    return (
+      <div className="rounded-2xl border border-[var(--color-border)] bg-card p-5">
+        <h3 className="flex items-center gap-2 font-display text-base font-bold text-foreground">
+          <Globe2 className="size-4 text-muted-2" />
+          مصدر التسجيل
+        </h3>
+        <p className="mt-3 text-sm text-muted">
+          لم يتم تسجيل بيانات الموقع لهذا الحساب.
+        </p>
+      </div>
+    );
+  }
+
+  const flag = countryCodeToFlag(country);
+  const place = [city, region].filter(Boolean).join("، ");
+
+  return (
+    <div className="rounded-2xl border border-[var(--color-border)] bg-card p-5">
+      <h3 className="flex items-center gap-2 font-display text-base font-bold text-foreground">
+        <Globe2 className="size-4 text-[var(--color-red-300)]" />
+        مصدر التسجيل
+      </h3>
+      <div className="mt-4 flex items-center gap-3">
+        {flag && (
+          <span className="text-3xl leading-none" aria-hidden="true">
+            {flag}
+          </span>
+        )}
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-base font-bold text-foreground">
+            {countryName || country || "غير معروف"}
+            {country && countryName && (
+              <span className="ms-2 text-xs font-normal text-muted-2" dir="ltr">
+                {country}
+              </span>
+            )}
+          </p>
+          {place && (
+            <p className="mt-0.5 flex items-center gap-1 truncate text-xs text-muted-2">
+              <MapPin className="size-3" />
+              {place}
+            </p>
+          )}
+        </div>
+      </div>
+      {ip && (
+        <dl className="mt-4 grid gap-2 text-sm">
+          <Row label="عنوان IP" value={ip} dir="ltr" />
+        </dl>
+      )}
+      <p className="mt-3 text-[11px] leading-relaxed text-muted-2">
+        تقريبي بناءً على عنوان IP — قد يختلف إذا استخدم الطالب VPN.
+      </p>
     </div>
   );
 }

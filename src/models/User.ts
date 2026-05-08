@@ -22,6 +22,11 @@ export interface IUser extends Document {
   reviewedAt?: Date;
   adminNote?: string;
   approvalEmailSentAt?: Date;
+  registrationIp?: string;
+  registrationCountry?: string;
+  registrationCountryName?: string;
+  registrationCity?: string;
+  registrationRegion?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -68,6 +73,11 @@ const UserSchema = new Schema<IUser>(
     reviewedAt: { type: Date },
     adminNote: { type: String, trim: true, maxlength: 1000 },
     approvalEmailSentAt: { type: Date },
+    registrationIp: { type: String, trim: true, maxlength: 64 },
+    registrationCountry: { type: String, trim: true, maxlength: 4, uppercase: true },
+    registrationCountryName: { type: String, trim: true, maxlength: 120 },
+    registrationCity: { type: String, trim: true, maxlength: 120 },
+    registrationRegion: { type: String, trim: true, maxlength: 120 },
   },
   {
     timestamps: true,
