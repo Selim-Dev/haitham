@@ -1,4 +1,11 @@
 import mongoose, { Schema, type Model, type Document } from "mongoose";
+import type { ApprovalStatus } from "@/lib/constants";
+
+export interface IApplicationAnswer {
+  questionId: mongoose.Types.ObjectId | string;
+  question: string;
+  answer: string;
+}
 
 export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;
@@ -8,9 +15,25 @@ export interface IUser extends Document {
   passwordHash: string;
   role: "STUDENT" | "ADMIN";
   isBlocked: boolean;
+  approvalStatus: ApprovalStatus;
+  applicationAnswers?: IApplicationAnswer[];
+  applicationSubmittedAt?: Date;
+  reviewedBy?: mongoose.Types.ObjectId;
+  reviewedAt?: Date;
+  adminNote?: string;
+  approvalEmailSentAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
+
+const ApplicationAnswerSchema = new Schema<IApplicationAnswer>(
+  {
+    questionId: { type: Schema.Types.Mixed, required: true },
+    question: { type: String, required: true, trim: true, maxlength: 500 },
+    answer: { type: String, required: true, trim: true, maxlength: 4000 },
+  },
+  { _id: false },
+);
 
 const UserSchema = new Schema<IUser>(
   {
@@ -32,6 +55,19 @@ const UserSchema = new Schema<IUser>(
       required: true,
     },
     isBlocked: { type: Boolean, default: false },
+    approvalStatus: {
+      type: String,
+      enum: ["PENDING_APPLICATION", "PENDING_REVIEW", "APPROVED", "REJECTED"],
+      default: "PENDING_APPLICATION",
+      required: true,
+      index: true,
+    },
+    applicationAnswers: { type: [ApplicationAnswerSchema], default: undefined },
+    applicationSubmittedAt: { type: Date },
+    reviewedBy: { type: Schema.Types.ObjectId, ref: "User" },
+    reviewedAt: { type: Date },
+    adminNote: { type: String, trim: true, maxlength: 1000 },
+    approvalEmailSentAt: { type: Date },
   },
   {
     timestamps: true,

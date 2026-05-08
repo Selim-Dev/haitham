@@ -29,6 +29,7 @@ export async function registerStudent(input: {
     passwordHash,
     role: "STUDENT",
     isBlocked: false,
+    approvalStatus: "PENDING_APPLICATION",
   });
 
   return {
@@ -38,6 +39,7 @@ export async function registerStudent(input: {
     phone: created.phone,
     role: created.role,
     isBlocked: created.isBlocked,
+    approvalStatus: created.approvalStatus,
   };
 }
 
@@ -83,5 +85,6 @@ export async function loginUser(
     phone: user.phone,
     role: user.role,
     isBlocked: user.isBlocked,
+    approvalStatus: user.approvalStatus ?? "APPROVED",
   };
 }

@@ -39,6 +39,22 @@ export const PAYMENT_STATUS_AR: Record<PaymentStatus, string> = {
   REJECTED: "مرفوض",
 };
 
+export const APPROVAL_STATUS = {
+  PENDING_APPLICATION: "PENDING_APPLICATION",
+  PENDING_REVIEW: "PENDING_REVIEW",
+  APPROVED: "APPROVED",
+  REJECTED: "REJECTED",
+} as const;
+export type ApprovalStatus =
+  (typeof APPROVAL_STATUS)[keyof typeof APPROVAL_STATUS];
+
+export const APPROVAL_STATUS_AR: Record<ApprovalStatus, string> = {
+  PENDING_APPLICATION: "لم يكمل الاستمارة",
+  PENDING_REVIEW: "قيد مراجعة الإدارة",
+  APPROVED: "مقبول",
+  REJECTED: "مرفوض",
+};
+
 export const ENROLLMENT_STATUS = {
   ACTIVE: "ACTIVE",
   REVOKED: "REVOKED",

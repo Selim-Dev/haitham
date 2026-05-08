@@ -108,12 +108,15 @@ async function main() {
     email: ADMIN_EMAIL.toLowerCase(),
     passwordHash: adminHash,
     role: "ADMIN",
+    approvalStatus: "APPROVED",
   });
   const student = await UserModel.create({
     name: "طالب تجريبي",
     email: STUDENT_EMAIL.toLowerCase(),
     passwordHash: studentHash,
     role: "STUDENT",
+    approvalStatus: "APPROVED",
+    reviewedAt: new Date(),
   });
   console.log(`✔ Admin: ${admin.email}`);
   console.log(`✔ Student: ${student.email}`);

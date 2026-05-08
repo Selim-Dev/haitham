@@ -41,8 +41,8 @@ export function RegisterForm() {
         toast.error(json.error || COPY.common.error);
         return;
       }
-      toast.success(`أهلًا بك في ${COPY.brand.academy}`);
-      router.push("/dashboard");
+      toast.success("الخطوة الأولى تمت — أكمل استمارة الانضمام الآن.");
+      router.push("/register/application");
       router.refresh();
     } catch {
       toast.error(COPY.common.error);

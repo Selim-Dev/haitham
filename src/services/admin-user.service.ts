@@ -29,6 +29,9 @@ export async function createAdminUser(
     passwordHash,
     role: input.role,
     isBlocked: false,
+    approvalStatus: "APPROVED",
+    reviewedBy: actorId,
+    reviewedAt: new Date(),
   });
 
   await AuditLogModel.create({

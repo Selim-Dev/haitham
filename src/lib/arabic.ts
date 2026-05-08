@@ -165,7 +165,9 @@ export const COPY = {
 
   auth: {
     loginTitle: "تسجيل الدخول",
-    registerTitle: "إنشاء حساب جديد",
+    registerTitle: "ابدأ رحلة تحويل حياتك",
+    registerSubtitle:
+      "خطوتك الأولى نحو نسخة جديدة من نفسك. حسابك يبدأ بكلمتين منك.",
     name: "الاسم الكامل",
     email: "البريد الإلكتروني",
     phone: "رقم الهاتف",
@@ -175,7 +177,26 @@ export const COPY = {
     noAccount: "ليس لديك حساب؟",
     haveAccount: "لديك حساب بالفعل؟",
     submitLogin: "تسجيل الدخول",
-    submitRegister: "إنشاء الحساب",
+    submitRegister: "أكمل الخطوة الأولى",
+    stepOne: "الخطوة ١ من ٢ — بياناتك الأساسية",
+    stepTwo: "الخطوة ٢ من ٢ — استمارة الانضمام",
+  },
+
+  application: {
+    pageTitle: "استمارة الانضمام — اعرض نفسك بصدق",
+    pageSubtitle:
+      "ردودك توضح للإدارة جديتك ورؤيتك. أجب بصدق وبأقصى ما يمكنك — كل سطر يفتح لك بابًا.",
+    submit: "أرسل طلبي للمراجعة",
+    submitting: "جارٍ الإرسال...",
+    success: "تم استلام طلبك. الإدارة ستراجعه قريبًا.",
+    waitingTitle: "أنت على بعد خطوة من الانطلاق",
+    waitingBody:
+      "طلبك بين أيدي الإدارة الآن. بمجرد الموافقة سيصلك بريد إلكتروني، وتفتح لك المنصة بكل ما فيها.",
+    rejectedTitle: "هذا ليس النهاية",
+    rejectedBody:
+      "تم إيقاف طلبك مؤقتًا. تواصل مع الإدارة إن كنت ترى أنك جاهز فعلًا.",
+    noQuestions:
+      "لا توجد أسئلة منشورة حاليًا. تواصل مع الإدارة لمتابعة طلبك.",
   },
 
   payment: {
@@ -213,6 +234,8 @@ export const COPY = {
     payments: "مراجعة المدفوعات",
     users: "المستخدمون",
     enrollments: "الاشتراكات",
+    applications: "طلبات الانضمام",
+    applicationQuestions: "أسئلة الانضمام",
     settings: "الإعدادات",
     stats: {
       users: "إجمالي المستخدمين",
@@ -242,6 +265,42 @@ export const COPY = {
     user: {
       block: "حظر",
       unblock: "إلغاء الحظر",
+    },
+    application: {
+      listTitle: "طلبات الانضمام — راجع وقرر",
+      listSubtitle:
+        "كل طالب هنا اتخذ قرارًا. مهمتك أن تختار من ينضم لرحلتنا.",
+      detailTitle: "مراجعة طلب الانضمام",
+      approve: "اقبل الطالب",
+      reject: "رفض الطلب",
+      adminNote: "ملاحظة الإدارة",
+      confirmApprove:
+        "موافقة على انضمام هذا الطالب وفتح المنصة له بالكامل؟",
+      confirmReject: "رفض هذا الطلب؟",
+      emptyAll: "لا توجد طلبات مسجلة بعد.",
+      emptyFiltered: "لا توجد طلبات في هذه الحالة.",
+      basicData: "البيانات الأساسية",
+      answers: "إجابات الاستمارة",
+      questions: {
+        listTitle: "أسئلة الانضمام — صمم استمارتك",
+        listSubtitle:
+          "حدد الأسئلة التي تكشف لك جدية الطالب. أنت تتحكم في كل سؤال يراه قبل أن ينضم.",
+        addNew: "إضافة سؤال",
+        editTitle: "تعديل السؤال",
+        newTitle: "سؤال جديد",
+        labelField: "نص السؤال",
+        helperField: "وصف توضيحي (اختياري)",
+        typeField: "نوع الإجابة",
+        typeShort: "إجابة قصيرة",
+        typeLong: "إجابة مطوّلة",
+        typeSelect: "اختيار من قائمة",
+        optionsField: "الخيارات (سطر لكل خيار)",
+        requiredField: "إجابة مطلوبة",
+        activeField: "ظاهر للمتقدمين",
+        orderField: "الترتيب",
+        empty: "لم يتم إضافة أي سؤال بعد.",
+        deleteConfirm: "حذف هذا السؤال نهائيًا؟",
+      },
     },
     enrollment: {
       revoke: "إلغاء الوصول",

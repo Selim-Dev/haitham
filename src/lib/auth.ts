@@ -3,6 +3,7 @@ import { connectDB } from "./db";
 import { UserModel } from "@/models/User";
 import { signSession, verifySession, type SessionPayload } from "./jwt";
 import { AUTH } from "./constants";
+import type { ApprovalStatus } from "./constants";
 
 export type SessionUser = {
   id: string;
@@ -11,6 +12,7 @@ export type SessionUser = {
   phone?: string;
   role: "STUDENT" | "ADMIN";
   isBlocked: boolean;
+  approvalStatus: ApprovalStatus;
 };
 
 export async function getCurrentSession(): Promise<SessionPayload | null> {
@@ -34,6 +36,7 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
     phone: user.phone,
     role: user.role,
     isBlocked: user.isBlocked,
+    approvalStatus: user.approvalStatus ?? "APPROVED",
   };
 }
 
@@ -61,6 +64,17 @@ export async function requireStudent(): Promise<SessionUser> {
   const user = await requireAuth();
   if (user.role !== "STUDENT" && user.role !== "ADMIN") {
     const err = new Error("FORBIDDEN") as Error & { status?: number };
+    err.status = 403;
+    throw err;
+  }
+  return user;
+}
+
+export async function requireApprovedStudent(): Promise<SessionUser> {
+  const user = await requireAuth();
+  if (user.role === "ADMIN") return user;
+  if (user.approvalStatus !== "APPROVED") {
+    const err = new Error("APPROVAL_REQUIRED") as Error & { status?: number };
     err.status = 403;
     throw err;
   }

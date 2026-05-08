@@ -9,6 +9,8 @@ import {
   Receipt,
   Users,
   GraduationCap,
+  ClipboardList,
+  ListChecks,
   LogOut,
   Menu,
   X,
@@ -25,6 +27,16 @@ const ADMIN_NAV = [
   { href: "/admin", label: COPY.admin.title, icon: LayoutDashboard },
   { href: "/admin/courses", label: COPY.admin.courses, icon: BookOpen },
   { href: "/admin/payments", label: COPY.admin.payments, icon: Receipt },
+  {
+    href: "/admin/applications",
+    label: COPY.admin.applications,
+    icon: ClipboardList,
+  },
+  {
+    href: "/admin/application-questions",
+    label: COPY.admin.applicationQuestions,
+    icon: ListChecks,
+  },
   { href: "/admin/users", label: COPY.admin.users, icon: Users },
   { href: "/admin/enrollments", label: COPY.admin.enrollments, icon: GraduationCap },
 ];
@@ -33,10 +45,12 @@ export function AdminShell({
   user,
   children,
   pendingCount = 0,
+  pendingApplications = 0,
 }: {
   user: { name: string; email: string };
   children: React.ReactNode;
   pendingCount?: number;
+  pendingApplications?: number;
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -90,6 +104,7 @@ export function AdminShell({
                   pathname === item.href ||
                   (item.href !== "/admin" && pathname.startsWith(item.href));
                 const isPaymentsLink = item.href === "/admin/payments";
+                const isApplicationsLink = item.href === "/admin/applications";
                 return (
                   <Link
                     key={item.href}
@@ -106,6 +121,11 @@ export function AdminShell({
                     {isPaymentsLink && pendingCount > 0 && (
                       <Badge variant="warning" className="px-2 py-0.5 text-[10px]">
                         {pendingCount}
+                      </Badge>
+                    )}
+                    {isApplicationsLink && pendingApplications > 0 && (
+                      <Badge variant="warning" className="px-2 py-0.5 text-[10px]">
+                        {pendingApplications}
                       </Badge>
                     )}
                   </Link>
