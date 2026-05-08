@@ -19,7 +19,6 @@ export type CourseCardData = {
   price: number;
   currency: string;
   featured?: boolean;
-  externalCourseUrl?: string;
 };
 
 export function CourseCard({ course }: { course: CourseCardData }) {

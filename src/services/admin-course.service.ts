@@ -59,8 +59,6 @@ export async function getAdminCourse(id: string) {
     durationLabel: course.durationLabel,
     isPublished: course.isPublished,
     featured: course.featured,
-    externalCourseUrl: course.externalCourseUrl,
-    externalAccessNote: course.externalAccessNote,
     lessonsCount: course.lessonsCount,
   };
 }

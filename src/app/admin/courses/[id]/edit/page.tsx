@@ -46,8 +46,6 @@ export default async function EditCoursePage({
           durationLabel: course.durationLabel,
           isPublished: course.isPublished,
           featured: course.featured,
-          externalCourseUrl: course.externalCourseUrl,
-          externalAccessNote: course.externalAccessNote,
         }}
       />
     </div>

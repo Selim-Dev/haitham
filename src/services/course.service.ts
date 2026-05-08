@@ -22,7 +22,6 @@ function mapCourseToCard(c: ICourse): CourseCardData {
     price: c.price,
     currency: c.currency,
     featured: c.featured,
-    externalCourseUrl: c.externalCourseUrl,
   };
 }
 
@@ -97,7 +96,6 @@ export async function getFeaturedCourses(
 
 export type CourseDetail = CourseCardData & {
   description: string;
-  externalAccessNote?: string;
   lessons: Array<{
     id: string;
     title: string;
@@ -132,7 +130,6 @@ export async function getCourseBySlug(
   return {
     ...mapCourseToCard(course),
     description: course.description,
-    externalAccessNote: course.externalAccessNote,
     lessons: lessons.map((l) => ({
       id: String(l._id),
       title: l.title,

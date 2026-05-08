@@ -51,8 +51,6 @@ export function CourseForm({
       durationLabel: initial?.durationLabel ?? "",
       isPublished: initial?.isPublished ?? false,
       featured: initial?.featured ?? false,
-      externalCourseUrl: initial?.externalCourseUrl ?? "",
-      externalAccessNote: initial?.externalAccessNote ?? "",
     },
   });
 
@@ -191,47 +189,6 @@ export function CourseForm({
           <Label htmlFor="description">الوصف الكامل</Label>
           <Textarea id="description" rows={6} {...register("description")} />
           <FieldError message={errors.description?.message} />
-        </div>
-
-        <div className="md:col-span-2 rounded-2xl border border-primary/30 bg-primary/5 p-5">
-          <h3 className="font-display text-base font-bold text-foreground">
-            استضافة الكورس الخارجية
-            <span className="ms-2 text-xs font-normal text-muted-2">
-              (اختياري)
-            </span>
-          </h3>
-          <p className="mt-1 text-xs leading-relaxed text-muted">
-            إذا كنت تستضيف الكورس على منصة خارجية (Vimeo, Thinkific…)، ضع رابط
-            الوصول هنا. بعد الموافقة على الدفع، سيظهر زر &quot;افتح الكورس&quot; للطالب
-            يفتح هذا الرابط مباشرة.
-          </p>
-
-          <div className="mt-4 grid gap-4">
-            <div>
-              <Label htmlFor="externalCourseUrl">رابط الكورس الخارجي</Label>
-              <Input
-                id="externalCourseUrl"
-                dir="ltr"
-                placeholder="https://vimeo.com/showcase/123456"
-                {...register("externalCourseUrl")}
-              />
-              <FieldError message={errors.externalCourseUrl?.message} />
-            </div>
-
-            <div>
-              <Label htmlFor="externalAccessNote">
-                ملاحظات وصول للطالب{" "}
-                <span className="font-normal text-muted-2">(اختياري)</span>
-              </Label>
-              <Textarea
-                id="externalAccessNote"
-                rows={3}
-                maxLength={1000}
-                placeholder="مثال: ستصلك دعوة على بريدك من Vimeo لإنشاء حساب ومشاهدة الكورس."
-                {...register("externalAccessNote")}
-              />
-            </div>
-          </div>
         </div>
       </div>
 

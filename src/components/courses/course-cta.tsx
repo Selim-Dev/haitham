@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LogIn, Upload, PlayCircle, Clock, XCircle, ExternalLink } from "lucide-react";
+import { LogIn, Upload, PlayCircle, Clock, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { COPY } from "@/lib/arabic";
@@ -15,14 +15,10 @@ export function CourseCta({
   state,
   courseId,
   courseSlug,
-  externalCourseUrl,
-  externalAccessNote,
 }: {
   state: AccessState;
   courseId: string;
   courseSlug: string;
-  externalCourseUrl?: string;
-  externalAccessNote?: string;
 }) {
   switch (state) {
     case "GUEST":
@@ -41,32 +37,12 @@ export function CourseCta({
           <Badge variant="success" className="w-fit px-3 py-1.5">
             لديك وصول مدى الحياة
           </Badge>
-          {externalCourseUrl ? (
-            <>
-              <Button asChild size="lg" variant="primary" className="w-full">
-                <a
-                  href={externalCourseUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <ExternalLink className="size-4" />
-                  افتح الكورس
-                </a>
-              </Button>
-              {externalAccessNote && (
-                <p className="rounded-lg border border-[var(--color-border)] bg-surface p-3 text-xs leading-relaxed text-muted">
-                  {externalAccessNote}
-                </p>
-              )}
-            </>
-          ) : (
-            <Button asChild size="lg" variant="primary" className="w-full">
-              <Link href={`/dashboard/my-courses/${courseSlug}`}>
-                <PlayCircle className="size-4" />
-                {COPY.courseDetail.startLearning}
-              </Link>
-            </Button>
-          )}
+          <Button asChild size="lg" variant="primary" className="w-full">
+            <Link href={`/dashboard/my-courses/${courseSlug}`}>
+              <PlayCircle className="size-4" />
+              {COPY.courseDetail.startLearning}
+            </Link>
+          </Button>
         </div>
       );
 

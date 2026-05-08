@@ -15,8 +15,6 @@ export interface ICourse extends Document {
   lessonsCount: number;
   isPublished: boolean;
   featured: boolean;
-  externalCourseUrl?: string;
-  externalAccessNote?: string;
   createdBy?: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
@@ -42,8 +40,6 @@ const CourseSchema = new Schema<ICourse>(
     lessonsCount: { type: Number, default: 0, min: 0 },
     isPublished: { type: Boolean, default: false, index: true },
     featured: { type: Boolean, default: false, index: true },
-    externalCourseUrl: { type: String, trim: true },
-    externalAccessNote: { type: String, trim: true, maxlength: 1000 },
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true },
