@@ -3,7 +3,21 @@ import { COPY } from "@/lib/arabic";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const EMAIL_FROM = process.env.EMAIL_FROM || "onboarding@resend.dev";
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+// Email links must always point to a public, long-lived URL — never localhost
+// or a preview deployment, since students may open the email days later.
+function getEmailBaseUrl(): string {
+  if (process.env.EMAIL_LINK_BASE_URL) return process.env.EMAIL_LINK_BASE_URL;
+  if (process.env.NEXT_PUBLIC_APP_URL && !process.env.NEXT_PUBLIC_APP_URL.includes("localhost")) {
+    return process.env.NEXT_PUBLIC_APP_URL;
+  }
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  }
+  return "https://ahmed-haytham.vercel.app";
+}
+
+const APP_URL = getEmailBaseUrl();
 
 let client: Resend | null = null;
 

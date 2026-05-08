@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+
+<style>img{max-width:100%;height:auto;} *{margin:0;padding:0;box-sizing:border-box;}body{font-family:'IBM Plex Sans Arabic',sans-serif;}.main-header{background:rgba(26,26,26,0.98);backdrop-filter:blur(10px);position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,0.1);border-bottom:2px solid rgba(255,215,0,0.2);}.header-nav{max-width:1200px;margin:0 auto;padding:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}.header-logo-container{display:flex;align-items:center;gap:15px;}.header-logo-link{text-decoration:none;display:flex;align-items:center;gap:12px;}.header-logo-img{height:50px;width:auto;border-radius:8px;box-shadow:0 4px 15px rgba(255,215,0,0.4);}.header-brand-name{font-size:1.4rem;font-weight:700;color:#fff;letter-spacing:0.5px;}.header-nav-links{display:flex;gap:30px;align-items:center;flex-wrap:wrap;}.header-nav-link{color:#fff;text-decoration:none;font-size:1.05rem;font-weight:600;transition:all 0.3s;padding:8px 0;border-bottom:2px solid transparent;}.header-nav-link:hover{border-bottom-color:#FFD700;transform:translateY(-2px);}.header-cta-btn{background:linear-gradient(135deg,#B8860B,#FFD700);color:#1a1a1a;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:1rem;transition:all 0.3s;box-shadow:0 4px 15px rgba(184,134,11,0.3);display:inline-block;}.header-cta-btn:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(184,134,11,0.5);}.mobile-menu-btn{display:none;background:none;border:none;color:#fff;font-size:1.8rem;cursor:pointer;padding:5px;}.mobile-menu{display:none;background:rgba(26,26,26,0.98);padding:20px;border-top:1px solid rgba(255,215,0,0.2);}.mobile-menu-links{display:flex;flex-direction:column;gap:15px;}.mobile-menu-link{color:#fff;text-decoration:none;font-size:1.1rem;font-weight:600;padding:12px;border-radius:8px;transition:all 0.3s;}.mobile-menu-link:hover{background:rgba(255,215,0,0.1);}.mobile-menu-cta{background:linear-gradient(135deg,#B8860B,#FFD700);color:#1a1a1a;padding:15px;border-radius:8px;text-decoration:none;font-weight:700;font-size:1.1rem;text-align:center;box-shadow:0 4px 15px rgba(184,134,11,0.3);}@media (max-width:768px){.mobile-menu-btn{display:block;}.header-nav-links{display:none;}.mobile-menu.active{display:block;}}</style>
+
+<header class="main-header">
+    <nav class="header-nav">
+        <div class="header-logo-container">
+            <a href="/" class="header-logo-link">
+                <img loading="eager" fetchpriority="high" decoding="async" src="images/logo.png" alt="أحمد هيثم" width="50" height="50" class="header-logo-img">
+                <span class="header-brand-name">أحمد هيثم</span>
+            </a>
+        </div>
+
+        <div class="header-nav-links">
+            <a href="/" class="header-nav-link">الرئيسية</a>
+            <a href="/region-select" class="header-nav-link">كتاب لعبة الاختبارات</a>
+            <a href="/sessions" class="header-nav-link">الجلسات الاستشارية</a>
+            <a href="/region-select" class="header-cta-btn">
+                🔥 احصل على الكتاب
+            </a>
+        </div>
+
+        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-links">
+            <a href="/" class="mobile-menu-link">الرئيسية</a>
+            <a href="/region-select" class="mobile-menu-link">كتاب لعبة الاختبارات</a>
+            <a href="/sessions" class="mobile-menu-link">الجلسات الاستشارية</a>
+            <a href="/region-select" class="mobile-menu-cta">
+                🔥 احصل على الكتاب
+            </a>
+        </div>
+    </div>
+</header>
+
+<script>
+    (function() {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        function checkScreenSize() {
+            if (window.innerWidth <= 768) {
+                mobileMenuBtn.style.display = 'block';
+                document.querySelector('.header-nav-links').style.display = 'none';
+            } else {
+                mobileMenuBtn.style.display = 'none';
+                document.querySelector('.header-nav-links').style.display = 'flex';
+                mobileMenu.classList.remove('active');
+            }
+        }
+
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
+            this.textContent = mobileMenu.classList.contains('active') ? '✕' : '☰';
+        });
+
+        window.addEventListener('resize', checkScreenSize);
+        checkScreenSize();
+
+        // Hover effects for nav links
+        const navLinks = document.querySelectorAll('.header-nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('mouseenter', function() {
+                this.style.borderBottomColor = '#FFD700';
+                this.style.transform = 'translateY(-2px)';
+            });
+            link.addEventListener('mouseleave', function() {
+                this.style.borderBottomColor = 'transparent';
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    })();
+</script>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link href="https://cdn.jsdelivr.net/npm/material-icons@1.13.13/iconfont/material-icons.min.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://files.easy-orders.net/funnels-assets/souq/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://files.easy-orders.net/funnels-assets/souq/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" media="print" onload="this.media='all'">
+    
+    <style>img{max-width:100%;height:auto;} *{margin:0;padding:0;box-sizing:border-box;}body{font-family:'IBM Plex Sans Arabic',sans-serif;background:linear-gradient(180deg,#fff 0%,#fffef8 100%);min-height:100vh;position:relative;overflow-x:hidden;}body::before{content:'';position:fixed;top:-100px;right:-100px;max-width:300px;width:100%;height:300px;background:radial-gradient(circle,rgba(255,215,0,0.1) 0%,transparent 70%);border-radius:50%;pointer-events:none;z-index:0;}body::after{content:'';position:fixed;bottom:-150px;left:-150px;max-width:400px;width:100%;height:400px;background:radial-gradient(circle,rgba(255,165,0,0.08) 0%,transparent 70%);border-radius:50%;pointer-events:none;z-index:0;}.progress-bar-top{position:fixed;top:0;right:0;width:100%;height:4px;background:linear-gradient(90deg,#FFD700,#FFA500,#ff0055);z-index:9999;}.container{max-width:1100px;margin:0 auto;padding:20px;position:relative;z-index:1;}.header{text-align:center;padding:60px 20px 40px;}.header h1{font-size:2.5rem;font-weight:700;color:#1a1a1a;margin-bottom:15px;background:linear-gradient(135deg,#FFD700,#FFA500);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}.header .subtitle{font-size:1.1rem;color:#666;font-weight:400;max-width:700px;margin:0 auto;line-height:1.6;}.content-wrapper{max-width:900px;margin:0 auto;padding:0 20px 80px;}.refund-section{background:#fff;border-radius:20px;padding:40px;margin-bottom:30px;box-shadow:0 10px 40px rgba(0,0,0,0.08);border:1px solid rgba(255,215,0,0.2);}.refund-section h2{font-size:1.8rem;font-weight:700;color:#1a1a1a;margin-bottom:20px;padding-bottom:15px;border-bottom:3px solid;border-image:linear-gradient(90deg,#FFD700,#FFA500) 1;}.refund-section h3{font-size:1.4rem;font-weight:600;color:#ff0055;margin-top:25px;margin-bottom:15px;}.refund-section h4{font-size:1.15rem;font-weight:600;color:#333;margin-top:20px;margin-bottom:12px;}.refund-section p{font-size:1.05rem;color:#444;line-height:1.8;margin-bottom:15px;}.refund-section ul{margin:15px 0;padding-right:25px;}.refund-section li{font-size:1.05rem;color:#444;line-height:1.8;margin-bottom:10px;}.intro-box{background:linear-gradient(135deg,#d4edda,#c3e6cb);border-right:4px solid #28a745;padding:25px;border-radius:12px;margin-bottom:30px;}.intro-box p{color:#155724;font-size:1.05rem;line-height:1.8;margin-bottom:0;}.guarantee-box{background:linear-gradient(135deg,#FFD700,#FFA500);padding:30px;border-radius:15px;text-align:center;margin:25px 0;box-shadow:0 10px 30px rgba(255,215,0,0.3);}.guarantee-box h3{color:#1a1a1a;margin-top:0;margin-bottom:15px;font-size:1.6rem;}.guarantee-box p{color:#333;font-weight:600;font-size:1.2rem;}.warning-box{background:linear-gradient(135deg,#ffe5e5,#ffd5d5);border-right:4px solid #ff0055;padding:25px;border-radius:12px;margin:20px 0;}.warning-box h4{color:#721c24;margin-top:0;margin-bottom:12px;}.warning-box p,.warning-box li{color:#721c24;font-weight:500;}.info-box{background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-right:4px solid #2196F3;padding:25px;border-radius:12px;margin:20px 0;}.info-box h4{color:#0d47a1;margin-top:0;margin-bottom:12px;}.info-box p,.info-box li{color:#1565c0;}.success-box{background:linear-gradient(135deg,#d4edda,#c3e6cb);border-right:4px solid #28a745;padding:25px;border-radius:12px;margin:20px 0;}.success-box h4{color:#155724;margin-top:0;margin-bottom:12px;}.success-box p,.success-box li{color:#1e7e34;}.steps-box{background:linear-gradient(135deg,#f9f9f9,#f0f0f0);padding:25px;border-radius:12px;margin:20px 0;border-right:4px solid #FFD700;}.step-number{display:inline-flex;align-items:center;justify-content:center;width:35px;height:35px;background:linear-gradient(135deg,#ff0055,#ff3377);border-radius:50%;color:#fff;font-weight:700;font-size:1rem;margin-left:10px;}.alternative-box{background:linear-gradient(135deg,#fff3cd,#ffe8a1);border-right:4px solid #FFD700;padding:25px;border-radius:12px;margin:20px 0;}.alternative-box h4{color:#856404;margin-top:0;margin-bottom:12px;}.alternative-box p,.alternative-box li{color:#856404;}.ban-warning{background:linear-gradient(135deg,#ff0055,#ff3377);color:#fff;padding:30px;border-radius:15px;margin:25px 0;box-shadow:0 10px 30px rgba(255,0,85,0.3);}.ban-warning h3{color:#FFD700;margin-top:0;margin-bottom:15px;}.ban-warning h4{color:#fff;margin-top:20px;margin-bottom:10px;}.ban-warning p,.ban-warning li{color:#fff;}.contact-box{background:linear-gradient(135deg,#FFD700,#FFA500);padding:30px;border-radius:15px;text-align:center;margin:25px 0;}.contact-box h3{color:#1a1a1a;margin-top:0;margin-bottom:15px;}.contact-box p{color:#333;margin-bottom:10px;}.contact-box a{color:#ff0055;font-weight:700;text-decoration:none;font-size:1.1rem;}.contact-box a:hover{text-decoration:underline;}.pledge-box{background:#f5f5f5;border:3px solid #FFD700;padding:25px;border-radius:12px;margin:20px 0;font-style:italic;}.pledge-box p{color:#333;font-size:1rem;line-height:1.8;margin-bottom:0;}footer{background:#1a1a1a;color:#fff;padding:50px 20px;text-align:center;margin-top:80px;}.footer-brand{font-size:1.8rem;font-weight:700;color:#FFD700;margin-bottom:30px;}.footer-links{list-style:none;padding:0;margin:0 0 30px 0;display:flex;justify-content:center;flex-wrap:wrap;gap:30px;}.footer-links li{display:inline-block;}.footer-links a{color:#fff;text-decoration:none;transition:color 0.3s ease;font-size:1rem;}.footer-links a:hover{color:#FFD700;}.footer-contact{margin:20px 0;color:#bbb;}.footer-social{display:flex;justify-content:center;gap:20px;margin:25px 0;}.footer-social a{display:inline-flex;align-items:center;justify-content:center;width:45px;height:45px;background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:50%;color:#1a1a1a;font-size:20px;transition:all 0.3s ease;}.footer-social a:hover{transform:scale(1.1);box-shadow:0 5px 15px rgba(255,215,0,0.4);}.copyright{margin-top:30px;padding-top:20px;border-top:1px solid #333;color:#888;font-size:0.9rem;}@media (max-width:768px){.header h1{font-size:2rem;}.refund-section{padding:25px;}.refund-section h2{font-size:1.5rem;}.footer-links{flex-direction:column;gap:15px;}}</style>
+
+    <!-- Fallback for users with JavaScript disabled -->
+    <noscript>
+                            </noscript>
+
+<style>
+/* Mobile-friendly overrides */
+@media (max-width: 768px) {
+  body {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+  }
+
+  .container, .row, .col, div, section {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  h1 {
+    font-size: 1.8rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+
+  h3 {
+    font-size: 1.3rem !important;
+  }
+
+  p, li, td {
+    font-size: 1rem !important;
+  }
+
+  table {
+    display: block !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+  }
+
+  /* Prevent horizontal scrolling */
+  html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+}
+</style>
+
+</head>
+<body>
+    <div class="progress-bar-top"></div>
+    
+    <div class="header">
+        <h1>سياسة الاسترجاع</h1>
+        <p class="subtitle">ضمان استرداد الأموال لمدة 14 يوماً - مبني على التجربة والتطبيق</p>
+    </div>
+    
+    <div class="content-wrapper">
+        
+        <div class="refund-section">
+            <h2>💡 مقدمة</h2>
+            <div class="intro-box">
+                <p>
+                    نحن في <strong>أحمد هيثم - افهم دماغ البنات</strong> نلتزم بتقديم أعلى جودة من المعلومات العملية والمجربة في مجال فهم سيكولوجية العلاقات والتطوير الذاتي. هدفنا الأساسي هو مساعدتك على التطور الحقيقي وفهم ديناميكيات العلاقات بشكل عملي ومؤثر.
+                </p>
+            </div>
+            
+            <div class="guarantee-box">
+                <h3>✅ ضمان استرداد الأموال</h3>
+                <p>نوفر ضمان استرداد الأموال لمدة 14 يوماً من تاريخ الشراء</p>
+            </div>
+            
+            <p>
+                ولأننا واثقون تماماً في قيمة المحتوى الذي نقدمه، نوفر هذا الضمان وفقاً للشروط والأحكام المفصلة أدناه.
+            </p>
+        </div>
+        
+        <div class="refund-section">
+            <h2>📱 طبيعة المنتج الرقمي</h2>
+            <p>
+                كتاب "لعبة الاختبارات" هو <strong>منتج رقمي (Digital Product)</strong> يتم توصيله إلكترونياً عبر البريد الإلكتروني بصيغة PDF فور إتمام عملية الشراء.
+            </p>
+            <div class="info-box">
+                <p>
+                    بما أن المنتجات الرقمية يمكن نسخها واستهلاكها بشكل كامل فور التحميل، فإن سياسة الاسترجاع الخاصة بنا مصممة لحماية حقوق الملكية الفكرية مع ضمان رضا العملاء الجادين في نفس الوقت.
+                </p>
+            </div>
+        </div>
+        
+        <div class="refund-section">
+            <h2>📋 شروط وأحكام الاسترداد</h2>
+            
+            <h3>نوع الضمان</h3>
+            <div class="warning-box">
+                <h4>⚠️ ضمان مبني على التجربة والتطبيق</h4>
+                <p>
+                    سياسة الاسترداد لدينا <strong>ليست "بدون أسئلة" (No Questions Asked)</strong>، بل هي <strong>"ضمان مبني على التجربة والتطبيق" (Action-Based Guarantee)</strong>.
+                </p>
+                <p style="margin-top: 15px;">
+                    هذا يعني أن طلب الاسترداد يتم قبوله فقط في حالة إثبات أنك حاولت تطبيق المحتوى بشكل جاد ولم تحصل على النتيجة المتوقعة.
+                </p>
+            </div>
+            
+            <h3>⏰ المدة الزمنية</h3>
+            <p>
+                يحق لك تقديم طلب استرداد خلال <strong>14 يوماً فقط</strong> من تاريخ الشراء الأصلي. أي طلب يتم تقديمه بعد هذه المدة سيتم رفضه تلقائياً دون استثناء.
+            </p>
+        </div>
+        
+        <div class="refund-section">
+            <h2>📧 خطوات تقديم طلب الاسترداد</h2>
+            <p>لتقديم طلب استرداد صحيح ومقبول، يجب عليك إرسال إيميل إلى:</p>
+            
+            <div class="contact-box">
+                <h3>البريد الإلكتروني</h3>
+                <p><a href="mailto:ahmedyoussef07472@gmail.com">ahmedyoussef07472@gmail.com</a></p>
+                <p style="margin-top: 15px; font-size: 0.95rem; color: #555;">
+                    بعنوان الإيميل: "طلب استرداد - لعبة الاختبارات - [رقم الطلب/Transaction ID]"
+                </p>
+            </div>
+            
+            <p style="font-weight: 600; margin-top: 25px;">
+                يجب أن يتضمن الإيميل العناصر التالية بشكل كامل وواضح:
+            </p>
+            
+            <div class="steps-box">
+                <h4>
+                    <span class="step-number">1</span>
+                    إثبات التطبيق العملي
+                </h4>
+                <p>يجب تقديم شرح تفصيلي (نصي أو بالصور/فيديو قصير) يوضح:</p>
+                <ul>
+                    <li>أي من تكتيكات الكتاب قمت بتطبيقها</li>
+                    <li>الموقف الحقيقي الذي طبقت فيه التكتيك</li>
+                    <li>كيف طبقته بالضبط (التفاصيل مهمة)</li>
+                    <li>رد فعل الطرف الآخر</li>
+                </ul>
+                <div class="warning-box" style="margin-top: 15px;">
+                    <p>
+                        ⚠️ الإثبات لا يعني أنك قرأت الكتاب فقط، بل أنك حاولت التطبيق فعلياً في الواقع.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="steps-box">
+                <h4>
+                    <span class="step-number">2</span>
+                    توضيح النتيجة السلبية
+                </h4>
+                <p>يجب أن تشرح بوضوح:</p>
+                <ul>
+                    <li>ما هي النتيجة التي حصلت عليها من التطبيق</li>
+                    <li>لماذا تعتقد أن الكتاب لم يفدك أو لم يحقق التوقعات</li>
+                    <li>ما هو الجزء المحدد من المحتوى الذي تعتقد أنه غير عملي أو غير فعال</li>
+                </ul>
+            </div>
+            
+            <div class="steps-box">
+                <h4>
+                    <span class="step-number">3</span>
+                    إقرار كتابي بالحذف والتعهد
+                </h4>
+                <p>يجب أن يتضمن الإيميل الإقرار التالي منسوخاً بالكامل:</p>
+                <div class="pledge-box">
+                    <p>
+                        "أقر بأنني قمت بحذف ملف كتاب 'لعبة الاختبارات' من جميع أجهزتي الإلكترونية (الكمبيوتر، الهاتف، التابلت، السحابة الإلكترونية)، وأتعهد بعدم مشاركة المحتوى مع أي طرف آخر بأي شكل من الأشكال. أفهم أن أي مخالفة لهذا التعهد تعتبر انتهاكاً لحقوق الملكية الفكرية وقد تعرضني للمساءلة القانونية."
+                    </p>
+                </div>
+            </div>
+            
+            <div class="steps-box">
+                <h4>
+                    <span class="step-number">4</span>
+                    بيانات الطلب الأصلي
+                </h4>
+                <ul>
+                    <li>رقم الطلب أو Transaction ID</li>
+                    <li>البريد الإلكتروني المستخدم في الشراء</li>
+                    <li>تاريخ الشراء</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="refund-section">
+            <h2>⏳ معالجة الطلبات</h2>
+            <p>
+                بعد استلام طلبك المكتمل، سيتم مراجعته خلال <strong>3-5 أيام عمل</strong>. سنقوم بالتواصل معك عبر البريد الإلكتروني لإبلاغك بقرار القبول أو الرفض.
+            </p>
+            <div class="success-box">
+                <h4>✅ في حالة القبول</h4>
+                <p>
+                    سيتم استرداد المبلغ الكامل إلى نفس طريقة الدفع المستخدمة في الشراء الأصلي. قد تستغرق عملية ظهور المبلغ في حسابك البنكي من <strong>5 إلى 10 أيام عمل</strong> حسب سياسة البنك أو شركة الدفع الإلكتروني الخاصة بك.
+                </p>
+            </div>
+        </div>
+        
+        <div class="refund-section">
+            <h2>❌ حالات رفض طلب الاسترداد</h2>
+            <div class="warning-box">
+                <h4>سيتم رفض طلبك تلقائياً في الحالات التالية:</h4>
+                <ul>
+                    <li>عدم تقديم إثبات التطبيق العملي</li>
+                    <li>تقديم الطلب بعد مرور 14 يوماً من تاريخ الشراء</li>
+                    <li>عدم الالتزام بصيغة الإيميل المطلوبة أو نقص المعلومات الأساسية</li>
+                    <li>إثبات مشاركة المحتوى مع آخرين أو إعادة بيعه</li>
+                    <li>محاولة طلب الاسترداد لأكثر من منتج واحد (يُعتبر سوء استخدام واضح)</li>
+                    <li>طلبات الاسترداد بناءً على "عدم الإعجاب" دون محاولة تطبيق فعلية</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="refund-section">
+            <h2>🆘 الحالات الاستثنائية</h2>
+            <p>نقدم الدعم الكامل في الحالات التالية:</p>
+            
+            <h3>1. مشاكل تقنية في التسليم</h3>
+            <ul>
+                <li>لم يصلك الكتاب خلال 24 ساعة من الشراء</li>
+                <li>الملف تالف أو لا يفتح بشكل صحيح</li>
+                <li>خطأ في معالجة الدفع (تم خصم المبلغ دون استلام المنتج)</li>
+            </ul>
+            <div class="success-box">
+                <h4>الحل:</h4>
+                <p>
+                    راسلنا فوراً عبر <strong>ahmedyoussef07472@gmail.com</strong>، وسنعيد إرسال الكتاب أو نحل المشكلة خلال 48 ساعة.
+                </p>
+            </div>
+            
+            <h3>2. الشراء الخاطئ المتكرر</h3>
+            <p>قمت بشراء نفس الكتاب مرتين بالخطأ في نفس اليوم</p>
+            <div class="success-box">
+                <h4>الحل:</h4>
+                <p>سنقوم بإلغاء الطلب المكرر واسترجاع المبلغ كاملاً.</p>
+            </div>
+        </div>
+        
+        <div class="refund-section">
+            <h2>🎁 بدلاً من الاسترداد</h2>
+            <p>إذا لم يلبِ الكتاب توقعاتك، نقدم لك بدائل أفضل من استرجاع المبلغ:</p>
+            
+            <div class="alternative-box">
+                <h4>💬 البدائل المتاحة:</h4>
+                <ul>
+                    <li>استشارة مجانية عبر البريد الإلكتروني حول كيفية تطبيق المحتوى على حالتك الشخصية</li>
+                    <li>خصم 25% على أي محتوى مستقبلي (كورسات، كتب جديدة، جلسات استشارية)</li>
+                </ul>
+            </div>
+            
+            <div class="info-box">
+                <p>
+                    نحن مهتمون بنجاحك الفعلي، وليس فقط بإتمام عملية البيع. راسلنا إذا كنت تواجه صعوبة في التطبيق، وسنساعدك شخصياً.
+                </p>
+            </div>
+        </div>
+        
+        <div class="refund-section">
+            <h2>🚫 الحالات المستثناة من سياسة الاسترداد</h2>
+            <p>لا يمكن طلب الاسترداد في الحالات التالية:</p>
+            
+            <ul>
+                <li><strong>المشكلات التقنية البسيطة:</strong> إذا كانت المشكلة تقنية، يرجى التواصل معنا أولاً لحل المشكلة قبل طلب الاسترداد. نحن نقدم دعماً تقنياً مجانياً لجميع العملاء.</li>
+                <li><strong>عدم قراءة الكتاب:</strong> لا يمكن طلب الاسترداد بحجة "لم يكن لدي وقت للقراءة" أو "نسيت الموضوع". المدة الزمنية (14 يوماً) كافية لقراءة الكتاب وتجربة التطبيق.</li>
+                <li><strong>التوقعات غير الواقعية:</strong> الكتاب يقدم أدوات ومبادئ نفسية مُجربة، لكنه ليس "عصا سحرية". النتائج تعتمد على التطبيق الصحيح والسياق الشخصي لكل شخص.</li>
+            </ul>
+        </div>
+        
+        <div class="refund-section">
+            <h2>⚖️ التبعات القانونية والإدارية</h2>
+            
+            <h3>الحظر الدائم من المنصة</h3>
+            <div class="ban-warning">
+                <h3>⚠️ تنبيه هام</h3>
+                <p>
+                    بمجرد قبول طلب الاسترداد واسترجاع مبلغك بالكامل، سيتم <strong>حظر بريدك الإلكتروني وبياناتك الشخصية بشكل نهائي</strong> من:
+                </p>
+                <ul>
+                    <li>شراء أي منتجات رقمية مستقبلية (كتب جديدة، كورسات، ملفات تدريبية)</li>
+                    <li>حجز جلسات استشارية خاصة (Coaching Sessions) مع أحمد هيثم</li>
+                    <li>الاشتراك في أي قوائم بريدية أو محتوى حصري</li>
+                </ul>
+                <h4>السبب:</h4>
+                <p>
+                    نحن نبحث عن عملاء جادين يؤمنون بمنهجنا ويرغبون في التطوير الحقيقي. طلب الاسترداد يعني أن أسلوبنا وطريقتنا لا تتناسب معك، ولذلك نفضل تركيز طاقتنا على من يستفيد فعلياً من المحتوى.
+                </p>
+            </div>
+            
+            <h3>حماية الملكية الفكرية</h3>
+            <div class="warning-box">
+                <p>
+                    جميع ملفات الكتب الرقمية لدينا <strong>مُختومة ببيانات المشتري (Email Watermarking)</strong>. أي محاولة لإعادة توزيع المحتوى أو مشاركته بشكل غير قانوني بعد الاسترداد ستعرضك لإجراءات قانونية وفقاً لقوانين حماية الملكية الفكرية والمحتوى الرقمي في مصر ودول مجلس التعاون الخليجي.
+                </p>
+            </div>
+        </div>
+        
+        <div class="refund-section">
+            <h2>📞 التواصل والاستفسارات</h2>
+            <p>لأي استفسارات حول سياسة الاسترداد أو لتقديم طلب رسمي، يُرجى التواصل عبر:</p>
+            
+            <div class="contact-box">
+                <h3>البريد الإلكتروني</h3>
+                <p><a href="mailto:ahmedyoussef07472@gmail.com">ahmedyoussef07472@gmail.com</a></p>
+                <p style="margin-top: 15px; font-size: 0.95rem; color: #555;">
+                    العنوان: طلب استرداد - لعبة الاختبارات - [رقم الطلب]
+                </p>
+            </div>
+            
+            <div class="info-box">
+                <p>
+                    ⏱️ ملاحظة: الرد على الاستفسارات يتم خلال <strong>2-3 أيام عمل</strong> (من السبت إلى الخميس).
+                </p>
+            </div>
+        </div>
+        
+        <div class="refund-section">
+            <h2>⚖️ الالتزام بالقوانين المحلية</h2>
+            <p>
+                تلتزم سياسة الاسترداد الخاصة بنا بقوانين التجارة الإلكترونية في <strong>جمهورية مصر العربية ودول مجلس التعاون الخليجي</strong>. بموجب قوانين حماية المستهلك للمنتجات الرقمية، يحق للبائع وضع شروط خاصة للاسترداد بما أن المنتج قابل للاستهلاك الكامل فور التحميل.
+            </p>
+        </div>
+        
+        <div class="intro-box">
+            <p style="font-weight: 600;">
+                ⚠️ ملاحظة مهمة: بإتمامك لعملية الشراء، فأنت توافق على سياسة الاسترداد للمنتجات الرقمية المذكورة في هذه الصفحة.
+            </p>
+        </div>
+        
+        <div class="guarantee-box" style="margin-top: 30px;">
+            <h3>💎 رضاك هدفنا الأول</h3>
+            <p>نحن واثقون من قيمة المحتوى الذي يقدمه أحمد هيثم بناءً على تجارب آلاف القراء الناجحين.</p>
+        </div>
+        
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-brand">
+                أحمد هيثم
+            </div>
+            
+            <ul class="footer-links">
+                <li><a href="shipping-policy">سياسة التسليم</a></li>
+                <li><a href="privacy-policy">سياسة الخصوصية</a></li>
+                <li><a href="terms-and-conditions">شروط الاستخدام</a></li>
+                <li><a href="refund-policy">سياسة الاسترجاع</a></li>
+                <li><a href="contact">تواصل معنا</a></li>
+            </ul>
+            
+            <div class="footer-social">
+                <a href="https://instagram.com/ahaitham74" target="_blank" rel="noopener" title="Instagram">
+                    <i class="bi bi-instagram"></i>
+                </a>
+                <a href="https://www.youtube.com/@AHaitham74" target="_blank" rel="noopener" title="YouTube">
+                    <i class="bi bi-youtube"></i>
+                </a>
+                <a href="https://www.tiktok.com/@ahaitham74" target="_blank" rel="noopener" title="TikTok">
+                    <i class="bi bi-tiktok"></i>
+                </a>
+                <a href="https://www.facebook.com/AHaitham74" target="_blank" rel="noopener" title="Facebook">
+                    <i class="bi bi-facebook"></i>
+                </a>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2026 أحمد هيثم. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="https://files.easy-orders.net/funnels-assets/souq/assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+</body>
+</html>

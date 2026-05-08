@@ -14,7 +14,7 @@ import { COPY } from "@/lib/arabic";
 export function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
-  const next = params.get("next") || "/dashboard";
+  const explicitNext = params.get("next");
 
   const {
     register,
@@ -38,7 +38,10 @@ export function LoginForm() {
         return;
       }
       toast.success(`أهلًا، ${json.user?.name ?? ""}`);
-      router.push(next);
+      const destination =
+        explicitNext ||
+        (json.user?.role === "ADMIN" ? "/admin" : "/dashboard");
+      router.push(destination);
       router.refresh();
     } catch {
       toast.error(COPY.common.error);
