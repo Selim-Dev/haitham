@@ -25,7 +25,7 @@ export function HeroSection() {
   return (
     <section
       ref={ref}
-      className="relative overflow-hidden pb-16 pt-12 sm:pb-24 sm:pt-20"
+      className="relative overflow-hidden pb-14 pt-8 sm:pb-24 sm:pt-20"
     >
       {/* Background layers */}
       <motion.div
@@ -48,26 +48,26 @@ export function HeroSection() {
       />
 
       <Container>
-        <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+        <div className="grid items-center gap-8 sm:gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
           <motion.div
             style={{ y: textY }}
-            className="flex flex-col items-start gap-6 text-start"
+            className="flex flex-col items-start gap-5 text-start sm:gap-6"
           >
             <motion.span
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3.5 py-1.5 text-xs font-bold tracking-wide text-[var(--color-red-300)]"
+              className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-[11px] font-bold tracking-wide text-[var(--color-red-300)] sm:px-3.5 sm:py-1.5 sm:text-xs"
             >
               <span className="size-1.5 rounded-full bg-primary animate-pulse" />
               {COPY.hero.eyebrow}
             </motion.span>
 
-            <h1 className="font-display text-balance text-4xl font-extrabold leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-6xl xl:text-7xl">
+            <h1 className="font-display text-balance text-[2.85rem] font-extrabold leading-[1.02] tracking-tight text-foreground sm:text-6xl sm:leading-[1.05] lg:text-7xl xl:text-8xl">
               <span className="block">
                 <WordReveal text={COPY.hero.headlinePre} />
               </span>
-              <span className="relative mt-2 inline-block">
+              <span className="relative mt-1 inline-block sm:mt-2">
                 <WordReveal
                   text={COPY.hero.headlineHighlight}
                   className="bg-gradient-to-l from-[var(--color-red-300)] via-primary to-[var(--color-red-700)] bg-clip-text text-transparent"
@@ -82,7 +82,7 @@ export function HeroSection() {
                     ease: [0.16, 1, 0.3, 1],
                   }}
                   style={{ transformOrigin: "right" }}
-                  className="absolute inset-x-0 -bottom-2 h-[2px] bg-gradient-to-l from-transparent via-primary to-transparent"
+                  className="absolute inset-x-0 -bottom-1.5 h-[2px] bg-gradient-to-l from-transparent via-primary to-transparent sm:-bottom-2"
                 />
               </span>
             </h1>
@@ -91,7 +91,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="max-w-xl text-pretty text-base leading-relaxed text-muted sm:text-lg"
+              className="max-w-xl text-pretty text-base leading-[1.7] text-muted sm:text-lg sm:leading-relaxed"
             >
               {COPY.hero.subtitle}
             </motion.p>
@@ -100,15 +100,25 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.78, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-col gap-3 sm:flex-row sm:items-center"
+              className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center"
             >
-              <Button asChild size="xl" variant="primary" className="group">
+              <Button
+                asChild
+                size="xl"
+                variant="primary"
+                className="group w-full sm:w-auto"
+              >
                 <Link href="/courses">
                   {COPY.hero.ctaPrimary}
                   <ArrowLeft className="size-5 transition-transform group-hover:-translate-x-1" />
                 </Link>
               </Button>
-              <Button asChild size="xl" variant="secondary">
+              <Button
+                asChild
+                size="xl"
+                variant="secondary"
+                className="w-full sm:w-auto"
+              >
                 <Link href="/register">
                   <PlayCircle className="size-5" />
                   {COPY.hero.ctaSecondary}
@@ -120,18 +130,18 @@ export function HeroSection() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.95 }}
-              className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-2"
+              className="mt-1 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-muted sm:gap-x-6 sm:text-xs sm:text-muted-2"
             >
-              <span className="flex items-center gap-1.5">
-                <span className="size-1.5 rounded-full bg-[var(--color-success)]" />
+              <span className="flex items-center gap-2 sm:gap-1.5">
+                <span className="size-2 rounded-full bg-[var(--color-success)] sm:size-1.5" />
                 وصول مدى الحياة
               </span>
-              <span className="flex items-center gap-1.5">
-                <span className="size-1.5 rounded-full bg-[var(--color-success)]" />
+              <span className="flex items-center gap-2 sm:gap-1.5">
+                <span className="size-2 rounded-full bg-[var(--color-success)] sm:size-1.5" />
                 دفع آمن وبسيط
               </span>
-              <span className="flex items-center gap-1.5">
-                <span className="size-1.5 rounded-full bg-[var(--color-success)]" />
+              <span className="flex items-center gap-2 sm:gap-1.5">
+                <span className="size-2 rounded-full bg-[var(--color-success)] sm:size-1.5" />
                 دعم عربي مباشر
               </span>
             </motion.div>

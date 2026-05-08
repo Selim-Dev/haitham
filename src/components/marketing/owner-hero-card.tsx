@@ -2,31 +2,43 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Sparkles, ShieldCheck, Infinity as InfinityIcon, Zap } from "lucide-react";
+import {
+  Sparkles,
+  ShieldCheck,
+  Infinity as InfinityIcon,
+  Zap,
+} from "lucide-react";
 import { COPY } from "@/lib/arabic";
 
-const FLOAT_BADGES = [
+// Desktop badges — overhang the card edges for a magazine-cover feel.
+const DESKTOP_BADGES = [
   { icon: InfinityIcon, label: COPY.hero.badges[0], top: "8%", left: "-8%" },
   { icon: Sparkles, label: COPY.hero.badges[1], top: "30%", right: "-12%" },
   { icon: ShieldCheck, label: COPY.hero.badges[2], bottom: "18%", left: "-10%" },
   { icon: Zap, label: COPY.hero.badges[3], bottom: "5%", right: "-6%" },
 ];
 
+// Mobile badges — sit INSIDE the card edges so they never clip off-screen.
+const MOBILE_BADGES = [
+  { icon: InfinityIcon, label: COPY.hero.badges[0], top: "4%", right: "4%" },
+  { icon: Zap, label: COPY.hero.badges[3], bottom: "22%", left: "4%" },
+];
+
 export function OwnerHeroCard() {
   return (
-    <div className="relative mx-auto w-full max-w-md aspect-[4/5] sm:max-w-lg">
-      {/* Red radial glow halo */}
+    <div className="relative mx-auto w-[88%] max-w-md aspect-[4/5] sm:w-full sm:max-w-lg">
+      {/* Red radial glow halo — bigger on mobile for drama */}
       <motion.div
         aria-hidden="true"
-        className="absolute -inset-12 -z-10 bg-radial-red blur-2xl"
+        className="absolute -inset-16 -z-10 bg-radial-red blur-3xl sm:-inset-12 sm:blur-2xl"
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
       />
       <motion.div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 rounded-[2rem] bg-gradient-to-br from-primary/40 via-deep-red/30 to-transparent blur-3xl"
-        animate={{ opacity: [0.55, 0.85, 0.55] }}
+        className="absolute inset-0 -z-10 rounded-[2rem] bg-gradient-to-br from-primary/45 via-deep-red/30 to-transparent blur-3xl"
+        animate={{ opacity: [0.55, 0.9, 0.55] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
 
@@ -43,34 +55,63 @@ export function OwnerHeroCard() {
             alt={COPY.instructor.name}
             fill
             priority
-            sizes="(max-width: 768px) 90vw, 480px"
+            sizes="(max-width: 768px) 88vw, 480px"
             className="object-cover"
           />
           {/* Bottom gradient for text legibility */}
           <div
             aria-hidden="true"
-            className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/70 to-transparent"
+            className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/75 to-transparent"
           />
-          <div className="absolute inset-x-0 bottom-0 p-5">
-            <div className="flex items-center gap-3">
+          <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
+            <div className="flex items-center gap-2.5 sm:gap-3">
               <span className="size-2 rounded-full bg-[var(--color-success)] animate-pulse" />
-              <span className="text-xs font-semibold tracking-wide text-foreground/90">
+              <span className="text-[11px] font-semibold tracking-wide text-foreground/90 sm:text-xs">
                 {COPY.instructor.role}
               </span>
             </div>
-            <p className="mt-1 font-display text-2xl font-extrabold text-foreground">
+            <p className="mt-1 font-display text-xl font-extrabold text-foreground sm:text-2xl">
               {COPY.instructor.name}
             </p>
           </div>
         </div>
       </motion.div>
 
-      {/* Floating badges */}
-      {FLOAT_BADGES.map((b, i) => {
+      {/* Mobile badges — inside card edges */}
+      {MOBILE_BADGES.map((b, i) => {
         const Icon = b.icon;
         return (
           <motion.div
-            key={b.label}
+            key={`m-${b.label}`}
+            initial={{ opacity: 0, y: 8, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{
+              duration: 0.6,
+              delay: 0.55 + i * 0.12,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            style={{
+              top: b.top,
+              bottom: b.bottom,
+              left: b.left,
+              right: b.right,
+            }}
+            className="absolute z-10 flex items-center gap-1.5 rounded-full border border-[var(--color-border-strong)] bg-card/90 px-2.5 py-1.5 text-[11px] font-semibold text-foreground shadow-[var(--shadow-soft)] backdrop-blur sm:hidden"
+          >
+            <span className="grid size-5 place-items-center rounded-full bg-primary/15 text-[var(--color-red-300)]">
+              <Icon className="size-3" />
+            </span>
+            <span>{b.label}</span>
+          </motion.div>
+        );
+      })}
+
+      {/* Desktop badges — overhang edges */}
+      {DESKTOP_BADGES.map((b, i) => {
+        const Icon = b.icon;
+        return (
+          <motion.div
+            key={`d-${b.label}`}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
@@ -84,7 +125,7 @@ export function OwnerHeroCard() {
               left: b.left,
               right: b.right,
             }}
-            className="absolute hidden sm:flex items-center gap-2 rounded-full border border-[var(--color-border-strong)] bg-card/90 px-3.5 py-2 text-xs font-semibold text-foreground shadow-[var(--shadow-soft)] backdrop-blur"
+            className="absolute hidden items-center gap-2 rounded-full border border-[var(--color-border-strong)] bg-card/90 px-3.5 py-2 text-xs font-semibold text-foreground shadow-[var(--shadow-soft)] backdrop-blur sm:flex"
           >
             <span className="grid size-6 place-items-center rounded-full bg-primary/15 text-[var(--color-red-300)]">
               <Icon className="size-3.5" />
