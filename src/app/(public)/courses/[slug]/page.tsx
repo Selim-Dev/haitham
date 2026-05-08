@@ -57,8 +57,8 @@ export default async function CourseDetailPage({
 
   return (
     <Container className="py-10 sm:py-14">
-      <div className="grid gap-10 lg:grid-cols-[1.4fr_0.9fr] lg:gap-12">
-        <div className="flex flex-col gap-8">
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,0.9fr)] lg:gap-12">
+        <div className="flex min-w-0 flex-col gap-8">
           <div className="flex flex-col gap-4">
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="primary">{course.category}</Badge>
@@ -68,7 +68,7 @@ export default async function CourseDetailPage({
               </Badge>
               {course.featured && <Badge variant="primary">مميز</Badge>}
             </div>
-            <h1 className="font-display text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+            <h1 className="font-display text-balance text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl">
               {course.title}
             </h1>
             <p className="text-pretty text-base leading-relaxed text-muted sm:text-lg">
@@ -76,7 +76,7 @@ export default async function CourseDetailPage({
             </p>
           </div>
 
-          <div className="relative aspect-video overflow-hidden rounded-2xl border border-[var(--color-border-strong)] bg-elevated">
+          <div className="relative aspect-video w-full max-w-full overflow-hidden rounded-2xl border border-[var(--color-border-strong)] bg-elevated">
             {course.thumbnailUrl ? (
               <Image
                 src={course.thumbnailUrl}
@@ -101,7 +101,7 @@ export default async function CourseDetailPage({
             <h2 className="font-display text-xl font-bold text-foreground">
               {COPY.courseDetail.description}
             </h2>
-            <div className="mt-3 whitespace-pre-line text-sm leading-relaxed text-foreground/85">
+            <div className="mt-3 break-words whitespace-pre-line text-sm leading-relaxed text-foreground/85">
               {course.description}
             </div>
           </div>
@@ -112,7 +112,7 @@ export default async function CourseDetailPage({
           />
         </div>
 
-        <aside className="lg:sticky lg:top-24 lg:self-start">
+        <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
           <div className="flex flex-col gap-5 rounded-2xl border border-[var(--color-border-strong)] bg-card p-6 shadow-[var(--shadow-card)]">
             <div className="flex items-end justify-between">
               <span className="font-display text-3xl font-extrabold text-foreground">
