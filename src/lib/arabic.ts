@@ -26,7 +26,8 @@ export const COPY = {
 
   hero: {
     eyebrow: "أكاديمية أحمد هيثم",
-    headlinePre: "افهم اللعبة الأزلية",
+    headlinePre1: "افهم",
+    headlinePre2: "اللعبة الأزلية",
     headlineHighlight: "وغيّر حياتك",
     headline: "افهم اللعبة الأزلية وغيّر حياتك",
     subtitle:

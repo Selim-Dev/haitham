@@ -58,11 +58,14 @@ export function HeroSection() {
               {COPY.hero.eyebrow}
             </motion.span>
 
-            <h1 className="font-display text-balance text-[2.85rem] font-extrabold leading-[1.02] tracking-tight text-foreground sm:text-6xl sm:leading-[1.05] lg:text-7xl xl:text-8xl">
+            <h1 className="font-display text-balance text-[2.85rem] font-extrabold leading-[1.04] tracking-tight text-foreground sm:text-6xl sm:leading-[1.06] lg:text-7xl xl:text-8xl">
               <span className="block">
-                <WordReveal text={COPY.hero.headlinePre} />
+                <WordReveal text={COPY.hero.headlinePre1} />
               </span>
-              <span className="relative mt-1 inline-block sm:mt-2">
+              <span className="mt-2 block sm:mt-3">
+                <WordReveal text={COPY.hero.headlinePre2} />
+              </span>
+              <span className="relative mt-2 inline-block sm:mt-3">
                 <WordReveal
                   text={COPY.hero.headlineHighlight}
                   className="bg-gradient-to-l from-[var(--color-red-300)] via-primary to-[var(--color-red-700)] bg-clip-text text-transparent"
@@ -73,7 +76,7 @@ export function HeroSection() {
                   animate={{ scaleX: 1, opacity: 1 }}
                   transition={{
                     duration: 0.9,
-                    delay: 0.7,
+                    delay: 0.9,
                     ease: [0.16, 1, 0.3, 1],
                   }}
                   style={{ transformOrigin: "right" }}
