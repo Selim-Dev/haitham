@@ -27,19 +27,17 @@ const MOBILE_BADGES = [
 export function OwnerHeroCard() {
   return (
     <div className="relative mx-auto w-[88%] max-w-md aspect-[4/5] sm:w-full sm:max-w-lg">
-      {/* Red radial glow halo — bigger on mobile for drama */}
+      {/* Red radial glow halo — fades in once, no continuous animation */}
       <motion.div
         aria-hidden="true"
         className="absolute -inset-16 -z-10 bg-radial-red blur-3xl sm:-inset-12 sm:blur-2xl"
-        initial={{ opacity: 0, scale: 0.85 }}
-        animate={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
       />
-      <motion.div
+      <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 rounded-[2rem] bg-gradient-to-br from-primary/45 via-deep-red/30 to-transparent blur-3xl"
-        animate={{ opacity: [0.55, 0.9, 0.55] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute inset-0 -z-10 rounded-[2rem] bg-gradient-to-br from-primary/35 via-deep-red/25 to-transparent blur-3xl opacity-70"
       />
 
       {/* Glass card */}

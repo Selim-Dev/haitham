@@ -27,6 +27,7 @@ export function Marquee({
     >
       <motion.div
         className="flex w-max items-center gap-10 py-4"
+        style={{ willChange: "transform" }}
         animate={{ x: ["0%", "-50%"] }}
         transition={{
           duration: speed,

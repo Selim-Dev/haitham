@@ -17,20 +17,18 @@ export function HeroSection() {
     target: ref,
     offset: ["start start", "end start"],
   });
-  // Subtle parallax on the owner image as you scroll past the hero.
-  const ownerY = useTransform(scrollYProgress, [0, 1], [0, -120]);
-  const textY = useTransform(scrollYProgress, [0, 1], [0, -40]);
-  const bgY = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  // Subtle parallax on the owner image only — keeps the scroll handler cheap.
+  // Background and text intentionally stay still to avoid extra repaints.
+  const ownerY = useTransform(scrollYProgress, [0, 1], [0, -60]);
 
   return (
     <section
       ref={ref}
       className="relative overflow-hidden pb-14 pt-8 sm:pb-24 sm:pt-20"
     >
-      {/* Background layers */}
-      <motion.div
+      {/* Background layers — static; parallax was removed to cut scroll cost */}
+      <div
         aria-hidden="true"
-        style={{ y: bgY }}
         className="absolute inset-0 -z-20 bg-redpill-grad"
       />
       <AnimatedBlobs />
@@ -49,10 +47,7 @@ export function HeroSection() {
 
       <Container>
         <div className="grid items-center gap-8 sm:gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-          <motion.div
-            style={{ y: textY }}
-            className="flex flex-col items-start gap-5 text-start sm:gap-6"
-          >
+          <div className="flex flex-col items-start gap-5 text-start sm:gap-6">
             <motion.span
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -145,7 +140,7 @@ export function HeroSection() {
                 دعم عربي مباشر
               </span>
             </motion.div>
-          </motion.div>
+          </div>
 
           <motion.div style={{ y: ownerY }} className="relative">
             <OwnerHeroCard />

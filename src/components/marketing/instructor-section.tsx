@@ -1,27 +1,12 @@
-"use client";
-
-import * as React from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
 import { Container } from "@/components/ui/container";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Badge } from "@/components/ui/badge";
 import { COPY } from "@/lib/arabic";
 
 export function InstructorSection() {
-  const ref = React.useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const imgY = useTransform(scrollYProgress, [0, 1], [40, -40]);
-
   return (
-    <section
-      id="instructor"
-      ref={ref}
-      className="relative py-20 sm:py-28"
-    >
+    <section id="instructor" className="relative py-20 sm:py-28">
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-[0.85fr_1.15fr]">
           <FadeIn className="relative mx-auto w-full max-w-sm">
@@ -29,10 +14,7 @@ export function InstructorSection() {
               aria-hidden="true"
               className="absolute -inset-6 -z-10 bg-radial-red blur-2xl opacity-70"
             />
-            <motion.div
-              style={{ y: imgY }}
-              className="aspect-[4/5] overflow-hidden rounded-2xl border border-[var(--color-border-strong)] glass-strong p-1.5 shadow-[var(--shadow-card)]"
-            >
+            <div className="aspect-[4/5] overflow-hidden rounded-2xl border border-[var(--color-border-strong)] glass-strong p-1.5 shadow-[var(--shadow-card)]">
               <div className="relative h-full w-full overflow-hidden rounded-xl">
                 <Image
                   src="/owner-hero.jpg"
@@ -46,7 +28,7 @@ export function InstructorSection() {
                   className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent"
                 />
               </div>
-            </motion.div>
+            </div>
           </FadeIn>
 
           <FadeIn delay={0.1} className="flex flex-col items-start gap-5">

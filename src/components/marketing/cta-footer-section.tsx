@@ -14,35 +14,16 @@ export function CtaFooterSection() {
       <Container>
         <FadeIn>
           <div className="relative overflow-hidden rounded-3xl border border-primary/30 bg-gradient-to-br from-[#1a0408] via-[#0b0b0f] to-[#0b0b0f] p-10 sm:p-16">
-            {/* Slowly drifting red halo */}
+            {/* Static red halo — opacity-only pulse to keep it cheap */}
             <motion.div
               aria-hidden="true"
               className="absolute -top-40 left-1/2 -translate-x-1/2 size-[640px] rounded-full bg-radial-red blur-3xl"
-              animate={{
-                opacity: [0.5, 0.85, 0.5],
-                scale: [1, 1.08, 1],
-              }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-
-            {/* Animated gradient sweep over the border */}
-            <motion.div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 -z-0 rounded-3xl"
-              style={{
-                background:
-                  "linear-gradient(115deg, transparent 30%, rgba(229,9,20,0.18) 50%, transparent 70%)",
-                backgroundSize: "300% 300%",
-              }}
-              animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
+              style={{ willChange: "opacity" }}
+              animate={{ opacity: [0.6, 0.85, 0.6] }}
               transition={{
                 duration: 8,
                 repeat: Infinity,
-                ease: "linear",
+                ease: "easeInOut",
               }}
             />
 

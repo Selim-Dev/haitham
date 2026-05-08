@@ -9,7 +9,9 @@ import { FaqSection } from "@/components/marketing/faq-section";
 import { CtaFooterSection } from "@/components/marketing/cta-footer-section";
 import { getFeaturedCourses } from "@/services/course.service";
 
-export const dynamic = "force-dynamic";
+// Revalidate every 5 minutes — the homepage is mostly static marketing
+// content; only the featured-courses block actually queries the DB.
+export const revalidate = 300;
 
 export default async function HomePage() {
   const featured = await getFeaturedCourses(3);
