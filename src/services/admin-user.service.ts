@@ -4,6 +4,48 @@ import { UserModel } from "@/models/User";
 import { EnrollmentModel } from "@/models/Enrollment";
 import { CourseModel } from "@/models/Course";
 import { AuditLogModel } from "@/models/AuditLog";
+import { hashPassword } from "@/lib/password";
+import type { AdminCreateUserInput } from "@/validators/auth.validator";
+
+export async function createAdminUser(
+  input: AdminCreateUserInput,
+  actorId: string,
+) {
+  await connectDB();
+
+  const email = input.email.toLowerCase().trim();
+  const existing = await UserModel.findOne({ email }).lean();
+  if (existing) {
+    throw Object.assign(new Error("هذا البريد مسجل بالفعل"), {
+      status: 409 as number,
+    });
+  }
+
+  const passwordHash = await hashPassword(input.password);
+  const user = await UserModel.create({
+    name: input.name.trim(),
+    email,
+    phone: input.phone?.trim() || undefined,
+    passwordHash,
+    role: input.role,
+    isBlocked: false,
+  });
+
+  await AuditLogModel.create({
+    actorId: new mongoose.Types.ObjectId(actorId),
+    action: "USER_CREATED_BY_ADMIN",
+    entityType: "User",
+    entityId: String(user._id),
+    metadata: { email: user.email, role: user.role },
+  });
+
+  return {
+    id: String(user._id),
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  };
+}
 
 export async function listAdminUsers() {
   await connectDB();

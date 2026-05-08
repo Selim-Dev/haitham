@@ -1,5 +1,7 @@
-import { Users } from "lucide-react";
+import Link from "next/link";
+import { Users, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { UserRowActions } from "@/components/admin/user-row-actions";
 import { listAdminUsers } from "@/services/admin-user.service";
@@ -17,17 +19,37 @@ export default async function AdminUsersPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <header>
-        <h1 className="font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
-          {COPY.admin.users}
-        </h1>
-        <p className="mt-2 text-sm text-muted">
-          عرض المستخدمين، الحظر، وإلغاء الحظر.
-        </p>
+      <header className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+            {COPY.admin.users}
+          </h1>
+          <p className="mt-2 text-sm text-muted">
+            عرض المستخدمين، إضافة مستخدم جديد، الحظر، وإلغاء الحظر.
+          </p>
+        </div>
+        <Button asChild variant="primary" size="md">
+          <Link href="/admin/users/new">
+            <Plus className="size-4" />
+            إضافة مستخدم
+          </Link>
+        </Button>
       </header>
 
       {users.length === 0 ? (
-        <EmptyState icon={<Users className="size-6" />} title="لا يوجد مستخدمون" />
+        <EmptyState
+          icon={<Users className="size-6" />}
+          title="لا يوجد مستخدمون"
+          description="ابدأ بإضافة أول مستخدم من هنا."
+          action={
+            <Button asChild variant="primary">
+              <Link href="/admin/users/new">
+                <Plus className="size-4" />
+                إضافة مستخدم
+              </Link>
+            </Button>
+          }
+        />
       ) : (
         <div className="overflow-hidden rounded-2xl border border-[var(--color-border)] bg-card">
           <table className="w-full">
