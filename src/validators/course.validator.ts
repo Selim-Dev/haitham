@@ -18,6 +18,8 @@ export const courseInputSchema = z.object({
   durationLabel: z.string().optional(),
   isPublished: z.boolean().default(false),
   featured: z.boolean().default(false),
+  externalCourseUrl: z.string().url().optional().or(z.literal("")),
+  externalAccessNote: z.string().max(1000).optional().or(z.literal("")),
 });
 
 export type CourseInput = z.infer<typeof courseInputSchema>;

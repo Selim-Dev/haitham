@@ -128,6 +128,8 @@ export default async function CourseDetailPage({
               state={accessState}
               courseId={course.id}
               courseSlug={course.slug}
+              externalCourseUrl={course.externalCourseUrl}
+              externalAccessNote={course.externalAccessNote}
             />
 
             <div className="grid grid-cols-2 gap-3 border-t border-[var(--color-border)] pt-4 text-sm">

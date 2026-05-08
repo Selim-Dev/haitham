@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Cairo, Noto_Kufi_Arabic } from "next/font/google";
 import { Toaster } from "sonner";
 import { ScrollProgress } from "@/components/motion/scroll-progress";
+import { getAppUrl } from "@/lib/env";
 import "./globals.css";
 
 const cairo = Cairo({
@@ -19,9 +20,7 @@ const kufi = Noto_Kufi_Arabic({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
-  ),
+  metadataBase: new URL(getAppUrl()),
   title: {
     default: "أحمد هيثم — افهم اللعبة الأزلية وغيّر حياتك",
     template: "%s · أحمد هيثم",
