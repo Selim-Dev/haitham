@@ -10,6 +10,7 @@ import {
   getDistinctCategories,
 } from "@/services/course.service";
 import { courseListQuerySchema } from "@/validators/course.validator";
+import { getViewerCountry } from "@/lib/viewer-country";
 import { COPY } from "@/lib/arabic";
 import { toArabicNumerals } from "@/lib/utils";
 
@@ -39,9 +40,10 @@ export default async function CoursesPage({
   const parsed = courseListQuerySchema.safeParse(params);
   const query = parsed.success ? parsed.data : { sort: "newest" as const, page: 1, limit: 12 };
 
-  const [{ items, total }, categories] = await Promise.all([
+  const [{ items, total }, categories, viewerCountry] = await Promise.all([
     listPublishedCourses(query),
     getDistinctCategories(),
+    getViewerCountry(),
   ]);
 
   return (
@@ -71,7 +73,7 @@ export default async function CoursesPage({
       ) : (
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((c) => (
-            <CourseCard key={c.id} course={c} />
+            <CourseCard key={c.id} course={c} viewerCountry={viewerCountry} />
           ))}
         </div>
       )}

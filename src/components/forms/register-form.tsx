@@ -120,6 +120,24 @@ export function RegisterForm() {
         {COPY.auth.submitRegister}
       </Button>
 
+      <p className="text-center text-xs leading-relaxed text-muted-2">
+        بإنشاء حسابك فأنت توافق على{" "}
+        <Link
+          href="/terms"
+          className="font-semibold text-[var(--color-red-300)] underline-offset-2 hover:underline"
+        >
+          {COPY.nav.terms}
+        </Link>{" "}
+        و
+        <Link
+          href="/privacy"
+          className="font-semibold text-[var(--color-red-300)] underline-offset-2 hover:underline"
+        >
+          {COPY.nav.privacy}
+        </Link>
+        .
+      </p>
+
       <p className="mt-2 text-center text-sm text-muted">
         {COPY.auth.haveAccount}{" "}
         <Link

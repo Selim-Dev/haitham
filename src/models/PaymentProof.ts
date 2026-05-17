@@ -1,5 +1,5 @@
 import mongoose, { Schema, type Model, type Document } from "mongoose";
-import type { PaymentStatus } from "@/lib/constants";
+import type { PaymentStatus, PaymentMethod } from "@/lib/constants";
 
 export interface IPaymentProof extends Document {
   _id: mongoose.Types.ObjectId;
@@ -7,8 +7,9 @@ export interface IPaymentProof extends Document {
   courseId: mongoose.Types.ObjectId;
   amount: number;
   currency: string;
-  receiptUrl: string;
-  receiptStorageKey: string;
+  paymentMethod: PaymentMethod;
+  receiptUrl?: string;
+  receiptStorageKey?: string;
   transactionReference?: string;
   userNote?: string;
   status: PaymentStatus;
@@ -35,8 +36,25 @@ const PaymentProofSchema = new Schema<IPaymentProof>(
     },
     amount: { type: Number, required: true, min: 0 },
     currency: { type: String, default: "EGP", uppercase: true },
-    receiptUrl: { type: String, required: true },
-    receiptStorageKey: { type: String, required: true },
+    paymentMethod: {
+      type: String,
+      enum: ["WALLET", "BANK", "PAYPAL"],
+      default: "WALLET",
+      required: true,
+      index: true,
+    },
+    receiptUrl: {
+      type: String,
+      required: function (this: IPaymentProof) {
+        return this.paymentMethod !== "PAYPAL";
+      },
+    },
+    receiptStorageKey: {
+      type: String,
+      required: function (this: IPaymentProof) {
+        return this.paymentMethod !== "PAYPAL";
+      },
+    },
     transactionReference: { type: String, trim: true },
     userNote: { type: String, trim: true, maxlength: 500 },
     status: {

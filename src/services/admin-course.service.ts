@@ -53,6 +53,8 @@ export async function getAdminCourse(id: string) {
     shortDescription: course.shortDescription,
     price: course.price,
     currency: course.currency,
+    priceUsd: course.priceUsd,
+    paypalHostedButtonId: course.paypalHostedButtonId,
     thumbnailUrl: course.thumbnailUrl,
     category: course.category,
     level: course.level,

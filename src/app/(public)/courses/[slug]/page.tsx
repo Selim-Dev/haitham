@@ -9,6 +9,8 @@ import { CourseCta } from "@/components/courses/course-cta";
 import { getCourseBySlug } from "@/services/course.service";
 import { getCurrentUser } from "@/lib/auth";
 import { getAccessStateForCourse } from "@/services/enrollment.service";
+import { getViewerCountry } from "@/lib/viewer-country";
+import { pickPriceForCountry } from "@/lib/pricing";
 import { COURSE_LEVEL_AR } from "@/lib/constants";
 import { COPY } from "@/lib/arabic";
 import {
@@ -49,7 +51,11 @@ export default async function CourseDetailPage({
     user = null;
   }
 
-  const accessState = await getAccessStateForCourse(user?.id ?? null, course.id);
+  const [accessState, viewerCountry] = await Promise.all([
+    getAccessStateForCourse(user?.id ?? null, course.id),
+    getViewerCountry(),
+  ]);
+  const priced = pickPriceForCountry(course, viewerCountry);
   const totalDuration = course.lessons.reduce(
     (s, l) => s + l.durationSeconds,
     0,
@@ -115,8 +121,11 @@ export default async function CourseDetailPage({
         <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
           <div className="flex flex-col gap-5 rounded-2xl border border-[var(--color-border-strong)] bg-card p-6 shadow-[var(--shadow-card)]">
             <div className="flex items-end justify-between">
-              <span className="font-display text-3xl font-extrabold text-foreground">
-                {formatPrice(course.price, course.currency)}
+              <span
+                className="font-display text-3xl font-extrabold text-foreground"
+                dir={priced.isInternational ? "ltr" : undefined}
+              >
+                {formatPrice(priced.amount, priced.currency)}
               </span>
               <Badge variant="success">
                 <InfinityIcon className="size-3" />
@@ -128,6 +137,7 @@ export default async function CourseDetailPage({
               state={accessState}
               courseId={course.id}
               courseSlug={course.slug}
+              isInternational={priced.isInternational}
             />
 
             <div className="grid grid-cols-2 gap-3 border-t border-[var(--color-border)] pt-4 text-sm">

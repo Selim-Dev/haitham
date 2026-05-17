@@ -21,6 +21,7 @@ function mapCourseToCard(c: ICourse): CourseCardData {
     durationLabel: c.durationLabel,
     price: c.price,
     currency: c.currency,
+    priceUsd: c.priceUsd,
     featured: c.featured,
   };
 }

@@ -8,6 +8,8 @@ export interface ICourse extends Document {
   shortDescription: string;
   price: number;
   currency: string;
+  priceUsd?: number;
+  paypalHostedButtonId?: string;
   thumbnailUrl?: string;
   category: string;
   level: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
@@ -28,6 +30,8 @@ const CourseSchema = new Schema<ICourse>(
     shortDescription: { type: String, required: true, maxlength: 280 },
     price: { type: Number, required: true, min: 0 },
     currency: { type: String, default: "EGP", uppercase: true, trim: true },
+    priceUsd: { type: Number, min: 0 },
+    paypalHostedButtonId: { type: String, trim: true, maxlength: 64 },
     thumbnailUrl: { type: String },
     category: { type: String, required: true, trim: true, index: true },
     level: {

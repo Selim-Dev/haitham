@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { COURSE_LEVEL_AR, type CourseLevel } from "@/lib/constants";
 import { COPY } from "@/lib/arabic";
 import { formatPrice, toArabicNumerals } from "@/lib/utils";
+import { pickPriceForCountry } from "@/lib/pricing";
 
 export type CourseCardData = {
   id: string;
@@ -18,10 +19,19 @@ export type CourseCardData = {
   durationLabel?: string;
   price: number;
   currency: string;
+  priceUsd?: number;
   featured?: boolean;
 };
 
-export function CourseCard({ course }: { course: CourseCardData }) {
+export function CourseCard({
+  course,
+  viewerCountry,
+}: {
+  course: CourseCardData;
+  viewerCountry?: string;
+}) {
+  const priced = pickPriceForCountry(course, viewerCountry);
+
   return (
     <Link
       href={`/courses/${course.slug}`}
@@ -77,8 +87,11 @@ export function CourseCard({ course }: { course: CourseCardData }) {
         </div>
 
         <div className="flex items-center justify-between border-t border-[var(--color-border)] pt-3">
-          <span className="font-display text-xl font-extrabold text-foreground">
-            {formatPrice(course.price, course.currency)}
+          <span
+            className="font-display text-xl font-extrabold text-foreground"
+            dir={priced.isInternational ? "ltr" : undefined}
+          >
+            {formatPrice(priced.amount, priced.currency)}
           </span>
           <span className="text-sm font-semibold text-[var(--color-red-300)] transition-colors group-hover:text-primary">
             {COPY.courses.card.details}

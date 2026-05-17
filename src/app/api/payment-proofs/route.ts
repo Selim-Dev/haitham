@@ -1,7 +1,14 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
-import { paymentProofInputSchema } from "@/validators/payment.validator";
-import { createPaymentProof, listMyPaymentProofs } from "@/services/payment.service";
+import {
+  paymentProofInputSchema,
+  paypalProofInputSchema,
+} from "@/validators/payment.validator";
+import {
+  createPaymentProof,
+  createPaypalPaymentProof,
+  listMyPaymentProofs,
+} from "@/services/payment.service";
 
 export const runtime = "nodejs";
 
@@ -24,6 +31,35 @@ export async function POST(req: Request) {
     const user = await requireAuth();
 
     const form = await req.formData();
+    const paymentMethod = (
+      String(form.get("paymentMethod") ?? "WALLET") || "WALLET"
+    ).toUpperCase();
+
+    if (paymentMethod === "PAYPAL") {
+      const fields = {
+        courseId: String(form.get("courseId") ?? ""),
+        transactionReference: String(form.get("transactionReference") ?? ""),
+        userNote: form.get("userNote") ?? undefined,
+      };
+      const parsed = paypalProofInputSchema.safeParse(fields);
+      if (!parsed.success) {
+        return NextResponse.json(
+          {
+            error: "بيانات غير صحيحة",
+            details: parsed.error.flatten().fieldErrors,
+          },
+          { status: 400 },
+        );
+      }
+      const result = await createPaypalPaymentProof({
+        userId: user.id,
+        courseId: parsed.data.courseId,
+        transactionReference: parsed.data.transactionReference,
+        userNote: parsed.data.userNote || undefined,
+      });
+      return NextResponse.json({ ok: true, ...result }, { status: 201 });
+    }
+
     const file = form.get("file");
     if (!(file instanceof File)) {
       return NextResponse.json(
@@ -36,6 +72,7 @@ export async function POST(req: Request) {
       courseId: String(form.get("courseId") ?? ""),
       amount: form.get("amount"),
       currency: String(form.get("currency") ?? "EGP"),
+      paymentMethod,
       transactionReference: form.get("transactionReference") ?? undefined,
       userNote: form.get("userNote") ?? undefined,
     };
@@ -58,6 +95,7 @@ export async function POST(req: Request) {
       courseId: parsed.data.courseId,
       amount: parsed.data.amount,
       currency: parsed.data.currency,
+      paymentMethod: parsed.data.paymentMethod,
       transactionReference: parsed.data.transactionReference || undefined,
       userNote: parsed.data.userNote || undefined,
       file: {

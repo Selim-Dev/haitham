@@ -3,7 +3,12 @@ import { Receipt } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import { listAdminPaymentProofs } from "@/services/admin-payment.service";
-import { PAYMENT_STATUS_AR, type PaymentStatus } from "@/lib/constants";
+import {
+  PAYMENT_STATUS_AR,
+  PAYMENT_METHOD_AR,
+  type PaymentStatus,
+  type PaymentMethod,
+} from "@/lib/constants";
 import { COPY } from "@/lib/arabic";
 import { cn, formatDate, formatPrice, toArabicNumerals } from "@/lib/utils";
 
@@ -105,9 +110,21 @@ export default async function AdminPaymentsPage({
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="font-display font-bold text-foreground">
+                    <span
+                      className="font-display font-bold text-foreground"
+                      dir={p.currency === "USD" ? "ltr" : undefined}
+                    >
                       {formatPrice(p.amount, p.currency)}
                     </span>
+                    <Badge
+                      variant={
+                        p.paymentMethod === "PAYPAL" ? "primary" : "outline"
+                      }
+                      className="hidden sm:inline-flex"
+                    >
+                      {PAYMENT_METHOD_AR[p.paymentMethod as PaymentMethod] ??
+                        p.paymentMethod}
+                    </Badge>
                     <Badge
                       variant={STATUS_VARIANT[p.status as PaymentStatus]}
                     >

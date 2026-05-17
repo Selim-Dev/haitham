@@ -11,14 +11,21 @@ export type AccessState =
   | "REJECTED"
   | "ENROLLED";
 
+function buildPayHref(courseId: string, isInternational?: boolean): string {
+  const base = `/dashboard/payment-proofs/new?courseId=${courseId}`;
+  return isInternational ? `${base}&method=paypal` : base;
+}
+
 export function CourseCta({
   state,
   courseId,
   courseSlug,
+  isInternational,
 }: {
   state: AccessState;
   courseId: string;
   courseSlug: string;
+  isInternational?: boolean;
 }) {
   switch (state) {
     case "GUEST":
@@ -67,9 +74,9 @@ export function CourseCta({
             {COPY.courseDetail.rejected}
           </Badge>
           <Button asChild size="lg" variant="primary" className="w-full">
-            <Link href={`/dashboard/payment-proofs/new?courseId=${courseId}`}>
+            <Link href={buildPayHref(courseId, isInternational)}>
               <Upload className="size-4" />
-              ارفع إيصال جديد
+              {isInternational ? "ادفع عبر PayPal" : "ارفع إيصال جديد"}
             </Link>
           </Button>
         </div>
@@ -79,9 +86,11 @@ export function CourseCta({
     default:
       return (
         <Button asChild size="lg" variant="primary" className="w-full">
-          <Link href={`/dashboard/payment-proofs/new?courseId=${courseId}`}>
+          <Link href={buildPayHref(courseId, isInternational)}>
             <Upload className="size-4" />
-            {COPY.courseDetail.uploadProof}
+            {isInternational
+              ? "ادفع عبر PayPal للاشتراك"
+              : COPY.courseDetail.uploadProof}
           </Link>
         </Button>
       );

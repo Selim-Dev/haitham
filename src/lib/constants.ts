@@ -39,6 +39,20 @@ export const PAYMENT_STATUS_AR: Record<PaymentStatus, string> = {
   REJECTED: "مرفوض",
 };
 
+export const PAYMENT_METHOD = {
+  WALLET: "WALLET",
+  BANK: "BANK",
+  PAYPAL: "PAYPAL",
+} as const;
+export type PaymentMethod =
+  (typeof PAYMENT_METHOD)[keyof typeof PAYMENT_METHOD];
+
+export const PAYMENT_METHOD_AR: Record<PaymentMethod, string> = {
+  WALLET: "محفظة / إنستاباي",
+  BANK: "تحويل بنكي",
+  PAYPAL: "PayPal",
+};
+
 export const APPROVAL_STATUS = {
   PENDING_APPLICATION: "PENDING_APPLICATION",
   PENDING_REVIEW: "PENDING_REVIEW",

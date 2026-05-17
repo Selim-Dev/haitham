@@ -9,19 +9,23 @@ import { FeedbacksSection } from "@/components/marketing/feedbacks-section";
 import { FaqSection } from "@/components/marketing/faq-section";
 import { CtaFooterSection } from "@/components/marketing/cta-footer-section";
 import { getFeaturedCourses } from "@/services/course.service";
+import { getViewerCountry } from "@/lib/viewer-country";
 
-// Revalidate every 5 minutes — the homepage is mostly static marketing
-// content; only the featured-courses block actually queries the DB.
-export const revalidate = 300;
+// Country-aware pricing needs request headers, so the homepage can't be
+// statically revalidated globally — keep it dynamic.
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const featured = await getFeaturedCourses(3);
+  const [featured, viewerCountry] = await Promise.all([
+    getFeaturedCourses(3),
+    getViewerCountry(),
+  ]);
 
   return (
     <>
       <HeroSection />
       <MarqueeStrip />
-      <FeaturedCoursesSection courses={featured} />
+      <FeaturedCoursesSection courses={featured} viewerCountry={viewerCountry} />
       <StatsSection />
       <BenefitsSection />
       <HowItWorksSection />

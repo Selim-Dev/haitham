@@ -45,6 +45,8 @@ export function CourseForm({
       shortDescription: initial?.shortDescription ?? "",
       price: initial?.price ?? 0,
       currency: initial?.currency ?? "EGP",
+      priceUsd: initial?.priceUsd ?? "",
+      paypalHostedButtonId: initial?.paypalHostedButtonId ?? "",
       thumbnailUrl: initial?.thumbnailUrl ?? "",
       category: initial?.category ?? "",
       level: initial?.level ?? "BEGINNER",
@@ -134,7 +136,7 @@ export function CourseForm({
         </div>
 
         <div>
-          <Label htmlFor="price">السعر</Label>
+          <Label htmlFor="price">السعر داخل مصر (EGP)</Label>
           <Input
             id="price"
             type="number"
@@ -147,17 +149,71 @@ export function CourseForm({
         </div>
 
         <div>
-          <Label htmlFor="currency">العملة</Label>
+          <Label htmlFor="currency">العملة المحلية</Label>
           <Input id="currency" dir="ltr" {...register("currency")} />
+          <p className="mt-1.5 text-xs text-muted-2">
+            افتراضيًا EGP. تنطبق على المشتركين داخل مصر.
+          </p>
         </div>
 
-        <div>
+        <div className="md:col-span-2">
           <Label htmlFor="durationLabel">المدة (نص)</Label>
           <Input
             id="durationLabel"
             placeholder="مثال: ٣ ساعات"
             {...register("durationLabel")}
           />
+        </div>
+
+        <div className="md:col-span-2 rounded-2xl border border-[var(--color-border)] bg-elevated/40 p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <div>
+              <h3 className="font-display text-base font-bold text-foreground">
+                تسعير دولي / PayPal
+              </h3>
+              <p className="mt-0.5 text-xs text-muted-2">
+                للمشتركين خارج مصر. اتركه فارغًا لإخفاء البيع الدولي لهذا
+                الكورس.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label htmlFor="priceUsd">السعر خارج مصر (USD)</Label>
+              <Input
+                id="priceUsd"
+                type="number"
+                min="0"
+                step="0.01"
+                dir="ltr"
+                placeholder="29"
+                {...register("priceUsd", {
+                  setValueAs: (v) =>
+                    v === "" || v === null || v === undefined ? "" : Number(v),
+                })}
+              />
+              <FieldError message={errors.priceUsd?.message} />
+            </div>
+
+            <div>
+              <Label htmlFor="paypalHostedButtonId">
+                PayPal Hosted Button ID
+              </Label>
+              <Input
+                id="paypalHostedButtonId"
+                dir="ltr"
+                placeholder="ZSVCNMW79RTDN"
+                className="font-mono uppercase"
+                {...register("paypalHostedButtonId")}
+              />
+              <FieldError message={errors.paypalHostedButtonId?.message} />
+              <p className="mt-1.5 text-xs text-muted-2">
+                أنشئ زر PayPal Hosted لهذا الكورس على لوحة PayPal، ثم الصق
+                الـ ID هنا.
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="md:col-span-2">

@@ -12,6 +12,19 @@ export const courseInputSchema = z.object({
   shortDescription: z.string().min(2).max(280),
   price: z.number().nonnegative(),
   currency: z.string().default("EGP"),
+  priceUsd: z
+    .union([z.number().nonnegative(), z.literal("")])
+    .optional()
+    .transform((v) => (v === "" || v === undefined ? undefined : Number(v))),
+  paypalHostedButtonId: z
+    .string()
+    .trim()
+    .regex(
+      /^[A-Z0-9]{6,32}$/,
+      "ID زر PayPal يحتوي رموزًا غير صحيحة (حروف كبيرة وأرقام فقط)",
+    )
+    .optional()
+    .or(z.literal("")),
   thumbnailUrl: z.string().url().optional().or(z.literal("")),
   category: z.string().trim().min(1),
   level: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]),

@@ -9,7 +9,7 @@ export function Footer() {
     <footer className="relative mt-20 border-t border-[var(--color-border)] bg-surface">
       <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
       <Container className="py-12">
-        <div className="grid gap-10 md:grid-cols-4">
+        <div className="grid gap-10 md:grid-cols-5">
           <div className="md:col-span-2">
             <Logo size="md" />
             <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
@@ -32,7 +32,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/#instructor" className="hover:text-foreground">
+                <Link href="/about" className="hover:text-foreground">
                   {COPY.nav.about}
                 </Link>
               </li>
@@ -60,6 +60,34 @@ export function Footer() {
               <li>
                 <Link href="/dashboard" className="hover:text-foreground">
                   {COPY.nav.dashboard}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="mb-3 text-sm font-bold text-foreground">
+              {COPY.nav.policies}
+            </h4>
+            <ul className="flex flex-col gap-2 text-sm text-muted">
+              <li>
+                <Link href="/terms" className="hover:text-foreground">
+                  {COPY.nav.terms}
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className="hover:text-foreground">
+                  {COPY.nav.privacy}
+                </Link>
+              </li>
+              <li>
+                <Link href="/refund" className="hover:text-foreground">
+                  {COPY.nav.refund}
+                </Link>
+              </li>
+              <li>
+                <Link href="/delivery" className="hover:text-foreground">
+                  {COPY.nav.delivery}
                 </Link>
               </li>
             </ul>

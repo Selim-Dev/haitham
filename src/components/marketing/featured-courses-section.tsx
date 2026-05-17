@@ -11,8 +11,10 @@ import { COPY } from "@/lib/arabic";
 
 export function FeaturedCoursesSection({
   courses,
+  viewerCountry,
 }: {
   courses: CourseCardData[];
+  viewerCountry?: string;
 }) {
   return (
     <section className="py-20 sm:py-28">
@@ -46,7 +48,7 @@ export function FeaturedCoursesSection({
             {courses.map((c) => (
               <StaggerItem key={c.id} className="h-full">
                 <TiltCard intensity={6}>
-                  <CourseCard course={c} />
+                  <CourseCard course={c} viewerCountry={viewerCountry} />
                 </TiltCard>
               </StaggerItem>
             ))}

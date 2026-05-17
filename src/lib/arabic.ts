@@ -22,6 +22,11 @@ export const COPY = {
     dashboard: "لوحة التعلم",
     admin: "لوحة التحكم",
     logout: "تسجيل الخروج",
+    policies: "السياسات",
+    terms: "شروط الاستخدام",
+    privacy: "سياسة الخصوصية",
+    refund: "سياسة الاسترجاع",
+    delivery: "سياسة التسليم",
   },
 
   hero: {

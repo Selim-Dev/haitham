@@ -13,6 +13,7 @@ export type SessionUser = {
   role: "STUDENT" | "ADMIN";
   isBlocked: boolean;
   approvalStatus: ApprovalStatus;
+  registrationCountry?: string;
 };
 
 export async function getCurrentSession(): Promise<SessionPayload | null> {
@@ -37,6 +38,7 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
     role: user.role,
     isBlocked: user.isBlocked,
     approvalStatus: user.approvalStatus ?? "APPROVED",
+    registrationCountry: user.registrationCountry,
   };
 }
 

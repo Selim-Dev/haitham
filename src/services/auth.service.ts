@@ -52,6 +52,7 @@ export async function registerStudent(input: {
     role: created.role,
     isBlocked: created.isBlocked,
     approvalStatus: created.approvalStatus,
+    registrationCountry: created.registrationCountry,
   };
 }
 
@@ -98,5 +99,6 @@ export async function loginUser(
     role: user.role,
     isBlocked: user.isBlocked,
     approvalStatus: user.approvalStatus ?? "APPROVED",
+    registrationCountry: user.registrationCountry,
   };
 }
