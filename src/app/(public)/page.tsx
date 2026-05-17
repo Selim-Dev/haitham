@@ -24,9 +24,9 @@ export default async function HomePage() {
       <HeroSection />
       <MarqueeStrip />
       <FeaturedCoursesSection courses={featured} viewerCountry={viewerCountry} />
-      <HowItWorksSection />
       <InstructorSection />
       <FeedbacksSection />
+      <HowItWorksSection />
       <FaqSection />
       <CtaFooterSection />
     </>
