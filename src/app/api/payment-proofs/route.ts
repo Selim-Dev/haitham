@@ -2,13 +2,14 @@ import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 import {
   paymentProofInputSchema,
-  paypalProofInputSchema,
+  internationalProofInputSchema,
 } from "@/validators/payment.validator";
 import {
   createPaymentProof,
-  createPaypalPaymentProof,
+  createInternationalPaymentProof,
   listMyPaymentProofs,
 } from "@/services/payment.service";
+import { isInternationalMethod } from "@/lib/constants";
 
 export const runtime = "nodejs";
 
@@ -35,13 +36,14 @@ export async function POST(req: Request) {
       String(form.get("paymentMethod") ?? "WALLET") || "WALLET"
     ).toUpperCase();
 
-    if (paymentMethod === "PAYPAL") {
+    if (isInternationalMethod(paymentMethod)) {
       const fields = {
         courseId: String(form.get("courseId") ?? ""),
+        paymentMethod,
         transactionReference: String(form.get("transactionReference") ?? ""),
         userNote: form.get("userNote") ?? undefined,
       };
-      const parsed = paypalProofInputSchema.safeParse(fields);
+      const parsed = internationalProofInputSchema.safeParse(fields);
       if (!parsed.success) {
         return NextResponse.json(
           {
@@ -51,9 +53,10 @@ export async function POST(req: Request) {
           { status: 400 },
         );
       }
-      const result = await createPaypalPaymentProof({
+      const result = await createInternationalPaymentProof({
         userId: user.id,
         courseId: parsed.data.courseId,
+        paymentMethod: parsed.data.paymentMethod,
         transactionReference: parsed.data.transactionReference,
         userNote: parsed.data.userNote || undefined,
       });

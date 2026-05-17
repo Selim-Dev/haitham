@@ -6,6 +6,9 @@ import {
   ChevronRight,
   Globe2,
   ShieldCheck,
+  CreditCard,
+  Layers,
+  Wallet,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +17,7 @@ import { getAdminPaymentProof } from "@/services/admin-payment.service";
 import {
   PAYMENT_STATUS_AR,
   PAYMENT_METHOD_AR,
+  isInternationalMethod,
   type PaymentStatus,
   type PaymentMethod,
 } from "@/lib/constants";
@@ -28,6 +32,65 @@ const STATUS_VARIANT: Record<PaymentStatus, "warning" | "success" | "danger"> = 
   REJECTED: "danger",
 };
 
+type InternationalDescriptor = {
+  title: string;
+  subtitle: string;
+  refLabel: string;
+  verifyUrl: string;
+  verifyLabel: string;
+  badgeIcon: React.ReactNode;
+  iconWrap: string;
+  borderTint: string;
+  panelIcon: React.ReactNode;
+  txUrl?: (ref: string) => string;
+};
+
+function getInternationalDescriptor(
+  method: PaymentMethod,
+): InternationalDescriptor | null {
+  if (method === "PAYPAL") {
+    return {
+      title: "دفعة بالبطاقة (PayPal)",
+      subtitle: "تحقق من الـ Transaction ID على لوحة PayPal قبل الموافقة.",
+      refLabel: "PayPal Transaction ID",
+      verifyUrl: "https://www.paypal.com/activity",
+      verifyLabel: "افتح لوحة PayPal",
+      badgeIcon: <CreditCard className="size-3.5" />,
+      iconWrap: "from-[#0070ba] to-[#003087]",
+      borderTint: "border-[#0070ba]/30",
+      panelIcon: <ShieldCheck className="size-5" />,
+    };
+  }
+  if (method === "CRYPTO_SOLANA") {
+    return {
+      title: "دفعة عبر Solana",
+      subtitle: "تحقق من الـ Transaction Hash على Solscan قبل الموافقة.",
+      refLabel: "Solana Transaction Hash",
+      verifyUrl: "https://solscan.io",
+      verifyLabel: "افتح Solscan",
+      badgeIcon: <Layers className="size-3.5" />,
+      iconWrap: "from-[#9945ff] to-[#14f195]",
+      borderTint: "border-[#9945ff]/30",
+      panelIcon: <Layers className="size-5" />,
+      txUrl: (ref) => `https://solscan.io/tx/${encodeURIComponent(ref)}`,
+    };
+  }
+  if (method === "CRYPTO_BINANCE") {
+    return {
+      title: "دفعة عبر Binance",
+      subtitle: "افتح تطبيق Binance وتحقق من سجل التحويلات الوارد بهذا الـ ID.",
+      refLabel: "Binance Transaction ID",
+      verifyUrl: "https://www.binance.com/en/my/wallet/account/main/deposit/history",
+      verifyLabel: "سجل التحويلات في Binance",
+      badgeIcon: <Wallet className="size-3.5" />,
+      iconWrap: "from-[#f0b90b] to-[#7a5b00]",
+      borderTint: "border-[#f0b90b]/30",
+      panelIcon: <Wallet className="size-5" />,
+    };
+  }
+  return null;
+}
+
 export default async function AdminPaymentReviewPage({
   params,
 }: {
@@ -38,7 +101,9 @@ export default async function AdminPaymentReviewPage({
   if (!proof) notFound();
 
   const method = (proof.paymentMethod as PaymentMethod) ?? "WALLET";
-  const isPaypal = method === "PAYPAL";
+  const intl = isInternationalMethod(method)
+    ? getInternationalDescriptor(method)
+    : null;
   const isImage =
     !!proof.receiptUrl && !proof.receiptUrl.toLowerCase().endsWith(".pdf");
 
@@ -62,8 +127,11 @@ export default async function AdminPaymentReviewPage({
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant={isPaypal ? "primary" : "outline"} className="px-3 py-1.5">
-            {isPaypal && <Globe2 className="size-3.5" />}
+          <Badge
+            variant={intl ? "primary" : "outline"}
+            className="px-3 py-1.5"
+          >
+            {intl ? intl.badgeIcon : <Globe2 className="size-3.5 opacity-0" />}
             {PAYMENT_METHOD_AR[method]}
           </Badge>
           <Badge
@@ -77,39 +145,55 @@ export default async function AdminPaymentReviewPage({
 
       <div className="grid gap-6 lg:grid-cols-[1.4fr_0.9fr]">
         <div className="flex flex-col gap-5">
-          {isPaypal ? (
-            <div className="rounded-2xl border border-[#0070ba]/30 bg-gradient-to-br from-card via-card to-elevated p-6">
-              <div className="flex items-start gap-3">
-                <div className="grid size-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#0070ba] to-[#003087] text-white shadow-md">
-                  <ShieldCheck className="size-5" />
+          {intl ? (
+            <div
+              className={`rounded-2xl border ${intl.borderTint} bg-gradient-to-br from-card via-card to-elevated p-6`}
+            >
+              <div className="flex flex-wrap items-start gap-3">
+                <div
+                  className={`grid size-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br ${intl.iconWrap} text-white shadow-md`}
+                >
+                  {intl.panelIcon}
                 </div>
                 <div className="min-w-0 flex-1">
                   <h2 className="font-display text-base font-bold text-foreground">
-                    دفعة عبر PayPal
+                    {intl.title}
                   </h2>
-                  <p className="mt-1 text-xs text-muted">
-                    تحقق من الرقم التالي على لوحة PayPal قبل الموافقة.
-                  </p>
+                  <p className="mt-1 text-xs text-muted">{intl.subtitle}</p>
                 </div>
-                <Button asChild variant="ghost" size="sm">
-                  <a
-                    href="https://www.paypal.com/activity"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <ExternalLink className="size-4" />
-                    افتح لوحة PayPal
-                  </a>
-                </Button>
+                <div className="flex flex-wrap gap-2">
+                  {intl.txUrl && proof.transactionReference && (
+                    <Button asChild variant="primary" size="sm">
+                      <a
+                        href={intl.txUrl(proof.transactionReference)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ExternalLink className="size-4" />
+                        افتح المعاملة
+                      </a>
+                    </Button>
+                  )}
+                  <Button asChild variant="ghost" size="sm">
+                    <a
+                      href={intl.verifyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <ExternalLink className="size-4" />
+                      {intl.verifyLabel}
+                    </a>
+                  </Button>
+                </div>
               </div>
 
               <div className="mt-5 rounded-xl border border-[var(--color-border-strong)] bg-surface p-4">
                 <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-2">
-                  PayPal Transaction ID
+                  {intl.refLabel}
                 </p>
                 <p
                   dir="ltr"
-                  className="mt-2 break-all font-mono text-xl font-extrabold text-foreground tabular-nums"
+                  className="mt-2 break-all font-mono text-lg font-extrabold text-foreground sm:text-xl"
                 >
                   {proof.transactionReference || "— غير مذكور —"}
                 </p>
@@ -219,10 +303,7 @@ export default async function AdminPaymentReviewPage({
               تفاصيل الدفع
             </h3>
             <dl className="mt-3 grid gap-2 text-sm">
-              <Row
-                label="طريقة الدفع"
-                value={PAYMENT_METHOD_AR[method]}
-              />
+              <Row label="طريقة الدفع" value={PAYMENT_METHOD_AR[method]} />
               <Row
                 label={COPY.admin.review.amount}
                 value={formatPrice(proof.amount, proof.currency)}
@@ -230,9 +311,7 @@ export default async function AdminPaymentReviewPage({
               />
               {proof.transactionReference && (
                 <Row
-                  label={
-                    isPaypal ? "PayPal Txn ID" : COPY.admin.review.reference
-                  }
+                  label={intl ? intl.refLabel : COPY.admin.review.reference}
                   value={proof.transactionReference}
                   dir="ltr"
                 />

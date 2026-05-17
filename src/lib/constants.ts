@@ -43,6 +43,8 @@ export const PAYMENT_METHOD = {
   WALLET: "WALLET",
   BANK: "BANK",
   PAYPAL: "PAYPAL",
+  CRYPTO_SOLANA: "CRYPTO_SOLANA",
+  CRYPTO_BINANCE: "CRYPTO_BINANCE",
 } as const;
 export type PaymentMethod =
   (typeof PAYMENT_METHOD)[keyof typeof PAYMENT_METHOD];
@@ -50,8 +52,23 @@ export type PaymentMethod =
 export const PAYMENT_METHOD_AR: Record<PaymentMethod, string> = {
   WALLET: "محفظة / إنستاباي",
   BANK: "تحويل بنكي",
-  PAYPAL: "PayPal",
+  PAYPAL: "بطاقة (PayPal)",
+  CRYPTO_SOLANA: "كريبتو — Solana",
+  CRYPTO_BINANCE: "كريبتو — Binance",
 };
+
+export const INTERNATIONAL_METHODS = [
+  PAYMENT_METHOD.PAYPAL,
+  PAYMENT_METHOD.CRYPTO_SOLANA,
+  PAYMENT_METHOD.CRYPTO_BINANCE,
+] as const;
+export type InternationalMethod = (typeof INTERNATIONAL_METHODS)[number];
+
+export function isInternationalMethod(
+  value: string,
+): value is InternationalMethod {
+  return (INTERNATIONAL_METHODS as readonly string[]).includes(value);
+}
 
 export const APPROVAL_STATUS = {
   PENDING_APPLICATION: "PENDING_APPLICATION",

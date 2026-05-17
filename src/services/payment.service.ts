@@ -70,9 +70,12 @@ export async function createPaymentProof(input: {
   };
 }
 
-export async function createPaypalPaymentProof(input: {
+type InternationalMethod = "PAYPAL" | "CRYPTO_SOLANA" | "CRYPTO_BINANCE";
+
+export async function createInternationalPaymentProof(input: {
   userId: string;
   courseId: string;
+  paymentMethod: InternationalMethod;
   transactionReference: string;
   userNote?: string;
 }) {
@@ -93,6 +96,19 @@ export async function createPaypalPaymentProof(input: {
     throw err;
   }
 
+  // PayPal additionally requires the course to have a hosted button.
+  // Crypto methods only need priceUsd.
+  if (
+    input.paymentMethod === "PAYPAL" &&
+    (!course.paypalHostedButtonId || !course.paypalHostedButtonId.trim())
+  ) {
+    const err = new Error(
+      "زر PayPal غير مُعد لهذا الكورس. تواصل مع الإدارة.",
+    ) as Error & { status?: number };
+    err.status = 400;
+    throw err;
+  }
+
   const ref = input.transactionReference.trim();
   if (ref.length < 4) {
     const err = new Error("رقم العملية غير صحيح") as Error & {
@@ -102,8 +118,10 @@ export async function createPaypalPaymentProof(input: {
     throw err;
   }
 
+  // Reject the same reference being submitted twice for the same method —
+  // each on-chain hash / PayPal txn ID is unique by definition.
   const duplicate = await PaymentProofModel.findOne({
-    paymentMethod: "PAYPAL",
+    paymentMethod: input.paymentMethod,
     transactionReference: ref,
   }).lean();
   if (duplicate) {
@@ -119,7 +137,7 @@ export async function createPaypalPaymentProof(input: {
     courseId: input.courseId,
     amount: course.priceUsd,
     currency: "USD",
-    paymentMethod: "PAYPAL",
+    paymentMethod: input.paymentMethod,
     transactionReference: ref,
     userNote: input.userNote?.trim() || undefined,
     status: "PENDING",

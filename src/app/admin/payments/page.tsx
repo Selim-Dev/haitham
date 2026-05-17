@@ -6,6 +6,7 @@ import { listAdminPaymentProofs } from "@/services/admin-payment.service";
 import {
   PAYMENT_STATUS_AR,
   PAYMENT_METHOD_AR,
+  isInternationalMethod,
   type PaymentStatus,
   type PaymentMethod,
 } from "@/lib/constants";
@@ -118,7 +119,9 @@ export default async function AdminPaymentsPage({
                     </span>
                     <Badge
                       variant={
-                        p.paymentMethod === "PAYPAL" ? "primary" : "outline"
+                        isInternationalMethod(p.paymentMethod ?? "")
+                          ? "primary"
+                          : "outline"
                       }
                       className="hidden sm:inline-flex"
                     >

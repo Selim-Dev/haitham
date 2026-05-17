@@ -38,7 +38,7 @@ const PaymentProofSchema = new Schema<IPaymentProof>(
     currency: { type: String, default: "EGP", uppercase: true },
     paymentMethod: {
       type: String,
-      enum: ["WALLET", "BANK", "PAYPAL"],
+      enum: ["WALLET", "BANK", "PAYPAL", "CRYPTO_SOLANA", "CRYPTO_BINANCE"],
       default: "WALLET",
       required: true,
       index: true,
@@ -46,13 +46,14 @@ const PaymentProofSchema = new Schema<IPaymentProof>(
     receiptUrl: {
       type: String,
       required: function (this: IPaymentProof) {
-        return this.paymentMethod !== "PAYPAL";
+        // Only Egyptian wallet/bank payments require an uploaded receipt.
+        return this.paymentMethod === "WALLET" || this.paymentMethod === "BANK";
       },
     },
     receiptStorageKey: {
       type: String,
       required: function (this: IPaymentProof) {
-        return this.paymentMethod !== "PAYPAL";
+        return this.paymentMethod === "WALLET" || this.paymentMethod === "BANK";
       },
     },
     transactionReference: { type: String, trim: true },

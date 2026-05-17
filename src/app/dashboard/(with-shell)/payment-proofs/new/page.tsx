@@ -4,7 +4,7 @@ import { connectDB } from "@/lib/db";
 import { CourseModel } from "@/models/Course";
 import { ReceiptUploader } from "@/components/forms/receipt-uploader";
 import { PaymentMethodsCard } from "@/components/payment/payment-methods-card";
-import { PaypalCheckoutCard } from "@/components/payment/paypal-checkout-card";
+import { InternationalCheckoutCard } from "@/components/payment/international-checkout-card";
 import { getViewerCountry } from "@/lib/viewer-country";
 import { pickPriceForCountry } from "@/lib/pricing";
 import { COPY } from "@/lib/arabic";
@@ -35,13 +35,13 @@ export default async function NewPaymentProofPage({
     },
     viewerCountry,
   );
-  // PayPal only when the viewer truly resolves to an international price,
-  // OR when the link explicitly forces it. If the course has no USD price,
-  // priced.isInternational is false and we fall through to the EG flow even
-  // for non-Egypt viewers — keeps the displayed price and the payment page
-  // consistent.
-  const forcePaypal = method === "paypal";
-  const useEgyptFlow = !(forcePaypal || priced.isInternational);
+  // Show the international checkout (card + crypto) when the viewer
+  // resolves to an international price OR when the link explicitly forces
+  // it (?method=paypal — kept as the URL value for backwards compat with
+  // existing CourseCta links). If the course has no priceUsd, fall back
+  // to the EG flow so the displayed price and payment page stay aligned.
+  const forceInternational = method === "paypal";
+  const useEgyptFlow = !(forceInternational || priced.isInternational);
 
   if (useEgyptFlow) {
     return (
@@ -97,12 +97,12 @@ export default async function NewPaymentProofPage({
           الاشتراك في {course.title}
         </h1>
         <p className="mt-2 text-sm text-muted">
-          ادفع بأمان عبر PayPal، ثم أرسل لنا رقم العملية لتفعيل اشتراكك مدى
-          الحياة.
+          ادفع بالبطاقة مباشرة أو بالعملة الرقمية، ثم أرسل لنا رقم العملية
+          لتفعيل اشتراكك مدى الحياة.
         </p>
       </header>
 
-      <PaypalCheckoutCard
+      <InternationalCheckoutCard
         course={{
           id: String(course._id),
           title: course.title,
