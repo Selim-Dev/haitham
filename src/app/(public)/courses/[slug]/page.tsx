@@ -63,46 +63,27 @@ export default async function CourseDetailPage({
 
   return (
     <Container className="py-10 sm:py-14">
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,0.9fr)] lg:gap-12">
-        <div className="flex min-w-0 flex-col gap-8">
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="primary">{course.category}</Badge>
-              <Badge variant="glass">
-                <Signal className="size-3" />
-                {COURSE_LEVEL_AR[course.level]}
-              </Badge>
-              {course.featured && <Badge variant="primary">مميز</Badge>}
-            </div>
-            <h1 className="font-display text-balance text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl">
-              {course.title}
-            </h1>
-            <p className="text-pretty text-base leading-relaxed text-muted sm:text-lg">
-              {course.shortDescription}
-            </p>
-          </div>
+      {/* Title block — full width above the grid */}
+      <header className="mb-8 flex flex-col gap-4 sm:mb-10">
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="primary">{course.category}</Badge>
+          <Badge variant="glass">
+            <Signal className="size-3" />
+            {COURSE_LEVEL_AR[course.level]}
+          </Badge>
+          {course.featured && <Badge variant="primary">مميز</Badge>}
+        </div>
+        <h1 className="font-display text-balance text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+          {course.title}
+        </h1>
+        <p className="max-w-3xl text-pretty text-base leading-relaxed text-muted sm:text-lg">
+          {course.shortDescription}
+        </p>
+      </header>
 
-          <div className="relative aspect-video w-full max-w-full overflow-hidden rounded-2xl border border-[var(--color-border-strong)] bg-elevated">
-            {course.thumbnailUrl ? (
-              <Image
-                src={course.thumbnailUrl}
-                alt={course.title}
-                fill
-                priority
-                sizes="(max-width: 1024px) 100vw, 700px"
-                className="object-cover"
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#082434] via-[#0b0b0f] to-[#0b0b0f] text-primary/30">
-                <span className="font-display text-8xl font-black">AH</span>
-              </div>
-            )}
-            <div
-              aria-hidden="true"
-              className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/70 to-transparent"
-            />
-          </div>
-
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-12">
+        {/* Main column — details (renders on the right in RTL on desktop) */}
+        <div className="order-2 flex min-w-0 flex-col gap-6 lg:order-1">
           <div className="rounded-2xl border border-[var(--color-border)] bg-card p-6">
             <h2 className="font-display text-xl font-bold text-foreground">
               {COPY.courseDetail.description}
@@ -118,9 +99,42 @@ export default async function CourseDetailPage({
           />
         </div>
 
-        <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
+        {/* Aside — book cover + price (renders on the left in RTL on desktop,
+            appears first on mobile for above-the-fold conversion) */}
+        <aside className="order-1 flex min-w-0 flex-col gap-5 lg:order-2 lg:sticky lg:top-24 lg:self-start">
+          {/* Book cover — full portrait, no crop */}
+          <div className="mx-auto w-full max-w-[280px] lg:max-w-none">
+            <div className="group relative aspect-[904/1280] w-full overflow-hidden rounded-2xl border border-[var(--color-border-strong)] bg-elevated shadow-[var(--shadow-card)]">
+              {course.thumbnailUrl ? (
+                <Image
+                  src={course.thumbnailUrl}
+                  alt={course.title}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 280px, 320px"
+                  className="object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#082434] via-[#0b0b0f] to-[#0b0b0f] text-primary/30">
+                  <span className="font-display text-7xl font-black">AH</span>
+                </div>
+              )}
+              {/* Subtle book-spine highlight on the start edge */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-y-0 start-0 w-1.5 bg-gradient-to-b from-white/10 via-transparent to-black/30"
+              />
+              {/* Soft bottom shadow for depth */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-1/5 bg-gradient-to-t from-black/40 to-transparent"
+              />
+            </div>
+          </div>
+
+          {/* Price + CTA + meta + security note */}
           <div className="flex flex-col gap-5 rounded-2xl border border-[var(--color-border-strong)] bg-card p-6 shadow-[var(--shadow-card)]">
-            <div className="flex items-end justify-between">
+            <div className="flex items-end justify-between gap-3">
               <span
                 className="font-display text-3xl font-extrabold text-foreground"
                 dir={priced.isInternational ? "ltr" : undefined}

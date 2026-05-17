@@ -37,23 +37,23 @@ export function CourseCard({
       href={`/courses/${course.slug}`}
       className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:bg-elevated hover:shadow-[var(--shadow-red-glow)]"
     >
-      <div className="relative aspect-video overflow-hidden bg-elevated">
+      <div className="relative aspect-[3/4] overflow-hidden bg-elevated">
         {course.thumbnailUrl ? (
           <Image
             src={course.thumbnailUrl}
             alt={course.title}
             fill
-            sizes="(max-width: 768px) 100vw, 33vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#082434] via-[#0b0b0f] to-[#0b0b0f] text-primary/30">
-            <span className="font-display text-5xl font-black">AH</span>
+            <span className="font-display text-6xl font-black">AH</span>
           </div>
         )}
         <div
           aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 to-transparent"
+          className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/75 to-transparent"
         />
         <div className="absolute right-3 top-3 flex gap-2">
           <Badge variant="glass">{course.category}</Badge>
