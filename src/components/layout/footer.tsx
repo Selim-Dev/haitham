@@ -41,6 +41,11 @@ export function Footer() {
                   {COPY.nav.faq}
                 </Link>
               </li>
+              <li>
+                <Link href="/contact" className="hover:text-foreground">
+                  {COPY.nav.contact}
+                </Link>
+              </li>
             </ul>
           </div>
 

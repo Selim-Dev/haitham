@@ -27,6 +27,7 @@ export const COPY = {
     privacy: "سياسة الخصوصية",
     refund: "سياسة الاسترجاع",
     delivery: "سياسة التسليم",
+    contact: "تواصل معنا",
   },
 
   hero: {
