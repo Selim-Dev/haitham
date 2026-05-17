@@ -29,7 +29,7 @@ export function Logo({
         className={cn(
           "relative flex shrink-0 items-center justify-center rounded-full overflow-hidden",
           "ring-1 ring-[var(--color-border-strong)] transition-all duration-300",
-          "group-hover:ring-primary/60 group-hover:shadow-[0_0_24px_-4px_rgba(229,9,20,0.5)]",
+          "group-hover:ring-primary/60 group-hover:shadow-[0_0_24px_-4px_rgba(37,150,190,0.5)]",
         )}
         style={{ width: dim, height: dim }}
       >

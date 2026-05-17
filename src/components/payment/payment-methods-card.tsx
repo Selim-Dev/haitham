@@ -32,7 +32,7 @@ const METHODS: Method[] = [
     subtitle: "الأسرع — تحويل فوري من أي شبكة",
     number: "01280468426",
     icon: <Smartphone className="size-5" />,
-    accent: "from-[#E50914] to-[#7a0a10]",
+    accent: "from-[#2596be] to-[#185f7d]",
     badge: "تحويل فقط",
     notes: [
       "تحويل فقط من كل الشبكات",
@@ -132,7 +132,7 @@ function MethodCard({ method }: { method: Method }) {
     <article
       className={cn(
         "group relative overflow-hidden rounded-2xl border border-[var(--color-border-strong)] bg-card/80 p-5 transition-all duration-300",
-        "hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[0_18px_40px_-18px_rgba(229,9,20,0.4)]",
+        "hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[0_18px_40px_-18px_rgba(37,150,190,0.4)]",
       )}
     >
       <div

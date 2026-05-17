@@ -2,7 +2,13 @@
 @import "tw-animate-css";
 
 /* ==========================================================================
-   Ahmed Haitham Academy — Redpill design system (black + red, RTL, dark-only)
+   Ahmed Haitham Academy — Cerulean design system (black + teal, RTL, dark)
+
+   Brand palette anchored at #2596be (cerulean / ocean teal). Variable names
+   retain the legacy "red" prefix (e.g. --color-red-300, --shadow-red-glow)
+   for backwards compatibility with existing components — the values are now
+   teal-derived shades. The intent is the same: a single brand accent that
+   pops cleanly on the deep-black canvas.
    ========================================================================== */
 
 @theme inline {
@@ -19,22 +25,22 @@
   --color-muted: #a3a3a3;
   --color-muted-2: #737373;
 
-  /* Brand red ramp */
-  --color-red-50: #fff1f2;
-  --color-red-100: #ffe1e3;
-  --color-red-300: #ff6b73;
-  --color-red-500: #e50914;
-  --color-red-600: #c4060f;
-  --color-red-700: #b00020;
-  --color-red-800: #7a0015;
-  --color-red-900: #4d000d;
+  /* Brand ramp — cerulean / teal */
+  --color-red-50: #e8f5fa;
+  --color-red-100: #cce8f1;
+  --color-red-300: #5fb4d2;
+  --color-red-500: #2596be;
+  --color-red-600: #1f7da0;
+  --color-red-700: #185f7d;
+  --color-red-800: #0f4258;
+  --color-red-900: #082a3a;
 
   /* Aliases for brand */
-  --color-primary: #e50914;
-  --color-primary-hover: #ff1b27;
+  --color-primary: #2596be;
+  --color-primary-hover: #2da8d4;
   --color-primary-foreground: #ffffff;
-  --color-accent: #b00020;
-  --color-deep-red: #7a0015;
+  --color-accent: #185f7d;
+  --color-deep-red: #0f4258;
 
   /* Semantic */
   --color-success: #22c55e;
@@ -56,16 +62,16 @@
   --radius-xl: 20px;
   --radius-2xl: 28px;
 
-  /* Shadows */
+  /* Shadows — brand glow now reads as teal */
   --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4),
     0 8px 24px -8px rgba(0, 0, 0, 0.6);
   --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.04) inset,
     0 2px 8px rgba(0, 0, 0, 0.5), 0 16px 48px -16px rgba(0, 0, 0, 0.7);
-  --shadow-red-glow: 0 0 0 1px rgba(229, 9, 20, 0.25),
-    0 8px 32px -8px rgba(229, 9, 20, 0.5);
-  --shadow-red-glow-lg: 0 0 0 1px rgba(229, 9, 20, 0.3),
-    0 12px 48px -8px rgba(229, 9, 20, 0.55),
-    0 0 96px -24px rgba(229, 9, 20, 0.4);
+  --shadow-red-glow: 0 0 0 1px rgba(37, 150, 190, 0.25),
+    0 8px 32px -8px rgba(37, 150, 190, 0.5);
+  --shadow-red-glow-lg: 0 0 0 1px rgba(37, 150, 190, 0.3),
+    0 12px 48px -8px rgba(37, 150, 190, 0.55),
+    0 0 96px -24px rgba(37, 150, 190, 0.4);
 
   /* Easings */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -153,8 +159,8 @@ html {
 
 body {
   background-image:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(229, 9, 20, 0.12), transparent 60%),
-    radial-gradient(ellipse 60% 50% at 50% 120%, rgba(122, 0, 21, 0.08), transparent 60%);
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(37, 150, 190, 0.12), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 50% 120%, rgba(15, 66, 88, 0.1), transparent 60%);
   background-attachment: fixed;
 }
 
@@ -186,7 +192,7 @@ h3,
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(229, 9, 20, 0.5);
+  background: rgba(37, 150, 190, 0.5);
 }
 
 /* Focus ring (custom, never removed) */
@@ -197,7 +203,7 @@ h3,
 }
 
 /* ==========================================================================
-   Utilities — branded
+   Utilities — branded (cerulean accent)
    ========================================================================== */
 
 @utility glass {
@@ -235,16 +241,16 @@ h3,
     135deg,
     #050505 0%,
     #0b0b0f 40%,
-    #1a0408 75%,
-    #2b0610 100%
+    #082434 75%,
+    #093143 100%
   );
 }
 
 @utility bg-radial-red {
   background: radial-gradient(
     ellipse at center,
-    rgba(229, 9, 20, 0.25) 0%,
-    rgba(229, 9, 20, 0.08) 35%,
+    rgba(37, 150, 190, 0.25) 0%,
+    rgba(37, 150, 190, 0.08) 35%,
     transparent 70%
   );
 }

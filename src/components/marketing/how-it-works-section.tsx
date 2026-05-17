@@ -59,10 +59,10 @@ export function HowItWorksSection() {
                 x2="0%"
                 y2="0%"
               >
-                <stop offset="0%" stopColor="rgba(229,9,20,0.0)" />
-                <stop offset="20%" stopColor="rgba(229,9,20,0.6)" />
-                <stop offset="80%" stopColor="rgba(229,9,20,0.6)" />
-                <stop offset="100%" stopColor="rgba(229,9,20,0.0)" />
+                <stop offset="0%" stopColor="rgba(37,150,190,0.0)" />
+                <stop offset="20%" stopColor="rgba(37,150,190,0.6)" />
+                <stop offset="80%" stopColor="rgba(37,150,190,0.6)" />
+                <stop offset="100%" stopColor="rgba(37,150,190,0.0)" />
               </linearGradient>
             </defs>
           </svg>

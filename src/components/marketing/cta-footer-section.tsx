@@ -13,7 +13,7 @@ export function CtaFooterSection() {
     <section className="py-20 sm:py-28">
       <Container>
         <FadeIn>
-          <div className="relative overflow-hidden rounded-3xl border border-primary/30 bg-gradient-to-br from-[#1a0408] via-[#0b0b0f] to-[#0b0b0f] p-10 sm:p-16">
+          <div className="relative overflow-hidden rounded-3xl border border-primary/30 bg-gradient-to-br from-[#082434] via-[#0b0b0f] to-[#0b0b0f] p-10 sm:p-16">
             {/* Static red halo — opacity-only pulse to keep it cheap */}
             <motion.div
               aria-hidden="true"

@@ -29,7 +29,7 @@ export default async function DashboardHome() {
   return (
     <div className="flex flex-col gap-8">
       {/* Welcome banner */}
-      <section className="relative overflow-hidden rounded-3xl border border-primary/30 bg-gradient-to-l from-[#1a0408] via-[#0b0b0f] to-[#0b0b0f] p-6 sm:p-10">
+      <section className="relative overflow-hidden rounded-3xl border border-primary/30 bg-gradient-to-l from-[#082434] via-[#0b0b0f] to-[#0b0b0f] p-6 sm:p-10">
         <div
           aria-hidden="true"
           className="absolute -top-24 -right-24 size-72 rounded-full bg-radial-red blur-3xl opacity-70"

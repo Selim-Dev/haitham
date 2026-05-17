@@ -93,7 +93,7 @@ export default async function CourseDetailPage({
                 className="object-cover"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#1a0408] via-[#0b0b0f] to-[#0b0b0f] text-primary/30">
+              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#082434] via-[#0b0b0f] to-[#0b0b0f] text-primary/30">
                 <span className="font-display text-8xl font-black">AH</span>
               </div>
             )}

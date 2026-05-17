@@ -78,10 +78,10 @@ function approvalEmailHtml(params: { name: string; loginUrl: string }): string {
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#0b0b0f;padding:32px 16px;">
       <tr>
         <td align="center">
-          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;background:linear-gradient(180deg,#15151b 0%,#0f0f15 100%);border:1px solid rgba(229,9,20,0.18);border-radius:20px;overflow:hidden;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;background:linear-gradient(180deg,#15151b 0%,#0f0f15 100%);border:1px solid rgba(37,150,190,0.18);border-radius:20px;overflow:hidden;">
             <tr>
-              <td style="background:linear-gradient(135deg,#E50914 0%,#7a0a10 100%);padding:36px 32px;text-align:center;">
-                <p style="margin:0;font-size:13px;letter-spacing:0.18em;color:#ffd5d8;text-transform:uppercase;">${COPY.brand.academy}</p>
+              <td style="background:linear-gradient(135deg,#2596be 0%,#185f7d 100%);padding:36px 32px;text-align:center;">
+                <p style="margin:0;font-size:13px;letter-spacing:0.18em;color:#e8f5fa;text-transform:uppercase;">${COPY.brand.academy}</p>
                 <h1 style="margin:14px 0 0;font-size:30px;line-height:1.25;font-weight:900;color:#ffffff;">
                   مبروك يا ${escapeHtml(name)} — أنت داخل اللعبة
                 </h1>
@@ -98,7 +98,7 @@ function approvalEmailHtml(params: { name: string; loginUrl: string }): string {
                 </p>
                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="right" style="margin:28px 0;">
                   <tr>
-                    <td style="border-radius:12px;background:#E50914;box-shadow:0 12px 28px -8px rgba(229,9,20,0.55);">
+                    <td style="border-radius:12px;background:#2596be;box-shadow:0 12px 28px -8px rgba(37,150,190,0.55);">
                       <a href="${loginUrl}" style="display:inline-block;padding:14px 28px;font-size:16px;font-weight:800;color:#ffffff;text-decoration:none;border-radius:12px;">
                         ابدأ رحلتك الآن ←
                       </a>

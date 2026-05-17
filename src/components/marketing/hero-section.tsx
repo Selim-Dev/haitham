@@ -34,7 +34,7 @@ export function HeroSection() {
       <AnimatedBlobs />
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 top-0 -z-10 h-[60%] bg-[radial-gradient(ellipse_70%_70%_at_50%_0%,rgba(229,9,20,0.18),transparent_60%)]"
+        className="absolute inset-x-0 top-0 -z-10 h-[60%] bg-[radial-gradient(ellipse_70%_70%_at_50%_0%,rgba(37,150,190,0.18),transparent_60%)]"
       />
       <div
         aria-hidden="true"

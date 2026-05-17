@@ -47,7 +47,7 @@ export function CourseCard({
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#1a0408] via-[#0b0b0f] to-[#0b0b0f] text-primary/30">
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#082434] via-[#0b0b0f] to-[#0b0b0f] text-primary/30">
             <span className="font-display text-5xl font-black">AH</span>
           </div>
         )}
