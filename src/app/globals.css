@@ -2,12 +2,12 @@
 @import "tw-animate-css";
 
 /* ==========================================================================
-   Ahmed Haitham Academy — Cerulean design system (black + teal, RTL, dark)
+   Ahmed Haitham Academy — Verdant design system (black + green, RTL, dark)
 
-   Brand palette anchored at #2596be (cerulean / ocean teal). Variable names
+   Brand palette anchored at #4bbc63 (vivid spring green). Variable names
    retain the legacy "red" prefix (e.g. --color-red-300, --shadow-red-glow)
    for backwards compatibility with existing components — the values are now
-   teal-derived shades. The intent is the same: a single brand accent that
+   green-derived shades. The intent is the same: a single brand accent that
    pops cleanly on the deep-black canvas.
    ========================================================================== */
 
@@ -25,22 +25,22 @@
   --color-muted: #a3a3a3;
   --color-muted-2: #737373;
 
-  /* Brand ramp — cerulean / teal */
-  --color-red-50: #e8f5fa;
-  --color-red-100: #cce8f1;
-  --color-red-300: #5fb4d2;
-  --color-red-500: #2596be;
-  --color-red-600: #1f7da0;
-  --color-red-700: #185f7d;
-  --color-red-800: #0f4258;
-  --color-red-900: #082a3a;
+  /* Brand ramp — verdant green */
+  --color-red-50: #edf9f0;
+  --color-red-100: #d6f0dd;
+  --color-red-300: #85d29a;
+  --color-red-500: #4bbc63;
+  --color-red-600: #3aa551;
+  --color-red-700: #2d8541;
+  --color-red-800: #1f5d2e;
+  --color-red-900: #143b1f;
 
   /* Aliases for brand */
-  --color-primary: #2596be;
-  --color-primary-hover: #2da8d4;
+  --color-primary: #4bbc63;
+  --color-primary-hover: #5fcc77;
   --color-primary-foreground: #ffffff;
-  --color-accent: #185f7d;
-  --color-deep-red: #0f4258;
+  --color-accent: #2d8541;
+  --color-deep-red: #1f5d2e;
 
   /* Semantic */
   --color-success: #22c55e;
@@ -62,16 +62,16 @@
   --radius-xl: 20px;
   --radius-2xl: 28px;
 
-  /* Shadows — brand glow now reads as teal */
+  /* Shadows — brand glow now reads as green */
   --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4),
     0 8px 24px -8px rgba(0, 0, 0, 0.6);
   --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.04) inset,
     0 2px 8px rgba(0, 0, 0, 0.5), 0 16px 48px -16px rgba(0, 0, 0, 0.7);
-  --shadow-red-glow: 0 0 0 1px rgba(37, 150, 190, 0.25),
-    0 8px 32px -8px rgba(37, 150, 190, 0.5);
-  --shadow-red-glow-lg: 0 0 0 1px rgba(37, 150, 190, 0.3),
-    0 12px 48px -8px rgba(37, 150, 190, 0.55),
-    0 0 96px -24px rgba(37, 150, 190, 0.4);
+  --shadow-red-glow: 0 0 0 1px rgba(75, 188, 99, 0.25),
+    0 8px 32px -8px rgba(75, 188, 99, 0.5);
+  --shadow-red-glow-lg: 0 0 0 1px rgba(75, 188, 99, 0.3),
+    0 12px 48px -8px rgba(75, 188, 99, 0.55),
+    0 0 96px -24px rgba(75, 188, 99, 0.4);
 
   /* Easings */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -159,8 +159,8 @@ html {
 
 body {
   background-image:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(37, 150, 190, 0.12), transparent 60%),
-    radial-gradient(ellipse 60% 50% at 50% 120%, rgba(15, 66, 88, 0.1), transparent 60%);
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(75, 188, 99, 0.12), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 50% 120%, rgba(31, 93, 46, 0.1), transparent 60%);
   background-attachment: fixed;
 }
 
@@ -192,7 +192,7 @@ h3,
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(37, 150, 190, 0.5);
+  background: rgba(75, 188, 99, 0.5);
 }
 
 /* Focus ring (custom, never removed) */
@@ -241,16 +241,16 @@ h3,
     135deg,
     #050505 0%,
     #0b0b0f 40%,
-    #082434 75%,
-    #093143 100%
+    #0b2814 75%,
+    #0e3320 100%
   );
 }
 
 @utility bg-radial-red {
   background: radial-gradient(
     ellipse at center,
-    rgba(37, 150, 190, 0.25) 0%,
-    rgba(37, 150, 190, 0.08) 35%,
+    rgba(75, 188, 99, 0.25) 0%,
+    rgba(75, 188, 99, 0.08) 35%,
     transparent 70%
   );
 }

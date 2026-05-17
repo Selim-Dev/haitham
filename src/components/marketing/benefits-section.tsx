@@ -51,7 +51,7 @@ export function BenefitsSection() {
                   className="pointer-events-none absolute -inset-px -z-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                   style={{
                     background:
-                      "radial-gradient(120% 80% at 0% 0%, rgba(37,150,190,0.08), transparent 60%)",
+                      "radial-gradient(120% 80% at 0% 0%, rgba(75,188,99,0.08), transparent 60%)",
                   }}
                 />
                 <motion.div

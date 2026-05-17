@@ -136,7 +136,7 @@ function FeedbackCard({
       whileHover={{ y: -4 }}
       aria-label={`عرض ${alt}`}
       className={cn(
-        "group relative block w-full break-inside-avoid overflow-hidden rounded-2xl border border-[var(--color-border)] bg-card shadow-[0_4px_18px_-12px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-primary/40 hover:shadow-[0_18px_40px_-20px_rgba(37,150,190,0.45)]",
+        "group relative block w-full break-inside-avoid overflow-hidden rounded-2xl border border-[var(--color-border)] bg-card shadow-[0_4px_18px_-12px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-primary/40 hover:shadow-[0_18px_40px_-20px_rgba(75,188,99,0.45)]",
       )}
     >
       <div className="relative w-full">
