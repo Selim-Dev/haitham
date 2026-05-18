@@ -296,6 +296,16 @@ h3,
   transform: scaleX(-1);
 }
 
+/* Single-fire entry animations that are SSR-safe: they start from the keyframe's
+   "from" state (animation-fill-mode: both) so hydration cannot flash a hidden
+   state. Use these instead of JS-driven enter motion. */
+@utility enter-fade-up {
+  animation: fade-up 0.5s var(--ease-out-quart) both;
+}
+@utility enter-fade {
+  animation: fade-in 0.4s var(--ease-out-quart) both;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,

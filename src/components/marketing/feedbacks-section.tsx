@@ -2,13 +2,11 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
 import { Quote, X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { SectionTitle } from "@/components/ui/section-title";
-import { FadeIn } from "@/components/motion/fade-in";
 import { COPY } from "@/lib/arabic";
-import { cn, toArabicNumerals } from "@/lib/utils";
+import { toArabicNumerals } from "@/lib/utils";
 
 const FEEDBACKS = Array.from({ length: 12 }, (_, i) => ({
   src: `/feedbacks/feedback${i + 1}.jpg`,
@@ -58,27 +56,23 @@ export function FeedbacksSection() {
         className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 mx-auto h-[60%] max-w-5xl -translate-y-1/2 rounded-full bg-radial-red opacity-25 blur-3xl"
       />
       <Container>
-        <FadeIn>
-          <SectionTitle
-            eyebrow={
-              <>
-                <Quote className="size-3.5" />
-                {COPY.feedbacks.eyebrow}
-              </>
-            }
-            title={COPY.feedbacks.title}
-            subtitle={COPY.feedbacks.subtitle}
-          />
-        </FadeIn>
+        <SectionTitle
+          eyebrow={
+            <>
+              <Quote className="size-3.5" />
+              {COPY.feedbacks.eyebrow}
+            </>
+          }
+          title={COPY.feedbacks.title}
+          subtitle={COPY.feedbacks.subtitle}
+        />
 
-        <FadeIn delay={0.1}>
-          <p className="mt-4 text-center text-xs font-medium text-muted-2">
-            {COPY.feedbacks.note} ·{" "}
-            <span className="text-[var(--color-red-300)]">
-              {toArabicNumerals(FEEDBACKS.length)} {COPY.feedbacks.counter}
-            </span>
-          </p>
-        </FadeIn>
+        <p className="mt-4 text-center text-xs font-medium text-muted-2">
+          {COPY.feedbacks.note} ·{" "}
+          <span className="text-[var(--color-red-300)]">
+            {toArabicNumerals(FEEDBACKS.length)} {COPY.feedbacks.counter}
+          </span>
+        </p>
 
         <div className="mt-14 columns-1 gap-4 sm:columns-2 lg:columns-3 xl:columns-4 [&>*]:mb-4">
           {FEEDBACKS.map((f, i) => (
@@ -93,19 +87,17 @@ export function FeedbacksSection() {
         </div>
       </Container>
 
-      <AnimatePresence>
-        {openIndex !== null && (
-          <Lightbox
-            src={FEEDBACKS[openIndex].src}
-            alt={FEEDBACKS[openIndex].alt}
-            index={openIndex}
-            total={FEEDBACKS.length}
-            onClose={close}
-            onNext={next}
-            onPrev={prev}
-          />
-        )}
-      </AnimatePresence>
+      {openIndex !== null && (
+        <Lightbox
+          src={FEEDBACKS[openIndex].src}
+          alt={FEEDBACKS[openIndex].alt}
+          index={openIndex}
+          total={FEEDBACKS.length}
+          onClose={close}
+          onNext={next}
+          onPrev={prev}
+        />
+      )}
     </section>
   );
 }
@@ -122,22 +114,11 @@ function FeedbackCard({
   onOpen: () => void;
 }) {
   return (
-    <motion.button
+    <button
       type="button"
       onClick={onOpen}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{
-        duration: 0.55,
-        delay: (index % 6) * 0.05,
-        ease: [0.16, 1, 0.3, 1],
-      }}
-      whileHover={{ y: -4 }}
       aria-label={`عرض ${alt}`}
-      className={cn(
-        "group relative block w-full break-inside-avoid overflow-hidden rounded-2xl border border-[var(--color-border)] bg-card shadow-[0_4px_18px_-12px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-primary/40 hover:shadow-[0_18px_40px_-20px_rgba(75,188,99,0.45)]",
-      )}
+      className="group relative block w-full break-inside-avoid overflow-hidden rounded-2xl border border-[var(--color-border)] bg-card shadow-[0_4px_18px_-12px_rgba(0,0,0,0.5)] transition-colors duration-200 hover:border-primary/40"
     >
       <div className="relative w-full">
         <Image
@@ -151,9 +132,9 @@ function FeedbackCard({
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100"
         />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between p-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-background/80 px-2.5 py-1 text-[11px] font-bold text-foreground backdrop-blur-md">
             <ZoomIn className="size-3" />
             عرض كامل
@@ -163,7 +144,7 @@ function FeedbackCard({
           </span>
         </div>
       </div>
-    </motion.button>
+    </button>
   );
 }
 
@@ -185,15 +166,11 @@ function Lightbox({
   onPrev: () => void;
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.22 }}
+    <div
       role="dialog"
       aria-modal="true"
       aria-label={alt}
-      className="fixed inset-0 z-[80] grid place-items-center"
+      className="fixed inset-0 z-[80] grid place-items-center motion-safe:enter-fade"
     >
       <button
         type="button"
@@ -203,14 +180,7 @@ function Lightbox({
       />
 
       <div className="relative z-10 flex max-h-[92vh] w-full max-w-[min(92vw,560px)] flex-col items-center px-2">
-        <motion.div
-          key={src}
-          initial={{ opacity: 0, scale: 0.96, y: 12 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: 12 }}
-          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-full overflow-hidden rounded-2xl border border-[var(--color-border-strong)] bg-card shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)]"
-        >
+        <div className="relative w-full overflow-hidden rounded-2xl border border-[var(--color-border-strong)] bg-card shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)]">
           <Image
             src={src}
             alt={alt}
@@ -220,7 +190,7 @@ function Lightbox({
             sizes="(max-width: 640px) 92vw, 560px"
             priority
           />
-        </motion.div>
+        </div>
 
         <div className="mt-4 flex w-full items-center justify-between text-xs text-muted">
           <span className="rounded-full bg-card/80 px-3 py-1 font-semibold backdrop-blur">
@@ -257,6 +227,6 @@ function Lightbox({
       >
         <ChevronLeft className="size-5" />
       </button>
-    </motion.div>
+    </div>
   );
 }

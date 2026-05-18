@@ -1,8 +1,11 @@
-"use client";
-
-import { motion } from "framer-motion";
 import * as React from "react";
 import { cn } from "@/lib/utils";
+
+// Pure CSS marquee. Was a framer-motion `animate={{ x: [0, -50%] }}` loop —
+// constantly repainted a large layer and re-ran the JS animation engine even
+// when off-screen. The CSS keyframe runs on the compositor, pauses for free
+// when the tab is backgrounded, and respects prefers-reduced-motion via the
+// global rule in globals.css. No JS needed, so this is a server component.
 
 export function Marquee({
   items,
@@ -15,9 +18,7 @@ export function Marquee({
   speed?: number;
   separator?: string;
 }) {
-  // Duplicate the list so the loop is seamless.
-  const loop = React.useMemo(() => [...items, ...items], [items]);
-
+  const loop = [...items, ...items];
   return (
     <div
       className={cn(
@@ -25,14 +26,11 @@ export function Marquee({
         className,
       )}
     >
-      <motion.div
+      <div
         className="flex w-max items-center gap-10 py-4"
-        style={{ willChange: "transform" }}
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{
-          duration: speed,
-          repeat: Infinity,
-          ease: "linear",
+        style={{
+          animation: `marquee ${speed}s linear infinite`,
+          willChange: "transform",
         }}
       >
         {loop.map((item, i) => (
@@ -40,12 +38,15 @@ export function Marquee({
             <span className="font-display text-2xl font-extrabold tracking-tight text-foreground/80 sm:text-3xl">
               {item}
             </span>
-            <span className="text-2xl text-primary/60 sm:text-3xl" aria-hidden="true">
+            <span
+              className="text-2xl text-primary/60 sm:text-3xl"
+              aria-hidden="true"
+            >
               {separator}
             </span>
           </span>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }

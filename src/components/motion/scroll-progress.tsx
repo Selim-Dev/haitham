@@ -1,20 +1,9 @@
-"use client";
-
-import { motion, useScroll, useSpring } from "framer-motion";
+// Used framer-motion's useScroll + useSpring to drive a top progress bar.
+// Every scroll event fired a spring update + scaleX repaint at the top of
+// every page — including on the homepage where it visually clashed with the
+// hero gradient. Removed: render nothing. The wrapper is kept so existing
+// imports (e.g. in app/layout.tsx) still resolve.
 
 export function ScrollProgress() {
-  const { scrollYProgress } = useScroll();
-  const x = useSpring(scrollYProgress, {
-    stiffness: 220,
-    damping: 30,
-    mass: 0.4,
-  });
-
-  return (
-    <motion.div
-      aria-hidden="true"
-      style={{ scaleX: x, transformOrigin: "right" }}
-      className="fixed inset-x-0 top-0 z-[60] h-[2px] bg-gradient-to-l from-[var(--color-red-300)] via-primary to-[var(--color-red-700)] shadow-[0_0_12px_rgba(75,188,99,0.6)]"
-    />
-  );
+  return null;
 }

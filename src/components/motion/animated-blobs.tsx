@@ -1,40 +1,8 @@
-"use client";
-
-import { motion } from "framer-motion";
-
-/**
- * Background gradient blobs.
- *
- * Perf notes:
- *  - Animating `blur` together with `scale` makes the browser re-rasterize
- *    the blur every frame. Keep `transform: translate3d` only (no scale).
- *  - 2 blobs is plenty visually; 3+ stack up GPU work.
- *  - Hidden on mobile — the screen is small enough that the blobs add
- *    motion noise rather than depth, and mobile GPUs struggle with the
- *    large blurs.
- *  - `will-change: transform` keeps each blob on its own compositor layer.
- */
-
-const BLOBS = [
-  {
-    size: 480,
-    top: "-8%",
-    left: "-8%",
-    color: "rgba(75,188,99,0.16)",
-    duration: 32,
-    x: [0, 50, 0],
-    y: [0, -25, 0],
-  },
-  {
-    size: 440,
-    bottom: "-12%",
-    right: "-10%",
-    color: "rgba(31,93,46,0.18)",
-    duration: 38,
-    x: [0, -35, 0],
-    y: [0, 25, 0],
-  },
-];
+// Was two framer-motion divs animating x/y forever behind a blur-3xl filter.
+// The blur is the single most expensive thing on the page to repaint, so a
+// moving blurred layer made every frame cost a full screen-sized rasterize.
+// Now: static gradient blobs. The depth of the hero is preserved without
+// continuous GPU work.
 
 export function AnimatedBlobs() {
   return (
@@ -42,31 +10,28 @@ export function AnimatedBlobs() {
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 -z-10 hidden overflow-hidden sm:block"
     >
-      {BLOBS.map((b, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full blur-3xl"
-          style={{
-            width: b.size,
-            height: b.size,
-            top: b.top,
-            bottom: b.bottom,
-            left: b.left,
-            right: b.right,
-            background: `radial-gradient(circle, ${b.color} 0%, transparent 70%)`,
-            willChange: "transform",
-          }}
-          animate={{
-            x: b.x,
-            y: b.y,
-          }}
-          transition={{
-            duration: b.duration,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
+      <div
+        className="absolute rounded-full blur-3xl"
+        style={{
+          width: 480,
+          height: 480,
+          top: "-8%",
+          left: "-8%",
+          background:
+            "radial-gradient(circle, rgba(75,188,99,0.16) 0%, transparent 70%)",
+        }}
+      />
+      <div
+        className="absolute rounded-full blur-3xl"
+        style={{
+          width: 440,
+          height: 440,
+          bottom: "-12%",
+          right: "-10%",
+          background:
+            "radial-gradient(circle, rgba(31,93,46,0.18) 0%, transparent 70%)",
+        }}
+      />
     </div>
   );
 }

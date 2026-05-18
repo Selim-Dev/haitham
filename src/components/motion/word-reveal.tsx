@@ -1,31 +1,15 @@
-"use client";
-
 import * as React from "react";
-import { motion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-const container: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.05, delayChildren: 0.1 },
-  },
-};
-
-const wordVariants: Variants = {
-  hidden: { opacity: 0, y: "0.6em" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-  },
-};
+// Previously animated each word in with a stagger. The per-word framer-motion
+// nodes were the main source of headline flicker on hydration — every word
+// briefly rendered at opacity 0. Now a plain inline span.
 
 export function WordReveal({
   text,
   className,
   highlight,
   highlightClassName,
-  as: Tag = "span",
 }: {
   text: string;
   className?: string;
@@ -33,37 +17,20 @@ export function WordReveal({
   highlightClassName?: string;
   as?: "h1" | "h2" | "h3" | "span" | "p";
 }) {
-  const words = text.split(" ");
-
+  if (!highlight) {
+    return <span className={cn("inline", className)}>{text}</span>;
+  }
+  const parts = text.split(highlight);
   return (
-    <motion.span
-      initial="hidden"
-      animate="visible"
-      variants={container}
-      className={cn("inline-block", className)}
-    >
-      {React.createElement(
-        Tag,
-        { className: "inline" },
-        words.map((word, i) => {
-          const isHighlight = highlight && word.includes(highlight);
-          return (
-            <span key={i} className="inline-block whitespace-pre">
-              <motion.span
-                variants={wordVariants}
-                className={cn(
-                  "inline-block",
-                  isHighlight && highlightClassName,
-                )}
-                style={{ transformOrigin: "0% 100%" }}
-              >
-                {word}
-              </motion.span>
-              {i < words.length - 1 && " "}
-            </span>
-          );
-        }),
-      )}
-    </motion.span>
+    <span className={cn("inline", className)}>
+      {parts.map((part, i) => (
+        <React.Fragment key={i}>
+          {part}
+          {i < parts.length - 1 && (
+            <span className={highlightClassName}>{highlight}</span>
+          )}
+        </React.Fragment>
+      ))}
+    </span>
   );
 }
