@@ -13,8 +13,8 @@ export function Footer() {
           <div className="md:col-span-2">
             <Logo size="md" />
             <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
-              منصة عربية تقدم كورسات قوية ومباشرة. تعلّم بعمق، طبّق بثقة، وابدأ
-              رحلتك من هنا.
+              أكاديمية أحمد هيثم: لإعداد رجال حقيقيين.. في عالم نسي معنى
+              الرجولة.
             </p>
           </div>
 
@@ -104,7 +104,7 @@ export function Footer() {
             © {year} {COPY.brand.academy}. جميع الحقوق محفوظة.
           </span>
           <span className="opacity-70">
-            صُنع بعناية للمتعلمين العرب الجادين.
+            صُنع بعناية للرجال الحقيقيين.
           </span>
         </div>
       </Container>

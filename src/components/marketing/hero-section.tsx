@@ -87,7 +87,7 @@ export function HeroSection() {
               </span>
               <span className="flex items-center gap-2 sm:gap-1.5">
                 <span className="size-2 rounded-full bg-[var(--color-success)] sm:size-1.5" />
-                دعم عربي مباشر
+                دعم مباشر على مدار الساعة
               </span>
             </div>
           </div>
