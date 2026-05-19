@@ -16,12 +16,18 @@ export function formatPrice(
   currency: string = "EGP",
   locale: string = "ar-EG",
 ): string {
+  // Intl.NumberFormat with ar-EG locale should yield Arabic-Indic digits, but
+  // some Node runtimes ship with reduced ICU data and silently fall back to
+  // Latin digits — so we always pipe the result through toArabicNumerals to
+  // guarantee ٠-٩. The regex only matches Latin 0-9, so a correct Intl
+  // output passes through untouched.
   try {
-    return new Intl.NumberFormat(locale, {
+    const formatted = new Intl.NumberFormat(locale, {
       style: "currency",
       currency,
       maximumFractionDigits: 0,
     }).format(amount);
+    return toArabicNumerals(formatted);
   } catch {
     return `${toArabicNumerals(amount)} ${currency}`;
   }
