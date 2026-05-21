@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 
 const WHATSAPP_NUMBER_INTL = "+20 151 571 7713";
 const WHATSAPP_URL = "https://wa.me/201515717713";
-const EMAIL_ADDRESS = "ahmedyoussef07472@gmail.com";
+const EMAIL_ADDRESS = "enter@ahmedhaitham.com";
 
 export default function ContactPage() {
   return (

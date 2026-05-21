@@ -177,11 +177,11 @@ export default function PrivacyPage() {
           <p>
             تواصل معنا عبر:{" "}
             <a
-              href="mailto:ahmedyoussef07472@gmail.com"
+              href="mailto:enter@ahmedhaitham.com"
               dir="ltr"
               className="font-mono"
             >
-              ahmedyoussef07472@gmail.com
+              enter@ahmedhaitham.com
             </a>
           </p>
         </Callout>

@@ -99,11 +99,11 @@ export default function RefundPage() {
         >
           <p>
             <a
-              href="mailto:ahmedyoussef07472@gmail.com"
+              href="mailto:enter@ahmedhaitham.com"
               dir="ltr"
               className="font-mono"
             >
-              ahmedyoussef07472@gmail.com
+              enter@ahmedhaitham.com
             </a>
           </p>
           <p className="mt-2 text-xs">
@@ -238,11 +238,11 @@ export default function RefundPage() {
           <p>
             راسلنا فورًا على{" "}
             <a
-              href="mailto:ahmedyoussef07472@gmail.com"
+              href="mailto:enter@ahmedhaitham.com"
               dir="ltr"
               className="font-mono"
             >
-              ahmedyoussef07472@gmail.com
+              enter@ahmedhaitham.com
             </a>{" "}
             وسنحل المشكلة أو نسترد المبلغ خلال 48 ساعة.
           </p>
