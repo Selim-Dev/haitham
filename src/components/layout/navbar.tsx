@@ -19,6 +19,7 @@ type NavbarUser = {
 const NAV_LINKS = [
   { href: "/", label: COPY.nav.home },
   { href: "/courses", label: COPY.nav.courses },
+  { href: "/sessions", label: "الجلسات" },
   { href: "/#how", label: COPY.nav.howItWorks },
   { href: "/#instructor", label: COPY.nav.about },
   { href: "/#faq", label: COPY.nav.faq },

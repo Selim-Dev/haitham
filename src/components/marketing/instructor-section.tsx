@@ -46,7 +46,7 @@ export function InstructorSection() {
             <div className="glass-strong relative aspect-[4/5] overflow-hidden rounded-[2rem] p-1.5 shadow-[var(--shadow-red-glow-lg)]">
               <div className="relative h-full w-full overflow-hidden rounded-[1.6rem] cinematic-vignette">
                 <Image
-                  src="/owner-hero.jpg"
+                  src="/instructor.png"
                   alt={COPY.instructor.name}
                   fill
                   sizes="(max-width: 768px) 80vw, 380px"

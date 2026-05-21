@@ -9,6 +9,7 @@ const PHRASES = [
   "غيّر مكانك",
   "نتائج حقيقية",
   "ادفع مرة، تعلّم مدى الحياة",
+  
 ];
 
 export function MarqueeStrip() {

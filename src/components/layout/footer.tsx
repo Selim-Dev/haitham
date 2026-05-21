@@ -13,7 +13,7 @@ export function Footer() {
           <div className="md:col-span-2">
             <Logo size="md" />
             <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
-              أكاديمية أحمد هيثم: لإعداد رجال حقيقيين.. في عالم نسي معنى
+              أكاديمية أحمد هيثم: لإعداد رجال حقيقيين.. في عالم نسى معنى
               الرجولة.
             </p>
           </div>
@@ -24,6 +24,11 @@ export function Footer() {
               <li>
                 <Link href="/courses" className="hover:text-foreground">
                   {COPY.nav.courses}
+                </Link>
+              </li>
+              <li>
+                <Link href="/sessions" className="hover:text-foreground">
+                  الجلسات الاستشارية
                 </Link>
               </li>
               <li>
