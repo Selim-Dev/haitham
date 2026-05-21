@@ -516,12 +516,14 @@ function BookingOption({
   description,
   cta,
   href,
+  variant = "primary",
 }: {
   icon: React.ReactNode;
   title: string;
   description: string;
   cta: string;
   href: string;
+  variant?: "primary" | "secondary";
 }) {
   return (
     <div className="flex h-full flex-col gap-4 rounded-2xl border border-[var(--color-border-strong)] bg-card p-6 shadow-[var(--shadow-card)] transition-colors hover:border-primary/40 sm:p-7">
@@ -532,7 +534,7 @@ function BookingOption({
         {title}
       </h3>
       <p className="text-sm leading-relaxed text-muted">{description}</p>
-      <Button asChild variant="primary" size="lg" className="mt-auto">
+      <Button asChild variant={variant} size="lg" className="mt-auto">
         <Link href={href} target="_blank" rel="noopener noreferrer">
           {cta}
         </Link>
