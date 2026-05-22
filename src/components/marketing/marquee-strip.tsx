@@ -9,7 +9,6 @@ const PHRASES = [
   "غيّر مكانك",
   "نتائج حقيقية",
   "ادفع مرة، تعلّم مدى الحياة",
-  
 ];
 
 export function MarqueeStrip() {
@@ -23,7 +22,7 @@ export function MarqueeStrip() {
         aria-hidden="true"
         className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-l from-transparent via-primary/30 to-transparent"
       />
-      <Marquee items={PHRASES} speed={36} />
+      <Marquee items={PHRASES} speed={50} />
     </div>
   );
 }

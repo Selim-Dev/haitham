@@ -1,37 +1,53 @@
+"use client";
+
 import * as React from "react";
+import FastMarquee from "react-fast-marquee";
 import { cn } from "@/lib/utils";
 
-// Seamless CSS marquee.
+// Thin wrapper around react-fast-marquee.
 //
-// Two identical copies of the item list rendered side by side. The keyframe
-// translates the track from 0 → -50% of its own width, landing the start of
-// copy #2 exactly where copy #1 began — visually identical, no reset visible.
+// We tried two hand-rolled CSS marquees first: both ran into the same class
+// of bugs. The math of "translateX(-50%) of a w-max child" depends on the
+// content being exactly 2× the visible width AND the child being anchored on
+// the correct edge. In an RTL document the child anchors on the right and
+// translateX(-50%) drives it off-screen, leaving an empty band on every
+// cycle. On iOS Safari, percentage-based transforms also occasionally
+// sub-pixel, compounding the gap.
 //
-// Spacing lives on each <li> (via gap-10 + pe-10), NOT as a parent `gap`.
-// Putting it on the parent breaks the math: the gap between the two copies
-// isn't accounted for by -50% and you get a one-gap snap each cycle.
+// `react-fast-marquee` solves both: it uses a ResizeObserver to measure the
+// container and the item track, then duplicates the content as many times
+// as needed (via `autoFill`) to guarantee the visible window is always
+// filled. Animation is GPU-driven and pause-aware so it doesn't burn
+// battery on iOS.
 //
-// `dir="ltr"` on the track is critical. The page is RTL, so by default a
-// w-max child overflows to the LEFT of its container (anchored on the right).
-// translateX(-50%) would then push it further left — straight off-screen,
-// leaving a visible empty gap until the animation loops. Forcing the track
-// to LTR layout makes it overflow rightward, so translating left scrolls
-// content into view. Each Arabic phrase still renders correctly inside its
-// span because Unicode bidi handles character order regardless of dir.
+// IMPORTANT: we force `dir="ltr"` on the wrapper. The library is designed
+// around LTR flex flow (first child on the left, translateX(-100%) scrolls
+// content leftward). When the surrounding page is RTL, the flex children
+// flow right-to-left and the library's autoFill math can't keep both halves
+// of the visible window populated — you get content on one side and an
+// empty band on the other (the exact symptom we kept hitting). Setting
+// `dir="ltr"` on this wrapper normalizes the layout for the library while
+// leaving every Arabic phrase inside each span to render correctly via
+// Unicode bidi.
+//
+// We disable the library's built-in gradient and apply our own mask-image on
+// the outer wrapper so the fade matches the rest of the design system.
 
 export function Marquee({
   items,
   className,
-  speed = 32,
+  speed = 50,
   separator = "•",
 }: {
   items: string[];
   className?: string;
+  /** Pixels per second. Library default is 50; higher = faster. */
   speed?: number;
   separator?: string;
 }) {
   return (
     <div
+      dir="ltr"
       className={cn(
         "relative w-full overflow-hidden",
         "[mask-image:linear-gradient(to_left,transparent,black_15%,black_85%,transparent)]",
@@ -39,48 +55,31 @@ export function Marquee({
         className,
       )}
     >
-      <div
-        dir="ltr"
-        className="flex w-max items-center py-4"
-        style={{
-          animation: `marquee ${speed}s linear infinite`,
-          willChange: "transform",
-        }}
+      <FastMarquee
+        speed={speed}
+        gradient={false}
+        autoFill
+        pauseOnHover={false}
+        direction="left"
+        className="py-4"
       >
-        <MarqueeRow items={items} separator={separator} />
-        <MarqueeRow items={items} separator={separator} ariaHidden />
-      </div>
-    </div>
-  );
-}
-
-function MarqueeRow({
-  items,
-  separator,
-  ariaHidden,
-}: {
-  items: string[];
-  separator: string;
-  ariaHidden?: boolean;
-}) {
-  return (
-    <ul
-      aria-hidden={ariaHidden || undefined}
-      className="flex shrink-0 items-center"
-    >
-      {items.map((item, i) => (
-        <li key={i} className="flex shrink-0 items-center gap-10 pe-10">
-          <span className="font-display text-2xl font-extrabold tracking-tight text-foreground/80 sm:text-3xl">
-            {item}
-          </span>
+        {items.map((item, i) => (
           <span
-            className="text-2xl text-primary/60 sm:text-3xl"
-            aria-hidden="true"
+            key={i}
+            className="flex shrink-0 items-center gap-10 pe-10"
           >
-            {separator}
+            <span className="font-display text-2xl font-extrabold tracking-tight text-foreground/80 sm:text-3xl">
+              {item}
+            </span>
+            <span
+              className="text-2xl text-primary/60 sm:text-3xl"
+              aria-hidden="true"
+            >
+              {separator}
+            </span>
           </span>
-        </li>
-      ))}
-    </ul>
+        ))}
+      </FastMarquee>
+    </div>
   );
 }
