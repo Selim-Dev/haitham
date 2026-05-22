@@ -3,7 +3,10 @@ import { connectDB } from "@/lib/db";
 import { UserModel } from "@/models/User";
 import { ApplicationQuestionModel } from "@/models/ApplicationQuestion";
 import { AuditLogModel } from "@/models/AuditLog";
-import { sendApprovalEmail } from "@/services/email.service";
+import {
+  sendApprovalEmail,
+  sendRejectionEmail,
+} from "@/services/email.service";
 import type { SubmitApplicationInput } from "@/validators/application.validator";
 import type { ApprovalStatus } from "@/lib/constants";
 
@@ -229,15 +232,33 @@ export async function rejectApplication(
   if (adminNote !== undefined) user.adminNote = adminNote || undefined;
   await user.save();
 
+  const email = await sendRejectionEmail({
+    name: user.name,
+    email: user.email,
+  });
+  if (email.ok) {
+    user.rejectionEmailSentAt = new Date();
+    await user.save();
+  }
+
   await AuditLogModel.create({
     actorId: new mongoose.Types.ObjectId(actorId),
     action: "APPLICATION_REJECTED",
     entityType: "User",
     entityId: String(user._id),
-    metadata: { adminNote },
+    metadata: {
+      adminNote,
+      emailSent: email.ok,
+      emailError: email.error,
+    },
   });
 
-  return { id: String(user._id), approvalStatus: user.approvalStatus };
+  return {
+    id: String(user._id),
+    approvalStatus: user.approvalStatus,
+    emailSent: email.ok,
+    emailError: email.error,
+  };
 }
 
 export async function getMyApplicationStatus(userId: string): Promise<{
