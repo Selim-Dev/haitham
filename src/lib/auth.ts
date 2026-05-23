@@ -30,6 +30,14 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
   const user = await UserModel.findById(session.sub).lean();
   if (!user) return null;
   if (user.isBlocked) return null;
+  // Single active session enforcement: a student's token is only valid when
+  // its `sv` matches the latest sessionVersion in the DB. Older devices'
+  // cookies fall out of sync the moment the student logs in elsewhere and
+  // this check turns them into anonymous requests. Admins are intentionally
+  // exempt so they can stay logged in on multiple devices.
+  if (user.role !== "ADMIN" && session.sv !== (user.sessionVersion ?? 0)) {
+    return null;
+  }
   return {
     id: String(user._id),
     name: user.name,
@@ -83,12 +91,16 @@ export async function requireApprovedStudent(): Promise<SessionUser> {
   return user;
 }
 
-export async function setSessionCookie(user: SessionUser): Promise<void> {
+export async function setSessionCookie(
+  user: SessionUser,
+  sessionVersion: number,
+): Promise<void> {
   const token = await signSession({
     sub: user.id,
     role: user.role,
     email: user.email,
     name: user.name,
+    sv: sessionVersion,
   });
   const store = await cookies();
   store.set(AUTH.COOKIE_NAME, token, {

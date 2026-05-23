@@ -19,14 +19,14 @@ export async function POST(req: Request) {
     }
     const { name, email, phone, password } = parsed.data;
     const geo = await lookupGeo(req.headers).catch(() => ({}));
-    const user = await registerStudent({
+    const { user, sessionVersion } = await registerStudent({
       name,
       email,
       phone: phone || undefined,
       password,
       geo,
     });
-    await setSessionCookie(user);
+    await setSessionCookie(user, sessionVersion);
     return NextResponse.json({ user }, { status: 201 });
   } catch (err) {
     const e = err as Error & { status?: number };

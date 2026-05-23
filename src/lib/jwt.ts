@@ -8,6 +8,10 @@ export type SessionPayload = {
   role: "STUDENT" | "ADMIN";
   email: string;
   name: string;
+  /** Session version — compared against UserModel.sessionVersion to invalidate
+   *  older cookies when the user logs in on a different device (students only;
+   *  admins are exempt — see getCurrentUser). */
+  sv: number;
 };
 
 function getSecret(): Uint8Array {
@@ -37,13 +41,15 @@ export async function verifySession(
       typeof payload.sub === "string" &&
       (payload.role === "STUDENT" || payload.role === "ADMIN") &&
       typeof payload.email === "string" &&
-      typeof payload.name === "string"
+      typeof payload.name === "string" &&
+      typeof payload.sv === "number"
     ) {
       return {
         sub: payload.sub,
         role: payload.role,
         email: payload.email,
         name: payload.name,
+        sv: payload.sv,
       };
     }
     return null;

@@ -16,8 +16,11 @@ export async function POST(req: Request) {
         { status: 400 },
       );
     }
-    const user = await loginUser(parsed.data.email, parsed.data.password);
-    await setSessionCookie(user);
+    const { user, sessionVersion } = await loginUser(
+      parsed.data.email,
+      parsed.data.password,
+    );
+    await setSessionCookie(user, sessionVersion);
     return NextResponse.json({ user });
   } catch (err) {
     const e = err as Error & { status?: number };

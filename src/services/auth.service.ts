@@ -3,6 +3,12 @@ import { UserModel } from "@/models/User";
 import { hashPassword, verifyPassword } from "@/lib/password";
 import type { SessionUser } from "@/lib/auth";
 
+// Both registerStudent and loginUser now return the SessionUser plus the
+// sessionVersion that should be embedded in the JWT. The cookie-setting code
+// in the route handlers passes both into setSessionCookie. See
+// docs / single-session enforcement in src/lib/auth.ts:getCurrentUser.
+export type AuthResult = { user: SessionUser; sessionVersion: number };
+
 export async function registerStudent(input: {
   name: string;
   email: string;
@@ -15,7 +21,7 @@ export async function registerStudent(input: {
     city?: string;
     region?: string;
   };
-}): Promise<SessionUser> {
+}): Promise<AuthResult> {
   await connectDB();
 
   const existing = await UserModel.findOne({ email: input.email.toLowerCase() }).lean();
@@ -37,6 +43,10 @@ export async function registerStudent(input: {
     role: "STUDENT",
     isBlocked: false,
     approvalStatus: "PENDING_APPLICATION",
+    // Seed at 1 so the first cookie carries sv:1 and matches the DB. Default
+    // is 0 — bumping to 1 here means any pre-existing JWT lacking `sv` is
+    // automatically stale.
+    sessionVersion: 1,
     registrationIp: input.geo?.ip,
     registrationCountry: input.geo?.country,
     registrationCountryName: input.geo?.countryName,
@@ -45,21 +55,24 @@ export async function registerStudent(input: {
   });
 
   return {
-    id: String(created._id),
-    name: created.name,
-    email: created.email,
-    phone: created.phone,
-    role: created.role,
-    isBlocked: created.isBlocked,
-    approvalStatus: created.approvalStatus,
-    registrationCountry: created.registrationCountry,
+    user: {
+      id: String(created._id),
+      name: created.name,
+      email: created.email,
+      phone: created.phone,
+      role: created.role,
+      isBlocked: created.isBlocked,
+      approvalStatus: created.approvalStatus,
+      registrationCountry: created.registrationCountry,
+    },
+    sessionVersion: created.sessionVersion,
   };
 }
 
 export async function loginUser(
   email: string,
   password: string,
-): Promise<SessionUser> {
+): Promise<AuthResult> {
   await connectDB();
 
   const user = await UserModel.findOne({ email: email.toLowerCase().trim() })
@@ -91,14 +104,25 @@ export async function loginUser(
     throw err;
   }
 
+  // Bump sessionVersion for students so all older devices' JWTs become stale.
+  // Admins are skipped here as a small optimization — their version is never
+  // compared on read (see getCurrentUser).
+  if (user.role !== "ADMIN") {
+    user.sessionVersion = (user.sessionVersion ?? 0) + 1;
+    await user.save();
+  }
+
   return {
-    id: String(user._id),
-    name: user.name,
-    email: user.email,
-    phone: user.phone,
-    role: user.role,
-    isBlocked: user.isBlocked,
-    approvalStatus: user.approvalStatus ?? "APPROVED",
-    registrationCountry: user.registrationCountry,
+    user: {
+      id: String(user._id),
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      role: user.role,
+      isBlocked: user.isBlocked,
+      approvalStatus: user.approvalStatus ?? "APPROVED",
+      registrationCountry: user.registrationCountry,
+    },
+    sessionVersion: user.sessionVersion ?? 0,
   };
 }

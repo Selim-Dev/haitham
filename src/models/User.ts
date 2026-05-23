@@ -23,6 +23,7 @@ export interface IUser extends Document {
   adminNote?: string;
   approvalEmailSentAt?: Date;
   rejectionEmailSentAt?: Date;
+  sessionVersion: number;
   registrationIp?: string;
   registrationCountry?: string;
   registrationCountryName?: string;
@@ -75,6 +76,10 @@ const UserSchema = new Schema<IUser>(
     adminNote: { type: String, trim: true, maxlength: 1000 },
     approvalEmailSentAt: { type: Date },
     rejectionEmailSentAt: { type: Date },
+    // Bumped on each non-admin login. The JWT carries the version it was
+    // signed with; a mismatch means the cookie was issued before a newer
+    // login and is now stale (see getCurrentUser).
+    sessionVersion: { type: Number, default: 0, required: true },
     registrationIp: { type: String, trim: true, maxlength: 64 },
     registrationCountry: { type: String, trim: true, maxlength: 4, uppercase: true },
     registrationCountryName: { type: String, trim: true, maxlength: 120 },
