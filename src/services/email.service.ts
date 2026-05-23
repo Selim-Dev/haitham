@@ -42,7 +42,7 @@ export async function sendApprovalEmail(input: {
     return { ok: false, error: "RESEND_API_KEY not configured" };
   }
 
-  const subject = `🔥 تم قبولك في ${COPY.brand.academy} — رحلتك تبدأ الآن`;
+  const subject = `تم قبول طلب انضمامك إلى ${COPY.brand.academy}`;
   const loginUrl = `${APP_URL}/login`;
   const html = approvalEmailHtml({ name: input.name, loginUrl });
   const text = approvalEmailText({ name: input.name, loginUrl });
@@ -65,6 +65,14 @@ export async function sendApprovalEmail(input: {
   }
 }
 
+// Approval email template — intentionally styled as a transactional
+// notification, not a marketing email. The previous version had a bright
+// green gradient hero + glowing CTA + pep-talk copy ("أنت داخل اللعبة"),
+// which read promotional to Gmail's classifier and pushed the message into
+// the Promotions tab. This version mirrors the rejection email's calmer
+// shape: muted dark header, factual subject + heading, plain body copy,
+// modest text-style button. Domain authentication (custom From + DKIM)
+// still does the heavy lifting; this template just stops contradicting it.
 function approvalEmailHtml(params: { name: string; loginUrl: string }): string {
   const { name, loginUrl } = params;
   return `<!doctype html>
@@ -72,47 +80,41 @@ function approvalEmailHtml(params: { name: string; loginUrl: string }): string {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>تم قبولك في ${COPY.brand.academy}</title>
+    <title>تم قبول طلب انضمامك</title>
   </head>
   <body style="margin:0;padding:0;background:#0b0b0f;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Tahoma,Arial,sans-serif;color:#f5f5f7;">
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#0b0b0f;padding:32px 16px;">
       <tr>
         <td align="center">
-          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;background:linear-gradient(180deg,#15151b 0%,#0f0f15 100%);border:1px solid rgba(75,188,99,0.18);border-radius:20px;overflow:hidden;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;background:linear-gradient(180deg,#15151b 0%,#0f0f15 100%);border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;">
             <tr>
-              <td style="background:linear-gradient(135deg,#4bbc63 0%,#2d8541 100%);padding:36px 32px;text-align:center;">
-                <p style="margin:0;font-size:13px;letter-spacing:0.18em;color:#edf9f0;text-transform:uppercase;">${COPY.brand.academy}</p>
-                <h1 style="margin:14px 0 0;font-size:30px;line-height:1.25;font-weight:900;color:#ffffff;">
-                  مبروك يا ${escapeHtml(name)} — أنت داخل اللعبة
+              <td style="background:linear-gradient(135deg,#1f1f27 0%,#15151b 100%);padding:32px 32px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.06);">
+                <p style="margin:0;font-size:13px;letter-spacing:0.18em;color:#c9c9d4;text-transform:uppercase;">${COPY.brand.academy}</p>
+                <h1 style="margin:14px 0 0;font-size:24px;line-height:1.4;font-weight:800;color:#ffffff;">
+                  تم قبول طلب انضمامك
                 </h1>
               </td>
             </tr>
             <tr>
-              <td style="padding:36px 32px;text-align:right;">
-                <p style="margin:0 0 16px;font-size:18px;line-height:1.7;color:#f5f5f7;font-weight:600;">
-                  قرارك بالانضمام تمت الموافقة عليه. من اللحظة دي، رحلتك في تغيير حياتك بدأت رسميًا.
+              <td style="padding:32px 32px;text-align:right;">
+                <p style="margin:0 0 18px;font-size:16px;line-height:1.85;color:#e6e6ec;font-weight:600;">
+                  مرحبًا ${escapeHtml(name)}،
                 </p>
-                <p style="margin:0 0 16px;font-size:15px;line-height:1.85;color:#c9c9d4;">
-                  المنصة دلوقتي مفتوحة لك بالكامل: محتوى مركّز، أدوات تطبيقية، ووصول مدى الحياة.
-                  ما عليك إلا خطوة واحدة — سجّل دخول وابدأ.
+                <p style="margin:0 0 16px;font-size:15px;line-height:1.95;color:#c9c9d4;">
+                  تمت الموافقة على طلب انضمامك إلى ${COPY.brand.academy}. حسابك الآن مفعّل وتقدر تسجل دخولك للوصول إلى المنصة.
                 </p>
-                <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="right" style="margin:28px 0;">
-                  <tr>
-                    <td style="border-radius:12px;background:#4bbc63;box-shadow:0 12px 28px -8px rgba(75,188,99,0.55);">
-                      <a href="${loginUrl}" style="display:inline-block;padding:14px 28px;font-size:16px;font-weight:800;color:#ffffff;text-decoration:none;border-radius:12px;">
-                        ابدأ رحلتك الآن ←
-                      </a>
-                    </td>
-                  </tr>
-                </table>
-                <p style="margin:24px 0 0;font-size:13px;line-height:1.7;color:#8a8a96;">
-                  لو الزر مش شغال، افتح الرابط ده مباشرة:<br/>
+                <p style="margin:24px 0 0;font-size:15px;line-height:1.85;color:#c9c9d4;">
+                  للدخول إلى حسابك:
+                  <a href="${loginUrl}" style="color:#85d29a;text-decoration:underline;font-weight:700;">سجّل الدخول</a>
+                </p>
+                <p style="margin:18px 0 0;font-size:13px;line-height:1.7;color:#8a8a96;">
+                  أو افتح الرابط مباشرة:<br/>
                   <span dir="ltr" style="color:#c9c9d4;word-break:break-all;">${loginUrl}</span>
                 </p>
               </td>
             </tr>
             <tr>
-              <td style="padding:20px 32px 32px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
+              <td style="padding:20px 32px 28px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
                 <p style="margin:0;font-size:12px;color:#6c6c7a;">
                   ${COPY.brand.academy} · ${COPY.brand.tagline}
                 </p>
@@ -127,12 +129,11 @@ function approvalEmailHtml(params: { name: string; loginUrl: string }): string {
 }
 
 function approvalEmailText(params: { name: string; loginUrl: string }): string {
-  return `مبروك يا ${params.name} — أنت داخل اللعبة.
+  return `مرحبًا ${params.name}،
 
-تمت الموافقة على انضمامك إلى ${COPY.brand.academy}.
-المنصة دلوقتي مفتوحة لك بالكامل، ووصولك مدى الحياة.
+تمت الموافقة على طلب انضمامك إلى ${COPY.brand.academy}. حسابك الآن مفعّل.
 
-ابدأ رحلتك من هنا: ${params.loginUrl}
+للدخول إلى حسابك: ${params.loginUrl}
 
 — ${COPY.brand.academy}`;
 }
