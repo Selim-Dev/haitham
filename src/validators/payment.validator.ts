@@ -15,12 +15,21 @@ export type PaymentProofInput = z.infer<typeof paymentProofInputSchema>;
 
 export const internationalProofInputSchema = z.object({
   courseId: z.string().min(1, "الكورس مطلوب"),
-  paymentMethod: z.enum(["PAYPAL", "CRYPTO_SOLANA", "CRYPTO_BINANCE"]),
+  paymentMethod: z.enum([
+    "PAYPAL",
+    "CRYPTO_SOLANA",
+    "CRYPTO_BINANCE",
+    "EWALLET",
+  ]),
+  // Reference is optional — the uploaded receipt is the primary artifact.
+  // When provided (e.g. crypto TX hash, PayPal txn ID), we still dedup it
+  // server-side in createInternationalPaymentProof.
   transactionReference: z
-    .string({ message: "رقم العملية مطلوب" })
+    .string()
     .trim()
-    .min(4, "رقم العملية قصير جدًا")
-    .max(200, "رقم العملية طويل جدًا"),
+    .max(200, "رقم العملية طويل جدًا")
+    .optional()
+    .or(z.literal("")),
   userNote: z.string().trim().max(500).optional().or(z.literal("")),
 });
 

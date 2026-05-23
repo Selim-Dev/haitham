@@ -45,6 +45,10 @@ export const PAYMENT_METHOD = {
   PAYPAL: "PAYPAL",
   CRYPTO_SOLANA: "CRYPTO_SOLANA",
   CRYPTO_BINANCE: "CRYPTO_BINANCE",
+  // International e-wallet: covers STC Pay AND Barq — both pay into the same
+  // recipient number (EWALLET_PAYOUT_NUMBER below) so we collapse them into
+  // a single picker option to keep the UX simple.
+  EWALLET: "EWALLET",
 } as const;
 export type PaymentMethod =
   (typeof PAYMENT_METHOD)[keyof typeof PAYMENT_METHOD];
@@ -55,12 +59,18 @@ export const PAYMENT_METHOD_AR: Record<PaymentMethod, string> = {
   PAYPAL: "بطاقة (PayPal)",
   CRYPTO_SOLANA: "كريبتو — Solana",
   CRYPTO_BINANCE: "كريبتو — Binance",
+  EWALLET: "محفظة إلكترونية (STC Pay / برق)",
 };
+
+// Recipient number for STC Pay + Barq transfers — both wallets route to the
+// same number. Used by the international checkout UI.
+export const EWALLET_PAYOUT_NUMBER = "00201280468426";
 
 export const INTERNATIONAL_METHODS = [
   PAYMENT_METHOD.PAYPAL,
   PAYMENT_METHOD.CRYPTO_SOLANA,
   PAYMENT_METHOD.CRYPTO_BINANCE,
+  PAYMENT_METHOD.EWALLET,
 ] as const;
 export type InternationalMethod = (typeof INTERNATIONAL_METHODS)[number];
 

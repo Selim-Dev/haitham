@@ -37,6 +37,17 @@ export async function POST(req: Request) {
     ).toUpperCase();
 
     if (isInternationalMethod(paymentMethod)) {
+      // International submissions now mirror the domestic flow: a receipt
+      // screenshot / PDF is required, and the transaction reference is
+      // optional (some students paying via STC Pay or Barq won't have a
+      // meaningful reference to copy).
+      const intlFile = form.get("file");
+      if (!(intlFile instanceof File)) {
+        return NextResponse.json(
+          { error: "صورة إثبات الدفع مطلوبة" },
+          { status: 400 },
+        );
+      }
       const fields = {
         courseId: String(form.get("courseId") ?? ""),
         paymentMethod,
@@ -53,12 +64,19 @@ export async function POST(req: Request) {
           { status: 400 },
         );
       }
+      const intlBuffer = Buffer.from(await intlFile.arrayBuffer());
       const result = await createInternationalPaymentProof({
         userId: user.id,
         courseId: parsed.data.courseId,
         paymentMethod: parsed.data.paymentMethod,
-        transactionReference: parsed.data.transactionReference,
+        transactionReference: parsed.data.transactionReference || undefined,
         userNote: parsed.data.userNote || undefined,
+        file: {
+          buffer: intlBuffer,
+          filename: intlFile.name,
+          mimeType: intlFile.type,
+          size: intlFile.size,
+        },
       });
       return NextResponse.json({ ok: true, ...result }, { status: 201 });
     }

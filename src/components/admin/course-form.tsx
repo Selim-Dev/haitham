@@ -203,7 +203,7 @@ export function CourseForm({
               <Input
                 id="paypalHostedButtonId"
                 dir="ltr"
-                placeholder="ZSVCNMW79RTDN"
+                placeholder="ادخل ال ID هنا"
                 className="font-mono uppercase"
                 {...register("paypalHostedButtonId")}
               />

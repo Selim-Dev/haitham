@@ -17,13 +17,22 @@ import {
   Globe2,
   Wallet,
   Layers,
+  Smartphone,
+  Upload,
+  FileText,
+  Image as ImageIcon,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea, FieldError } from "@/components/ui/input";
 import { COPY } from "@/lib/arabic";
 import { cn, formatPrice } from "@/lib/utils";
-import type { InternationalMethod } from "@/lib/constants";
+import {
+  RECEIPT_UPLOAD,
+  EWALLET_PAYOUT_NUMBER,
+  type InternationalMethod,
+} from "@/lib/constants";
 
 const PAYPAL_CLIENT_ID =
   process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID ||
@@ -79,6 +88,13 @@ const METHOD_OPTIONS: MethodOption[] = [
     refLabel: "Binance Transaction ID",
     refPlaceholder: "مثال: 1234567890",
   },
+  {
+    value: "EWALLET",
+    label: "دفعت عبر STC Pay / برق",
+    hint: "حوّل إلى الرقم الموضّح أعلاه واحتفظ بصورة عملية التحويل.",
+    refLabel: "رقم العملية في المحفظة",
+    refPlaceholder: "اختياري — رقم العملية كما يظهر في إيصال التحويل",
+  },
 ];
 
 export function InternationalCheckoutCard({ course }: { course: Course }) {
@@ -88,9 +104,35 @@ export function InternationalCheckoutCard({ course }: { course: Course }) {
   const [method, setMethod] = React.useState<InternationalMethod>("PAYPAL");
   const [reference, setReference] = React.useState("");
   const [note, setNote] = React.useState("");
+  const [file, setFile] = React.useState<File | null>(null);
+  const [preview, setPreview] = React.useState<string | null>(null);
+  const [dragOver, setDragOver] = React.useState(false);
   const [errors, setErrors] = React.useState<Record<string, string>>({});
   const [submitting, setSubmitting] = React.useState(false);
   const [done, setDone] = React.useState(false);
+
+  function pickFile(f: File | null) {
+    setErrors((e) => ({ ...e, file: "" }));
+    if (!f) {
+      setFile(null);
+      setPreview(null);
+      return;
+    }
+    if (!RECEIPT_UPLOAD.ALLOWED_MIME_TYPES.includes(f.type as never)) {
+      setErrors((e) => ({ ...e, file: "نوع الملف غير مدعوم. JPG, PNG, أو PDF." }));
+      return;
+    }
+    if (f.size > RECEIPT_UPLOAD.MAX_SIZE_BYTES) {
+      setErrors((e) => ({ ...e, file: "الحد الأقصى ٥ ميجابايت." }));
+      return;
+    }
+    setFile(f);
+    if (f.type.startsWith("image/")) {
+      setPreview(URL.createObjectURL(f));
+    } else {
+      setPreview(null);
+    }
+  }
 
   const buttonId = course.paypalHostedButtonId?.trim();
   const hasPriceUsd = typeof course.priceUsd === "number" && course.priceUsd > 0;
@@ -114,9 +156,8 @@ export function InternationalCheckoutCard({ course }: { course: Course }) {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const ref = reference.trim();
-    if (ref.length < 4) {
-      setErrors({ reference: "أدخل رقم العملية كما يظهر في التحويل" });
+    if (!file) {
+      setErrors({ file: "صورة إثبات الدفع مطلوبة" });
       return;
     }
     setErrors({});
@@ -126,8 +167,10 @@ export function InternationalCheckoutCard({ course }: { course: Course }) {
       const fd = new FormData();
       fd.set("courseId", course.id);
       fd.set("paymentMethod", method);
-      fd.set("transactionReference", ref);
+      const ref = reference.trim();
+      if (ref) fd.set("transactionReference", ref);
       if (note.trim()) fd.set("userNote", note.trim());
+      fd.set("file", file);
 
       const res = await fetch("/api/payment-proofs", {
         method: "POST",
@@ -228,8 +271,8 @@ export function InternationalCheckoutCard({ course }: { course: Course }) {
             <span dir="ltr" className="font-bold text-foreground">
               {formatPrice(course.priceUsd!, "USD")}
             </span>{" "}
-            بالطريقة المناسبة لك، ثم أرسل رقم العملية لتفعيل اشتراكك مدى
-            الحياة.
+            بالطريقة المناسبة لك، ثم ارفع صورة إثبات التحويل لتفعيل اشتراكك
+            مدى الحياة.
           </p>
         </div>
         <div className="hidden text-end sm:block">
@@ -237,7 +280,7 @@ export function InternationalCheckoutCard({ course }: { course: Course }) {
             خطوة 1 من 2
           </p>
           <p className="mt-1 text-xs font-medium text-muted">
-            ادفع · ثم أرسل رقم العملية
+            ادفع · ثم ارفع صورة التحويل
           </p>
         </div>
       </header>
@@ -249,6 +292,8 @@ export function InternationalCheckoutCard({ course }: { course: Course }) {
       />
 
       <CryptoSection priceUsd={course.priceUsd!} />
+
+      <EWalletSection priceUsd={course.priceUsd!} />
 
       <section
         aria-labelledby="confirm-title"
@@ -262,18 +307,18 @@ export function InternationalCheckoutCard({ course }: { course: Course }) {
             id="confirm-title"
             className="mt-1 font-display text-xl font-extrabold tracking-tight text-foreground sm:text-2xl"
           >
-            أكّد الدفع — أرسل لنا رقم العملية
+            أكّد الدفع — ارفع صورة التحويل
           </h2>
           <p className="mt-1 text-sm text-muted">
-            اختر الطريقة التي دفعت بها، وألصق رقم العملية لتراجعها الإدارة
-            وتفعّل اشتراكك.
+            اختر الطريقة التي دفعت بها، ارفع صورة أو ملف PDF لإثبات التحويل،
+            وأضف رقم العملية اختياريًا لتفعيل اشتراكك بأسرع وقت.
           </p>
         </header>
 
         <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
           <div>
             <Label>طريقة الدفع المستخدمة</Label>
-            <div className="grid gap-2 sm:grid-cols-3">
+            <div className="grid gap-2 sm:grid-cols-2">
               {METHOD_OPTIONS.map((opt) => (
                 <label
                   key={opt.value}
@@ -306,7 +351,90 @@ export function InternationalCheckoutCard({ course }: { course: Course }) {
           </div>
 
           <div>
-            <Label htmlFor="reference">{activeOption.refLabel}</Label>
+            <Label>
+              صورة أو ملف PDF لإثبات التحويل
+            </Label>
+            <label
+              onDragOver={(e) => {
+                e.preventDefault();
+                setDragOver(true);
+              }}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setDragOver(false);
+                const f = e.dataTransfer.files?.[0];
+                if (f) pickFile(f);
+              }}
+              className={cn(
+                "flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed p-6 transition-colors",
+                dragOver
+                  ? "border-primary bg-primary/5"
+                  : "border-[var(--color-border-strong)] bg-surface hover:border-primary/40",
+              )}
+            >
+              <input
+                type="file"
+                accept={RECEIPT_UPLOAD.ALLOWED_EXTENSIONS.map((x) => `.${x}`).join(",")}
+                onChange={(e) => pickFile(e.target.files?.[0] ?? null)}
+                className="sr-only"
+              />
+              {file ? (
+                <div className="flex w-full items-center gap-3 rounded-xl border border-[var(--color-border-strong)] bg-card p-3 text-start">
+                  {preview ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={preview}
+                      alt="معاينة"
+                      className="size-14 rounded-lg object-cover"
+                    />
+                  ) : file.type === "application/pdf" ? (
+                    <div className="grid size-14 place-items-center rounded-lg bg-primary/10 text-[var(--color-red-300)]">
+                      <FileText className="size-6" />
+                    </div>
+                  ) : (
+                    <div className="grid size-14 place-items-center rounded-lg bg-primary/10 text-[var(--color-red-300)]">
+                      <ImageIcon className="size-6" />
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-foreground">
+                      {file.name}
+                    </p>
+                    <p className="text-xs text-muted">
+                      {(file.size / 1024).toFixed(0)} كيلوبايت
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      pickFile(null);
+                    }}
+                    className="grid size-8 place-items-center rounded-full bg-card text-muted hover:bg-elevated"
+                    aria-label="إزالة"
+                  >
+                    <X className="size-4" />
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <Upload className="size-8 text-[var(--color-red-300)]" />
+                  <p className="text-sm font-semibold text-foreground">
+                    اضغط لاختيار الملف أو اسحبه هنا
+                  </p>
+                  <p className="text-xs text-muted">JPG, PNG, PDF — حتى ٥ ميجابايت</p>
+                </>
+              )}
+            </label>
+            <FieldError message={errors.file} />
+          </div>
+
+          <div>
+            <Label htmlFor="reference">
+              {activeOption.refLabel}{" "}
+              <span className="font-normal text-muted-2">(اختياري)</span>
+            </Label>
             <Input
               id="reference"
               dir="ltr"
@@ -503,6 +631,67 @@ function CryptoSection({ priceUsd }: { priceUsd: number }) {
             تأكد من المبلغ والعنوان أو الـ ID قبل الإرسال — التحويلات
             بالعملة الرقمية لا يمكن استرجاعها. احتفظ بـ Transaction Hash
             من محفظتك لإرساله أسفل الصفحة.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function EWalletSection({ priceUsd }: { priceUsd: number }) {
+  return (
+    <section
+      aria-labelledby="ewallet-pay-title"
+      className="relative overflow-hidden rounded-3xl border border-[var(--color-border-strong)] bg-gradient-to-br from-card via-card to-elevated p-6 shadow-[var(--shadow-card)] sm:p-8"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -start-12 -top-20 size-56 rounded-full bg-primary/12 blur-3xl"
+      />
+
+      <header className="relative flex flex-wrap items-start justify-between gap-3">
+        <div className="flex items-start gap-3">
+          <div className="grid size-11 place-items-center rounded-xl bg-gradient-to-br from-primary to-[var(--color-deep-red)] text-white shadow-md">
+            <Smartphone className="size-5" />
+          </div>
+          <div>
+            <span className="inline-grid size-6 place-items-center rounded-md border border-[var(--color-border-strong)] bg-elevated text-[11px] font-extrabold text-foreground">
+              C
+            </span>
+            <h3
+              id="ewallet-pay-title"
+              className="mt-2 font-display text-base font-extrabold text-foreground sm:text-lg"
+            >
+              ادفع عبر المحفظة الإلكترونية — STC Pay أو برق
+            </h3>
+            <p className="mt-0.5 text-xs text-muted">
+              نفس الرقم للمحفظتين — حوّل ما يعادل{" "}
+              <span dir="ltr" className="font-bold text-foreground">
+                {formatPrice(priceUsd, "USD")}
+              </span>{" "}
+              ثم ارفع صورة عملية التحويل أسفل الصفحة.
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <div className="relative mt-5">
+        <CryptoAddressCard
+          icon={<Smartphone className="size-4" />}
+          accent="from-[#4bbc63] to-[#1f5d2e]"
+          network="رقم المحفظة (STC Pay / برق)"
+          address={EWALLET_PAYOUT_NUMBER}
+          hint="هذا الرقم يعمل مع المحفظتين معًا. ادفع من خلال تطبيقك واحتفظ بصورة شاشة التأكيد."
+        />
+      </div>
+
+      <div className="relative mt-5 flex items-start gap-3 rounded-2xl border border-primary/30 bg-primary/5 p-4">
+        <ShieldCheck className="mt-0.5 size-5 shrink-0 text-[var(--color-red-300)]" />
+        <div className="text-sm leading-relaxed text-foreground/85">
+          <p className="font-bold text-foreground">صورة التحويل مطلوبة</p>
+          <p className="mt-1 text-muted">
+            بعد التحويل، التقط صورة لشاشة التأكيد (أو احفظ ملف PDF) وارفعها
+            أسفل الصفحة. رقم العملية اختياري.
           </p>
         </div>
       </div>

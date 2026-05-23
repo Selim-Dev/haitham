@@ -38,24 +38,25 @@ const PaymentProofSchema = new Schema<IPaymentProof>(
     currency: { type: String, default: "EGP", uppercase: true },
     paymentMethod: {
       type: String,
-      enum: ["WALLET", "BANK", "PAYPAL", "CRYPTO_SOLANA", "CRYPTO_BINANCE"],
+      enum: [
+        "WALLET",
+        "BANK",
+        "PAYPAL",
+        "CRYPTO_SOLANA",
+        "CRYPTO_BINANCE",
+        "EWALLET",
+      ],
       default: "WALLET",
       required: true,
       index: true,
     },
-    receiptUrl: {
-      type: String,
-      required: function (this: IPaymentProof) {
-        // Only Egyptian wallet/bank payments require an uploaded receipt.
-        return this.paymentMethod === "WALLET" || this.paymentMethod === "BANK";
-      },
-    },
-    receiptStorageKey: {
-      type: String,
-      required: function (this: IPaymentProof) {
-        return this.paymentMethod === "WALLET" || this.paymentMethod === "BANK";
-      },
-    },
+    // Receipt fields are optional at the schema level. The submission API
+    // is the source of truth on whether a receipt is required per method
+    // (domestic: required; international: required; admin-created: not
+    // required). Widening this allows international submissions to attach
+    // their transfer screenshot.
+    receiptUrl: { type: String },
+    receiptStorageKey: { type: String },
     transactionReference: { type: String, trim: true },
     userNote: { type: String, trim: true, maxlength: 500 },
     status: {

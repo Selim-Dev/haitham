@@ -70,16 +70,37 @@ export async function createPaymentProof(input: {
   };
 }
 
-type InternationalMethod = "PAYPAL" | "CRYPTO_SOLANA" | "CRYPTO_BINANCE";
+type InternationalMethod =
+  | "PAYPAL"
+  | "CRYPTO_SOLANA"
+  | "CRYPTO_BINANCE"
+  | "EWALLET";
 
 export async function createInternationalPaymentProof(input: {
   userId: string;
   courseId: string;
   paymentMethod: InternationalMethod;
-  transactionReference: string;
+  transactionReference?: string;
   userNote?: string;
+  file: { buffer: Buffer; filename: string; mimeType: string; size: number };
 }) {
   await connectDB();
+
+  if (!ALLOWED_MIME.has(input.file.mimeType)) {
+    const err = new Error("نوع الملف غير مدعوم. JPG, PNG, أو PDF فقط.") as Error & {
+      status?: number;
+    };
+    err.status = 400;
+    throw err;
+  }
+
+  if (input.file.size > RECEIPT_UPLOAD.MAX_SIZE_BYTES) {
+    const err = new Error("حجم الملف أكبر من المسموح (٥ ميجابايت).") as Error & {
+      status?: number;
+    };
+    err.status = 400;
+    throw err;
+  }
 
   const course = await CourseModel.findById(input.courseId).lean();
   if (!course) {
@@ -97,7 +118,7 @@ export async function createInternationalPaymentProof(input: {
   }
 
   // PayPal additionally requires the course to have a hosted button.
-  // Crypto methods only need priceUsd.
+  // Crypto / E-Wallet methods only need priceUsd.
   if (
     input.paymentMethod === "PAYPAL" &&
     (!course.paypalHostedButtonId || !course.paypalHostedButtonId.trim())
@@ -109,28 +130,34 @@ export async function createInternationalPaymentProof(input: {
     throw err;
   }
 
-  const ref = input.transactionReference.trim();
-  if (ref.length < 4) {
-    const err = new Error("رقم العملية غير صحيح") as Error & {
-      status?: number;
-    };
-    err.status = 400;
-    throw err;
+  const ref = input.transactionReference?.trim() || "";
+
+  // Dedup is only meaningful when the student actually supplied a reference.
+  // The receipt screenshot is now the primary artifact, so submissions
+  // without a reference are allowed — but if a reference IS provided we
+  // still reject duplicates so a crypto hash / PayPal txn ID can't be
+  // re-used across submissions.
+  if (ref) {
+    const duplicate = await PaymentProofModel.findOne({
+      paymentMethod: input.paymentMethod,
+      transactionReference: ref,
+    }).lean();
+    if (duplicate) {
+      const err = new Error("رقم العملية مستخدم بالفعل") as Error & {
+        status?: number;
+      };
+      err.status = 409;
+      throw err;
+    }
   }
 
-  // Reject the same reference being submitted twice for the same method —
-  // each on-chain hash / PayPal txn ID is unique by definition.
-  const duplicate = await PaymentProofModel.findOne({
-    paymentMethod: input.paymentMethod,
-    transactionReference: ref,
-  }).lean();
-  if (duplicate) {
-    const err = new Error("رقم العملية مستخدم بالفعل") as Error & {
-      status?: number;
-    };
-    err.status = 409;
-    throw err;
-  }
+  const storage = getStorageProvider();
+  const stored = await storage.upload({
+    buffer: input.file.buffer,
+    filename: input.file.filename,
+    mimeType: input.file.mimeType,
+    folder: `ahmed-haitham/receipts/${input.userId}`,
+  });
 
   const proof = await PaymentProofModel.create({
     userId: input.userId,
@@ -138,7 +165,9 @@ export async function createInternationalPaymentProof(input: {
     amount: course.priceUsd,
     currency: "USD",
     paymentMethod: input.paymentMethod,
-    transactionReference: ref,
+    receiptUrl: stored.url,
+    receiptStorageKey: stored.storageKey,
+    transactionReference: ref || undefined,
     userNote: input.userNote?.trim() || undefined,
     status: "PENDING",
   });
