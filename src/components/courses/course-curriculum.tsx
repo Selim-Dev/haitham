@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import {
   ChevronDown,
   Lock,
@@ -55,60 +55,85 @@ export function CourseCurriculum({
           )}
         />
       </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden border-t border-[var(--color-border)]"
-          >
-            <ol className="divide-y divide-[var(--color-border)]">
-              {lessons.map((lesson, i) => {
-                const playable = hasAccess || lesson.isPreview;
-                return (
-                  <li
-                    key={lesson.id}
-                    className="flex items-center gap-4 px-6 py-4"
+      {open && (
+        <div className="border-t border-[var(--color-border)]">
+          <ol className="divide-y divide-[var(--color-border)]">
+            {lessons.map((lesson, i) => {
+              // Enrolled users get the full dashboard player; non-enrolled
+              // visitors can still open preview lessons via the public route.
+              // Everything else stays locked.
+              const href = hasAccess
+                ? `/dashboard/lessons/${lesson.id}`
+                : lesson.isPreview
+                  ? `/lessons/${lesson.id}`
+                  : null;
+              const playable = href !== null;
+
+              const body = (
+                <>
+                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-surface text-xs font-bold text-muted">
+                    {toArabicNumerals(i + 1)}
+                  </span>
+                  <span
+                    className={cn(
+                      "grid size-8 shrink-0 place-items-center rounded-full border bg-card",
+                      playable
+                        ? "border-primary/30 text-[var(--color-red-300)]"
+                        : "border-[var(--color-border)] text-muted",
+                    )}
                   >
-                    <span className="grid size-9 shrink-0 place-items-center rounded-full bg-surface text-xs font-bold text-muted">
-                      {toArabicNumerals(i + 1)}
-                    </span>
-                    <span className="grid size-8 shrink-0 place-items-center rounded-full border border-[var(--color-border)] bg-card text-muted">
-                      {playable ? (
-                        <PlayCircle className="size-4 text-[var(--color-red-300)]" />
-                      ) : (
-                        <Lock className="size-3.5" />
-                      )}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-medium text-foreground">
-                        {lesson.title}
+                    {playable ? (
+                      <PlayCircle className="size-4" />
+                    ) : (
+                      <Lock className="size-3.5" />
+                    )}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-medium text-foreground">
+                      {lesson.title}
+                    </p>
+                    {lesson.description && (
+                      <p className="mt-0.5 truncate text-xs text-muted-2">
+                        {lesson.description}
                       </p>
-                      {lesson.description && (
-                        <p className="mt-0.5 truncate text-xs text-muted-2">
-                          {lesson.description}
-                        </p>
-                      )}
+                    )}
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    {lesson.isPreview && (
+                      <Badge variant="primary">
+                        {COPY.courseDetail.preview}
+                      </Badge>
+                    )}
+                    <span className="text-xs text-muted-2">
+                      {formatDuration(lesson.durationSeconds)}
+                    </span>
+                  </div>
+                </>
+              );
+
+              return (
+                <li key={lesson.id}>
+                  {href ? (
+                    <Link
+                      href={href}
+                      className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-elevated"
+                    >
+                      {body}
+                    </Link>
+                  ) : (
+                    <div
+                      className="flex items-center gap-4 px-6 py-4 opacity-80"
+                      title="اشترك في الكورس للوصول لهذا الدرس"
+                    >
+                      {body}
                     </div>
-                    <div className="flex shrink-0 items-center gap-2">
-                      {lesson.isPreview && (
-                        <Badge variant="primary">
-                          {COPY.courseDetail.preview}
-                        </Badge>
-                      )}
-                      <span className="text-xs text-muted-2">
-                        {formatDuration(lesson.durationSeconds)}
-                      </span>
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      )}
     </div>
   );
 }
