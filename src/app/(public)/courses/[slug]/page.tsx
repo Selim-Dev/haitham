@@ -164,7 +164,7 @@ export default async function CourseDetailPage({
               </div>
               <div className="flex items-center gap-2 text-muted">
                 <Clock className="size-4 text-[var(--color-red-300)]" />
-                <span>{formatDuration(totalDuration)}</span>
+                <span>{course.durationLabel ?? formatDuration(totalDuration)}</span>
               </div>
               <div className="flex items-center gap-2 text-muted">
                 <Signal className="size-4 text-[var(--color-red-300)]" />
