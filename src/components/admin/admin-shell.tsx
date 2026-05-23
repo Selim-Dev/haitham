@@ -11,6 +11,7 @@ import {
   GraduationCap,
   ClipboardList,
   ListChecks,
+  Settings as SettingsIcon,
   LogOut,
   Menu,
   X,
@@ -39,6 +40,7 @@ const ADMIN_NAV = [
   },
   { href: "/admin/users", label: COPY.admin.users, icon: Users },
   { href: "/admin/enrollments", label: COPY.admin.enrollments, icon: GraduationCap },
+  { href: "/admin/settings", label: COPY.adminSettings.title, icon: SettingsIcon },
 ];
 
 export function AdminShell({

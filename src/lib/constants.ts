@@ -132,3 +132,23 @@ export const BRAND = {
   TAGLINE_AR: "ادخل عالم التعلم الجاد",
   ACADEMY_AR: "أكاديمية أحمد هيثم",
 } as const;
+
+// Seasonal / occasion themes. Driven by the global Settings document
+// (services/settings.service.ts) and toggled from /admin/settings. Extend
+// this union when you add new themes — every place that branches on theme
+// will pick the new option up automatically via the exhaustive type.
+export const THEMES = {
+  DEFAULT: "DEFAULT",
+  EID_AL_ADHA: "EID_AL_ADHA",
+} as const;
+export type Theme = (typeof THEMES)[keyof typeof THEMES];
+
+export const THEME_AR: Record<Theme, string> = {
+  DEFAULT: "افتراضي",
+  EID_AL_ADHA: "عيد الأضحى",
+};
+
+export const THEME_DESCRIPTION_AR: Record<Theme, string> = {
+  DEFAULT: "المظهر العادي للموقع — بدون زخارف موسمية.",
+  EID_AL_ADHA: "تهنئة بعيد الأضحى مع شارة احتفالية ولمسات ذهبية على الصفحة الرئيسية.",
+};
