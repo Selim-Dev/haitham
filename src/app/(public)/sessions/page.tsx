@@ -394,7 +394,7 @@ function ComparisonTableSection() {
           </p>
         </div>
 
-        <div className="mt-12 overflow-x-auto rounded-2xl border border-[var(--color-border-strong)] bg-card shadow-[var(--shadow-card)]">
+        <div className="mt-12 w-full max-w-full overflow-x-auto rounded-2xl border border-[var(--color-border-strong)] bg-card shadow-[var(--shadow-card)]">
           <table className="w-full min-w-[640px] border-collapse text-sm sm:text-base">
             <thead>
               <tr className="border-b border-[var(--color-border-strong)] bg-elevated">

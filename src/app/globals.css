@@ -152,6 +152,18 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Prevent any rogue wide element from widening the layout viewport on iOS
+   Safari. When a child overflows horizontally past the viewport, Mobile
+   Safari quietly widens its layout viewport to fit the widest element and
+   then scales the whole page down — which looks like "the page is zoomed
+   out" to the user. `overflow-x: clip` blocks that propagation without
+   creating a scroll container, so `position: sticky` on the navbar keeps
+   working (which is why we don't use `overflow-x: hidden` here). */
+html,
+body {
+  overflow-x: clip;
+}
+
 html {
   color-scheme: dark;
   scroll-behavior: smooth;
