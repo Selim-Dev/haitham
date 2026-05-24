@@ -6,6 +6,7 @@ import { Upload, FileText, Image as ImageIcon, X, CheckCircle2 } from "lucide-re
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea, FieldError } from "@/components/ui/input";
+import { CouponField } from "@/components/payment/coupon-field";
 import { COPY } from "@/lib/arabic";
 import { RECEIPT_UPLOAD } from "@/lib/constants";
 import { cn, formatPrice } from "@/lib/utils";
@@ -25,6 +26,7 @@ export function ReceiptUploader({ course }: { course: Course }) {
   const [amount, setAmount] = React.useState<string>(String(course.price));
   const [reference, setReference] = React.useState("");
   const [note, setNote] = React.useState("");
+  const [couponCode, setCouponCode] = React.useState("");
   const [errors, setErrors] = React.useState<Record<string, string>>({});
   const [submitting, setSubmitting] = React.useState(false);
   const [done, setDone] = React.useState(false);
@@ -73,6 +75,7 @@ export function ReceiptUploader({ course }: { course: Course }) {
     fd.set("currency", course.currency);
     if (reference) fd.set("transactionReference", reference);
     if (note) fd.set("userNote", note);
+    if (couponCode) fd.set("couponCode", couponCode);
     if (file) fd.set("file", file);
 
     setSubmitting(true);
@@ -199,6 +202,22 @@ export function ReceiptUploader({ course }: { course: Course }) {
           </label>
           <FieldError message={errors.file} />
         </div>
+
+        <CouponField
+          courseId={course.id}
+          value={couponCode}
+          onChange={setCouponCode}
+          onApplied={(applied) => {
+            // When the server confirms a discount, sync the amount field
+            // so the student sees the expected post-discount total. If they
+            // clear the coupon, snap back to the full course price.
+            if (applied) {
+              setAmount(String(applied.expectedAmount));
+            } else {
+              setAmount(String(course.price));
+            }
+          }}
+        />
 
         <div>
           <Label htmlFor="amount">{COPY.payment.amount}</Label>

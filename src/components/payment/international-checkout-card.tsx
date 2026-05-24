@@ -26,6 +26,7 @@ import {
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea, FieldError } from "@/components/ui/input";
+import { CouponField } from "@/components/payment/coupon-field";
 import { COPY } from "@/lib/arabic";
 import { cn, formatPrice } from "@/lib/utils";
 import {
@@ -104,6 +105,7 @@ export function InternationalCheckoutCard({ course }: { course: Course }) {
   const [method, setMethod] = React.useState<InternationalMethod>("PAYPAL");
   const [reference, setReference] = React.useState("");
   const [note, setNote] = React.useState("");
+  const [couponCode, setCouponCode] = React.useState("");
   const [file, setFile] = React.useState<File | null>(null);
   const [preview, setPreview] = React.useState<string | null>(null);
   const [dragOver, setDragOver] = React.useState(false);
@@ -170,6 +172,7 @@ export function InternationalCheckoutCard({ course }: { course: Course }) {
       const ref = reference.trim();
       if (ref) fd.set("transactionReference", ref);
       if (note.trim()) fd.set("userNote", note.trim());
+      if (couponCode) fd.set("couponCode", couponCode);
       fd.set("file", file);
 
       const res = await fetch("/api/payment-proofs", {
@@ -349,6 +352,12 @@ export function InternationalCheckoutCard({ course }: { course: Course }) {
               ))}
             </div>
           </div>
+
+          <CouponField
+            courseId={course.id}
+            value={couponCode}
+            onChange={setCouponCode}
+          />
 
           <div>
             <Label>

@@ -53,6 +53,7 @@ export async function POST(req: Request) {
         paymentMethod,
         transactionReference: String(form.get("transactionReference") ?? ""),
         userNote: form.get("userNote") ?? undefined,
+        couponCode: form.get("couponCode") ?? undefined,
       };
       const parsed = internationalProofInputSchema.safeParse(fields);
       if (!parsed.success) {
@@ -71,6 +72,7 @@ export async function POST(req: Request) {
         paymentMethod: parsed.data.paymentMethod,
         transactionReference: parsed.data.transactionReference || undefined,
         userNote: parsed.data.userNote || undefined,
+        couponCode: parsed.data.couponCode || undefined,
         file: {
           buffer: intlBuffer,
           filename: intlFile.name,
@@ -96,6 +98,7 @@ export async function POST(req: Request) {
       paymentMethod,
       transactionReference: form.get("transactionReference") ?? undefined,
       userNote: form.get("userNote") ?? undefined,
+      couponCode: form.get("couponCode") ?? undefined,
     };
 
     const parsed = paymentProofInputSchema.safeParse(fields);
@@ -119,6 +122,7 @@ export async function POST(req: Request) {
       paymentMethod: parsed.data.paymentMethod,
       transactionReference: parsed.data.transactionReference || undefined,
       userNote: parsed.data.userNote || undefined,
+      couponCode: parsed.data.couponCode || undefined,
       file: {
         buffer,
         filename: file.name,

@@ -1,6 +1,28 @@
 import mongoose, { Schema, type Model, type Document } from "mongoose";
 import type { PaymentStatus, PaymentMethod } from "@/lib/constants";
 
+// Snapshot of the coupon the student claimed at submission time. Captured
+// once and never mutated — the admin reads this during review, no joins
+// needed (and the original coupon may be deleted / expired / exhausted by
+// the time the admin gets to it).
+export type CouponInvalidReason =
+  | "NOT_FOUND"
+  | "INACTIVE"
+  | "EXPIRED"
+  | "EXHAUSTED"
+  | "NOT_FOR_COURSE";
+
+export interface IAppliedCoupon {
+  code: string;
+  couponId?: mongoose.Types.ObjectId;
+  isValidAtSubmission: boolean;
+  invalidReason?: CouponInvalidReason;
+  type?: "PERCENTAGE" | "FIXED";
+  value?: number;
+  discountAmount: number;
+  expectedAmount: number;
+}
+
 export interface IPaymentProof extends Document {
   _id: mongoose.Types.ObjectId;
   userId: mongoose.Types.ObjectId;
@@ -12,6 +34,7 @@ export interface IPaymentProof extends Document {
   receiptStorageKey?: string;
   transactionReference?: string;
   userNote?: string;
+  appliedCoupon?: IAppliedCoupon;
   status: PaymentStatus;
   adminNote?: string;
   reviewedBy?: mongoose.Types.ObjectId;
@@ -19,6 +42,23 @@ export interface IPaymentProof extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
+
+const AppliedCouponSchema = new Schema<IAppliedCoupon>(
+  {
+    code: { type: String, required: true, trim: true, uppercase: true },
+    couponId: { type: Schema.Types.ObjectId, ref: "Coupon" },
+    isValidAtSubmission: { type: Boolean, required: true },
+    invalidReason: {
+      type: String,
+      enum: ["NOT_FOUND", "INACTIVE", "EXPIRED", "EXHAUSTED", "NOT_FOR_COURSE"],
+    },
+    type: { type: String, enum: ["PERCENTAGE", "FIXED"] },
+    value: { type: Number },
+    discountAmount: { type: Number, required: true, default: 0 },
+    expectedAmount: { type: Number, required: true, default: 0 },
+  },
+  { _id: false },
+);
 
 const PaymentProofSchema = new Schema<IPaymentProof>(
   {
@@ -59,6 +99,7 @@ const PaymentProofSchema = new Schema<IPaymentProof>(
     receiptStorageKey: { type: String },
     transactionReference: { type: String, trim: true },
     userNote: { type: String, trim: true, maxlength: 500 },
+    appliedCoupon: { type: AppliedCouponSchema, default: undefined },
     status: {
       type: String,
       enum: ["PENDING", "APPROVED", "REJECTED"],

@@ -9,11 +9,16 @@ import {
   CreditCard,
   Layers,
   Wallet,
+  TicketPercent,
+  AlertCircle,
+  CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PaymentReviewActions } from "@/components/admin/payment-review-actions";
 import { getAdminPaymentProof } from "@/services/admin-payment.service";
+import { COUPON_INVALID_MESSAGES_AR } from "@/services/coupon.service";
+import type { CouponInvalidReason } from "@/models/PaymentProof";
 import {
   PAYMENT_STATUS_AR,
   PAYMENT_METHOD_AR,
@@ -298,6 +303,13 @@ export default async function AdminPaymentReviewPage({
             )}
           </div>
 
+          {proof.appliedCoupon && (
+            <CouponReviewPanel
+              applied={proof.appliedCoupon}
+              currency={proof.currency}
+            />
+          )}
+
           <div className="rounded-2xl border border-primary/30 bg-card p-5">
             <h3 className="font-display text-base font-bold text-foreground">
               تفاصيل الدفع
@@ -327,6 +339,98 @@ export default async function AdminPaymentReviewPage({
           </div>
         </aside>
       </div>
+    </div>
+  );
+}
+
+function CouponReviewPanel({
+  applied,
+  currency,
+}: {
+  applied: {
+    code: string;
+    isValidAtSubmission: boolean;
+    invalidReason?: CouponInvalidReason;
+    type?: "PERCENTAGE" | "FIXED";
+    value?: number;
+    discountAmount: number;
+    expectedAmount: number;
+  };
+  currency: string;
+}) {
+  // Two flavours: green panel when the snapshot says the coupon was valid
+  // at submission, red panel when it wasn't (so the admin sees the exact
+  // reason and can reject with one click).
+  if (applied.isValidAtSubmission) {
+    return (
+      <div className="rounded-2xl border border-[var(--color-success)]/35 bg-[var(--color-success)]/8 p-5">
+        <header className="flex items-start gap-3">
+          <div className="grid size-9 shrink-0 place-items-center rounded-lg bg-[var(--color-success)]/15 text-[var(--color-success)]">
+            <TicketPercent className="size-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h3 className="font-display text-base font-bold text-foreground">
+              تم تطبيق كوبون خصم
+            </h3>
+            <p className="mt-0.5 flex items-center gap-1.5 text-xs text-muted">
+              <CheckCircle2 className="size-3.5 text-[var(--color-success)]" />
+              صالح عند الإرسال
+            </p>
+          </div>
+        </header>
+        <dl className="mt-4 grid gap-2 text-sm">
+          <Row label="الكود" value={applied.code} dir="ltr" />
+          <Row
+            label="النوع"
+            value={
+              applied.type === "PERCENTAGE"
+                ? `نسبة ${applied.value ?? 0}%`
+                : "مبلغ ثابت"
+            }
+          />
+          <Row
+            label="قيمة الخصم"
+            value={formatPrice(applied.discountAmount, currency)}
+            dir={currency === "USD" ? "ltr" : undefined}
+          />
+          <Row
+            label="السعر المتوقع بعد الخصم"
+            value={formatPrice(applied.expectedAmount, currency)}
+            dir={currency === "USD" ? "ltr" : undefined}
+          />
+        </dl>
+      </div>
+    );
+  }
+
+  const reasonMessage =
+    applied.invalidReason && applied.invalidReason in COUPON_INVALID_MESSAGES_AR
+      ? COUPON_INVALID_MESSAGES_AR[applied.invalidReason]
+      : "الكوبون غير صالح";
+
+  return (
+    <div className="rounded-2xl border border-[var(--color-danger)]/35 bg-[var(--color-danger)]/8 p-5">
+      <header className="flex items-start gap-3">
+        <div className="grid size-9 shrink-0 place-items-center rounded-lg bg-[var(--color-danger)]/15 text-[var(--color-danger)]">
+          <AlertCircle className="size-5" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <h3 className="font-display text-base font-bold text-foreground">
+            كوبون غير صالح
+          </h3>
+          <p className="mt-0.5 text-xs text-muted">
+            استخدم الطالب كودًا لم يمر التحقق وقت الإرسال.
+          </p>
+        </div>
+      </header>
+      <dl className="mt-4 grid gap-2 text-sm">
+        <Row label="الكود المُدخَل" value={applied.code} dir="ltr" />
+        <Row label="السبب" value={reasonMessage} />
+      </dl>
+      <p className="mt-4 rounded-xl border border-[var(--color-danger)]/30 bg-[var(--color-danger)]/10 p-3 text-xs leading-relaxed text-foreground/85">
+        ننصح برفض الإيصال إن كان الطالب اعتمد على هذا الخصم في المبلغ الذي
+        دفعه. تقدر تستخدم رسالة الرفض الجاهزة في قسم المراجعة بالأسفل.
+      </p>
     </div>
   );
 }

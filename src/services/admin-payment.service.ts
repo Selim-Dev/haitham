@@ -5,6 +5,7 @@ import { EnrollmentModel } from "@/models/Enrollment";
 import { CourseModel } from "@/models/Course";
 import { UserModel } from "@/models/User";
 import { AuditLogModel } from "@/models/AuditLog";
+import { consumeCoupon } from "@/services/coupon.service";
 import type { PaymentStatus } from "@/lib/constants";
 
 export async function listAdminPaymentProofs(filter: {
@@ -88,6 +89,17 @@ export async function getAdminPaymentProof(id: string) {
     createdAt: proof.createdAt,
     reviewedAt: proof.reviewedAt,
     adminNote: proof.adminNote,
+    appliedCoupon: proof.appliedCoupon
+      ? {
+          code: proof.appliedCoupon.code,
+          isValidAtSubmission: proof.appliedCoupon.isValidAtSubmission,
+          invalidReason: proof.appliedCoupon.invalidReason,
+          type: proof.appliedCoupon.type,
+          value: proof.appliedCoupon.value,
+          discountAmount: proof.appliedCoupon.discountAmount,
+          expectedAmount: proof.appliedCoupon.expectedAmount,
+        }
+      : null,
     user: user
       ? {
           id: String(user._id),
@@ -145,6 +157,21 @@ export async function approvePaymentProof(input: {
     proof.reviewedAt = new Date();
     if (input.adminNote) proof.adminNote = input.adminNote;
     await proof.save({ session: session ?? undefined });
+
+    // If this proof was submitted with a valid coupon snapshot, increment
+    // the coupon's usedCount. Throws 409 if the coupon was exhausted
+    // between submission and this approval — admin needs to decide what
+    // to do (proof is already saved as APPROVED at that point, so the
+    // failure is observable but doesn't roll back the approval).
+    if (
+      proof.appliedCoupon?.isValidAtSubmission &&
+      proof.appliedCoupon.couponId
+    ) {
+      await consumeCoupon(
+        String(proof.appliedCoupon.couponId),
+        session ?? undefined,
+      );
+    }
 
     await EnrollmentModel.findOneAndUpdate(
       { userId: proof.userId, courseId: proof.courseId },

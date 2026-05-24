@@ -1,10 +1,50 @@
 import { connectDB } from "@/lib/db";
-import { PaymentProofModel } from "@/models/PaymentProof";
+import { PaymentProofModel, type IAppliedCoupon } from "@/models/PaymentProof";
 import { CourseModel } from "@/models/Course";
 import { getStorageProvider } from "@/services/storage/storage.service";
 import { RECEIPT_UPLOAD, type PaymentMethod } from "@/lib/constants";
+import { validateCoupon } from "@/services/coupon.service";
+import mongoose from "mongoose";
 
 const ALLOWED_MIME = new Set<string>(RECEIPT_UPLOAD.ALLOWED_MIME_TYPES);
+
+// Build the snapshot we persist on PaymentProof from a coupon-validation
+// result. Even when the code is invalid we capture the raw code + reason
+// so the admin sees exactly what the student typed during review.
+async function buildCouponSnapshot(
+  rawCode: string | undefined,
+  courseId: string,
+  currency: "EGP" | "USD",
+  baseAmount: number,
+): Promise<IAppliedCoupon | undefined> {
+  const code = (rawCode ?? "").trim().toUpperCase();
+  if (!code) return undefined;
+
+  const result = await validateCoupon({ code, courseId, currency, baseAmount });
+  if (result.valid) {
+    return {
+      code: result.coupon.code,
+      couponId: new mongoose.Types.ObjectId(result.coupon.id),
+      isValidAtSubmission: true,
+      type: result.coupon.type,
+      value: result.coupon.value,
+      discountAmount: result.applied.discountAmount,
+      expectedAmount: result.applied.expectedAmount,
+    };
+  }
+  return {
+    code,
+    couponId: result.coupon
+      ? new mongoose.Types.ObjectId(result.coupon.id)
+      : undefined,
+    isValidAtSubmission: false,
+    invalidReason: result.reason,
+    type: result.coupon?.type,
+    value: result.coupon?.value,
+    discountAmount: 0,
+    expectedAmount: baseAmount,
+  };
+}
 
 export async function createPaymentProof(input: {
   userId: string;
@@ -14,6 +54,7 @@ export async function createPaymentProof(input: {
   paymentMethod?: PaymentMethod;
   transactionReference?: string;
   userNote?: string;
+  couponCode?: string;
   file: { buffer: Buffer; filename: string; mimeType: string; size: number };
 }) {
   await connectDB();
@@ -51,6 +92,13 @@ export async function createPaymentProof(input: {
 
   const method: PaymentMethod = input.paymentMethod ?? "WALLET";
 
+  const appliedCoupon = await buildCouponSnapshot(
+    input.couponCode,
+    input.courseId,
+    "EGP",
+    course.price,
+  );
+
   const proof = await PaymentProofModel.create({
     userId: input.userId,
     courseId: input.courseId,
@@ -61,6 +109,7 @@ export async function createPaymentProof(input: {
     receiptStorageKey: stored.storageKey,
     transactionReference: input.transactionReference?.trim() || undefined,
     userNote: input.userNote?.trim() || undefined,
+    appliedCoupon,
     status: "PENDING",
   });
 
@@ -82,6 +131,7 @@ export async function createInternationalPaymentProof(input: {
   paymentMethod: InternationalMethod;
   transactionReference?: string;
   userNote?: string;
+  couponCode?: string;
   file: { buffer: Buffer; filename: string; mimeType: string; size: number };
 }) {
   await connectDB();
@@ -159,6 +209,13 @@ export async function createInternationalPaymentProof(input: {
     folder: `ahmed-haitham/receipts/${input.userId}`,
   });
 
+  const appliedCoupon = await buildCouponSnapshot(
+    input.couponCode,
+    input.courseId,
+    "USD",
+    course.priceUsd,
+  );
+
   const proof = await PaymentProofModel.create({
     userId: input.userId,
     courseId: input.courseId,
@@ -169,6 +226,7 @@ export async function createInternationalPaymentProof(input: {
     receiptStorageKey: stored.storageKey,
     transactionReference: ref || undefined,
     userNote: input.userNote?.trim() || undefined,
+    appliedCoupon,
     status: "PENDING",
   });
 

@@ -12,6 +12,7 @@ import {
   ClipboardList,
   ListChecks,
   Settings as SettingsIcon,
+  TicketPercent,
   LogOut,
   Menu,
   X,
@@ -40,6 +41,7 @@ const ADMIN_NAV = [
   },
   { href: "/admin/users", label: COPY.admin.users, icon: Users },
   { href: "/admin/enrollments", label: COPY.admin.enrollments, icon: GraduationCap },
+  { href: "/admin/coupons", label: "الكوبونات", icon: TicketPercent },
   { href: "/admin/settings", label: COPY.adminSettings.title, icon: SettingsIcon },
 ];
 
