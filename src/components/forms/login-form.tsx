@@ -64,7 +64,17 @@ export function LoginForm() {
       </div>
 
       <div>
-        <Label htmlFor="password">{COPY.auth.password}</Label>
+        <div className="mb-2 flex items-baseline justify-between gap-3">
+          <Label htmlFor="password" className="mb-0">
+            {COPY.auth.password}
+          </Label>
+          <Link
+            href="/forgot-password"
+            className="text-xs font-semibold text-muted hover:text-[var(--color-red-300)]"
+          >
+            {COPY.auth.forgot}
+          </Link>
+        </div>
         <Input
           id="password"
           type="password"

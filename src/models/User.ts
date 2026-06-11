@@ -24,6 +24,8 @@ export interface IUser extends Document {
   approvalEmailSentAt?: Date;
   rejectionEmailSentAt?: Date;
   sessionVersion: number;
+  passwordResetTokenHash?: string;
+  passwordResetTokenExpiresAt?: Date;
   registrationIp?: string;
   registrationCountry?: string;
   registrationCountryName?: string;
@@ -80,6 +82,11 @@ const UserSchema = new Schema<IUser>(
     // signed with; a mismatch means the cookie was issued before a newer
     // login and is now stale (see getCurrentUser).
     sessionVersion: { type: Number, default: 0, required: true },
+    // Password reset: only the SHA-256 hash of the raw token is stored, so
+    // a DB read alone can't take over an account. Sparse index keeps the
+    // lookup O(log n) when most users have no active token.
+    passwordResetTokenHash: { type: String, index: { sparse: true } },
+    passwordResetTokenExpiresAt: { type: Date },
     registrationIp: { type: String, trim: true, maxlength: 64 },
     registrationCountry: { type: String, trim: true, maxlength: 4, uppercase: true },
     registrationCountryName: { type: String, trim: true, maxlength: 120 },

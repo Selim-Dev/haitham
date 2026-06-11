@@ -1,7 +1,19 @@
+import crypto from "node:crypto";
 import { connectDB } from "@/lib/db";
 import { UserModel } from "@/models/User";
 import { hashPassword, verifyPassword } from "@/lib/password";
 import type { SessionUser } from "@/lib/auth";
+
+// Password reset token shape:
+// - raw token = 32 random bytes hex (64 chars), sent only in the email link
+// - stored = SHA-256 hash of the raw token, so a DB leak alone can't take
+//   over accounts. Constant-time comparison happens implicitly via the
+//   indexed equality query.
+const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
+
+function hashResetToken(raw: string): string {
+  return crypto.createHash("sha256").update(raw).digest("hex");
+}
 
 // Both registerStudent and loginUser now return the SessionUser plus the
 // sessionVersion that should be embedded in the JWT. The cookie-setting code
@@ -125,4 +137,70 @@ export async function loginUser(
     },
     sessionVersion: user.sessionVersion ?? 0,
   };
+}
+
+// Request a password reset. Always silent w.r.t. the caller: returns null
+// when no eligible user matches (no account, or blocked) so the route
+// handler can return an identical success response either way and prevent
+// email enumeration. When an eligible user is found, a fresh raw token is
+// issued, its hash + expiry persisted, and the raw token is handed back to
+// the caller to compose the email link.
+export async function requestPasswordReset(
+  email: string,
+): Promise<{ name: string; email: string; rawToken: string } | null> {
+  await connectDB();
+
+  const user = await UserModel.findOne({
+    email: email.toLowerCase().trim(),
+  }).exec();
+
+  if (!user || user.isBlocked) return null;
+
+  const rawToken = crypto.randomBytes(32).toString("hex");
+  user.passwordResetTokenHash = hashResetToken(rawToken);
+  user.passwordResetTokenExpiresAt = new Date(Date.now() + RESET_TOKEN_TTL_MS);
+  await user.save();
+
+  return { name: user.name, email: user.email, rawToken };
+}
+
+// Consume a reset token and rotate the password. Single-use: the token
+// hash and expiry are cleared atomically with the password update. The
+// sessionVersion bump invalidates every JWT previously issued for this
+// user (see getCurrentUser stale-cookie path).
+export async function resetPassword(
+  rawToken: string,
+  newPassword: string,
+): Promise<void> {
+  await connectDB();
+
+  const tokenHash = hashResetToken(rawToken);
+  const user = await UserModel.findOne({
+    passwordResetTokenHash: tokenHash,
+    passwordResetTokenExpiresAt: { $gt: new Date() },
+  })
+    .select("+passwordHash")
+    .exec();
+
+  if (!user) {
+    const err = new Error("الرابط منتهي أو غير صحيح") as Error & {
+      status?: number;
+    };
+    err.status = 400;
+    throw err;
+  }
+
+  if (user.isBlocked) {
+    const err = new Error("الحساب موقوف. تواصل مع الإدارة.") as Error & {
+      status?: number;
+    };
+    err.status = 403;
+    throw err;
+  }
+
+  user.passwordHash = await hashPassword(newPassword);
+  user.passwordResetTokenHash = undefined;
+  user.passwordResetTokenExpiresAt = undefined;
+  user.sessionVersion = (user.sessionVersion ?? 0) + 1;
+  await user.save();
 }

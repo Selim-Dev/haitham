@@ -45,6 +45,34 @@ export const loginSchema = z.object({
 
 export type LoginInput = z.infer<typeof loginSchema>;
 
+export const forgotPasswordSchema = z.object({
+  email: z
+    .string({ message: "البريد الإلكتروني مطلوب" })
+    .trim()
+    .toLowerCase()
+    .email("البريد الإلكتروني غير صحيح"),
+});
+
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
+
+export const resetPasswordSchema = z
+  .object({
+    token: z
+      .string({ message: "رمز إعادة التعيين مفقود" })
+      .min(32, "رمز إعادة التعيين غير صحيح"),
+    password: z
+      .string({ message: "كلمة المرور مطلوبة" })
+      .min(8, "كلمة المرور يجب ألا تقل عن ٨ أحرف")
+      .max(128, "كلمة المرور طويلة جدًا"),
+    confirmPassword: z.string({ message: "تأكيد كلمة المرور مطلوب" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "كلمتا المرور غير متطابقتين",
+    path: ["confirmPassword"],
+  });
+
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
+
 export const adminCreateUserSchema = z.object({
   name: z
     .string({ message: "الاسم مطلوب" })

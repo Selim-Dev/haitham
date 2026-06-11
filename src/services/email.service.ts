@@ -229,6 +229,129 @@ function rejectionEmailHtml(params: { name: string }): string {
 </html>`;
 }
 
+export async function sendPasswordResetEmail(input: {
+  name: string;
+  email: string;
+  rawToken: string;
+}): Promise<SendResult> {
+  const resend = getClient();
+  if (!resend) {
+    console.warn(
+      "[email] RESEND_API_KEY not set — password reset email not sent for",
+      input.email,
+    );
+    // Make the link visible in dev so a developer running without
+    // RESEND_API_KEY can still complete the flow end-to-end.
+    const devUrl = `${APP_URL}/reset-password?token=${input.rawToken}`;
+    console.warn("[email][dev] password reset URL:", devUrl);
+    return { ok: false, error: "RESEND_API_KEY not configured" };
+  }
+
+  const resetUrl = `${APP_URL}/reset-password?token=${encodeURIComponent(
+    input.rawToken,
+  )}`;
+  const subject = `${COPY.auth.emailResetSubject} — ${COPY.brand.academy}`;
+  const html = passwordResetEmailHtml({ name: input.name, resetUrl });
+  const text = passwordResetEmailText({ name: input.name, resetUrl });
+
+  try {
+    const res = await resend.emails.send({
+      from: EMAIL_FROM,
+      to: input.email,
+      subject,
+      html,
+      text,
+    });
+    if (res.error) {
+      return { ok: false, error: res.error.message };
+    }
+    return { ok: true, id: res.data?.id };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "send failed";
+    return { ok: false, error: message };
+  }
+}
+
+// Password reset template — same calm, transactional shape as the
+// approval/rejection emails. Muted dark chrome, factual heading,
+// one-sentence body, modest text-style CTA, plain fallback URL, and the
+// "ignore if you didn't request this" reassurance every reset email
+// needs. No marketing copy, no gradient hero button, so it stays out of
+// Gmail's Promotions tab.
+function passwordResetEmailHtml(params: { name: string; resetUrl: string }): string {
+  const { name, resetUrl } = params;
+  return `<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>${COPY.auth.emailResetHeading}</title>
+  </head>
+  <body style="margin:0;padding:0;background:#0b0b0f;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Tahoma,Arial,sans-serif;color:#f5f5f7;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#0b0b0f;padding:32px 16px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;background:linear-gradient(180deg,#15151b 0%,#0f0f15 100%);border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;">
+            <tr>
+              <td style="background:linear-gradient(135deg,#1f1f27 0%,#15151b 100%);padding:32px 32px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.06);">
+                <p style="margin:0;font-size:13px;letter-spacing:0.18em;color:#c9c9d4;text-transform:uppercase;">${COPY.brand.academy}</p>
+                <h1 style="margin:14px 0 0;font-size:24px;line-height:1.4;font-weight:800;color:#ffffff;">
+                  ${COPY.auth.emailResetHeading}
+                </h1>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:32px 32px;text-align:right;">
+                <p style="margin:0 0 18px;font-size:16px;line-height:1.85;color:#e6e6ec;font-weight:600;">
+                  مرحبًا ${escapeHtml(name)}،
+                </p>
+                <p style="margin:0 0 16px;font-size:15px;line-height:1.95;color:#c9c9d4;">
+                  ${COPY.auth.emailResetIntro}
+                </p>
+                <p style="margin:24px 0 0;font-size:15px;line-height:1.85;color:#c9c9d4;">
+                  <a href="${resetUrl}" style="color:#85d29a;text-decoration:underline;font-weight:700;">${COPY.auth.emailResetCta}</a>
+                </p>
+                <p style="margin:18px 0 0;font-size:13px;line-height:1.7;color:#8a8a96;">
+                  أو افتح الرابط مباشرة:<br/>
+                  <span dir="ltr" style="color:#c9c9d4;word-break:break-all;">${resetUrl}</span>
+                </p>
+                <p style="margin:24px 0 0;font-size:13px;line-height:1.75;color:#8a8a96;">
+                  ${COPY.auth.emailResetExpiry}
+                </p>
+                <p style="margin:14px 0 0;font-size:13px;line-height:1.75;color:#8a8a96;">
+                  ${COPY.auth.emailResetIgnore}
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:20px 32px 28px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
+                <p style="margin:0;font-size:12px;color:#6c6c7a;">
+                  ${COPY.brand.academy} · ${COPY.brand.tagline}
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`;
+}
+
+function passwordResetEmailText(params: { name: string; resetUrl: string }): string {
+  return `مرحبًا ${params.name}،
+
+${COPY.auth.emailResetIntro}
+
+${COPY.auth.emailResetCta}: ${params.resetUrl}
+
+${COPY.auth.emailResetExpiry}
+
+${COPY.auth.emailResetIgnore}
+
+— ${COPY.brand.academy}`;
+}
+
 function rejectionEmailText(params: { name: string }): string {
   return `مرحبًا ${params.name}،
 
