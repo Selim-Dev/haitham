@@ -112,6 +112,6 @@ export async function upsertWatchProgress(
         completed,
       },
     },
-    { upsert: true, new: true, setDefaultsOnInsert: true },
+    { upsert: true, returnDocument: "after", setDefaultsOnInsert: true },
   );
 }

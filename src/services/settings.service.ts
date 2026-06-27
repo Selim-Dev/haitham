@@ -38,7 +38,7 @@ export async function updateSiteSettings(
   const doc = await SettingsModel.findOneAndUpdate(
     { key: "global" },
     { $set: update, $setOnInsert: { key: "global" } },
-    { upsert: true, new: true, setDefaultsOnInsert: true },
+    { upsert: true, returnDocument: "after", setDefaultsOnInsert: true },
   );
 
   return { activeTheme: doc.activeTheme };

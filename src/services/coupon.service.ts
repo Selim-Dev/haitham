@@ -197,7 +197,7 @@ export async function consumeCoupon(
       $expr: { $lt: ["$usedCount", "$maxUses"] },
     },
     { $inc: { usedCount: 1 } },
-    { new: true, session: session ?? undefined },
+    { returnDocument: "after", session: session ?? undefined },
   );
   if (!updated) {
     throw Object.assign(

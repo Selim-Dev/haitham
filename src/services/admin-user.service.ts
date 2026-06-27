@@ -83,7 +83,7 @@ export async function setUserBlocked(
   const user = await UserModel.findByIdAndUpdate(
     userId,
     { $set: { isBlocked: blocked } },
-    { new: true },
+    { returnDocument: "after" },
   ).lean();
   if (!user) {
     throw Object.assign(new Error("المستخدم غير موجود"), { status: 404 });
@@ -143,7 +143,7 @@ export async function revokeEnrollment(
   const updated = await EnrollmentModel.findByIdAndUpdate(
     enrollmentId,
     { $set: { status: "REVOKED" } },
-    { new: true },
+    { returnDocument: "after" },
   ).lean();
   if (!updated) {
     throw Object.assign(new Error("الاشتراك غير موجود"), { status: 404 });

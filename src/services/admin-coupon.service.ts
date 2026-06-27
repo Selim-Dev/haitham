@@ -148,7 +148,7 @@ export async function updateAdminCoupon(
   const updated = await CouponModel.findByIdAndUpdate(
     id,
     { $set: buildPayload(input) },
-    { new: true },
+    { returnDocument: "after" },
   ).lean();
   if (!updated) {
     throw Object.assign(new Error("الكوبون غير موجود"), { status: 404 });

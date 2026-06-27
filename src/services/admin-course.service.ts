@@ -102,7 +102,7 @@ export async function updateAdminCourse(
   const updated = await CourseModel.findByIdAndUpdate(
     id,
     { $set: { ...input, slug } },
-    { new: true },
+    { returnDocument: "after" },
   ).lean();
   if (!updated) {
     throw Object.assign(new Error("الكورس غير موجود"), { status: 404 });
@@ -182,7 +182,7 @@ export async function updateAdminLesson(
   const updated = await LessonModel.findByIdAndUpdate(
     id,
     { $set: input },
-    { new: true },
+    { returnDocument: "after" },
   ).lean();
   if (!updated) {
     throw Object.assign(new Error("الدرس غير موجود"), { status: 404 });

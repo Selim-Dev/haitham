@@ -184,7 +184,7 @@ export async function approvePaymentProof(input: {
       },
       {
         upsert: true,
-        new: true,
+        returnDocument: "after",
         setDefaultsOnInsert: true,
         session: session ?? undefined,
       },

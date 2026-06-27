@@ -114,7 +114,7 @@ export async function updateQuestion(
   const doc = await ApplicationQuestionModel.findByIdAndUpdate(
     id,
     { $set: update },
-    { new: true },
+    { returnDocument: "after" },
   ).lean();
   if (!doc) {
     throw Object.assign(new Error("السؤال غير موجود"), { status: 404 });
