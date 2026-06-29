@@ -59,18 +59,18 @@ export function PaypalHostedButton({
         onLoad={() => setSdkReady(true)}
         onReady={() => setSdkReady(true)}
       />
-      <div className="rounded-2xl border border-[var(--color-border-strong)] bg-card/80 p-5">
+      <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-5">
         <div className="relative min-h-[52px]">
           {showLoader && (
-            <div className="flex items-center justify-center gap-2 rounded-xl border border-dashed border-[var(--color-border-strong)] bg-surface px-4 py-4 text-sm text-muted">
+            <div className="flex items-center justify-center gap-2 rounded-xl border border-dashed border-neutral-300 bg-white px-4 py-4 text-sm text-neutral-500">
               <Loader2 className="size-4 animate-spin" />
               جاري تحميل زر الدفع الآمن...
             </div>
           )}
           <div id={`paypal-container-${hostedButtonId}`} className="w-full" />
         </div>
-        <p className="mt-3 flex items-center gap-1.5 text-[11px] leading-relaxed text-muted-2">
-          <ShieldCheck className="size-3.5 text-[var(--color-red-300)]" />
+        <p className="mt-3 flex items-center gap-1.5 text-[11px] leading-relaxed text-neutral-500">
+          <ShieldCheck className="size-3.5 text-[#2d8541]" />
           بعد إتمام الدفع يوصلك الكتاب والهدايا على الإيميل أو واتساب أو تليجرام
           خلال دقائق.
         </p>

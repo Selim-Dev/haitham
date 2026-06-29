@@ -16,25 +16,33 @@ export const FEEDBACKS = Array.from({ length: 12 }, (_, i) => ({
 // Renders the masonry grid + click-to-zoom lightbox. The caller is
 // responsible for the section heading / wrapping container so the gallery
 // can drop into any layout (homepage testimonials, sessions page, etc).
-export function FeedbackGallery() {
+export function FeedbackGallery({
+  feedbacks = FEEDBACKS,
+  tone = "dark",
+}: {
+  feedbacks?: readonly { src: string; alt: string }[];
+  // "light" is used by the white offer landing pages; default keeps the dark
+  // frames used on the homepage / sessions page.
+  tone?: "dark" | "light";
+}) {
   const [openIndex, setOpenIndex] = React.useState<number | null>(null);
 
   const close = React.useCallback(() => setOpenIndex(null), []);
   const next = React.useCallback(
     () =>
       setOpenIndex((i) =>
-        i === null ? null : (i + 1) % FEEDBACKS.length,
+        i === null ? null : (i + 1) % feedbacks.length,
       ),
-    [],
+    [feedbacks.length],
   );
   const prev = React.useCallback(
     () =>
       setOpenIndex((i) =>
         i === null
           ? null
-          : (i - 1 + FEEDBACKS.length) % FEEDBACKS.length,
+          : (i - 1 + feedbacks.length) % feedbacks.length,
       ),
-    [],
+    [feedbacks.length],
   );
 
   React.useEffect(() => {
@@ -55,12 +63,13 @@ export function FeedbackGallery() {
   return (
     <>
       <div className="columns-1 gap-4 sm:columns-2 lg:columns-3 xl:columns-4 [&>*]:mb-4">
-        {FEEDBACKS.map((f, i) => (
+        {feedbacks.map((f, i) => (
           <FeedbackCard
             key={f.src}
             src={f.src}
             alt={f.alt}
             index={i}
+            tone={tone}
             onOpen={() => setOpenIndex(i)}
           />
         ))}
@@ -68,10 +77,10 @@ export function FeedbackGallery() {
 
       {openIndex !== null && (
         <Lightbox
-          src={FEEDBACKS[openIndex].src}
-          alt={FEEDBACKS[openIndex].alt}
+          src={feedbacks[openIndex].src}
+          alt={feedbacks[openIndex].alt}
           index={openIndex}
-          total={FEEDBACKS.length}
+          total={feedbacks.length}
           onClose={close}
           onNext={next}
           onPrev={prev}
@@ -85,11 +94,13 @@ function FeedbackCard({
   src,
   alt,
   index,
+  tone,
   onOpen,
 }: {
   src: string;
   alt: string;
   index: number;
+  tone: "dark" | "light";
   onOpen: () => void;
 }) {
   return (
@@ -98,7 +109,10 @@ function FeedbackCard({
       onClick={onOpen}
       aria-label={`عرض ${alt}`}
       className={cn(
-        "group relative block w-full break-inside-avoid overflow-hidden rounded-2xl border border-[var(--color-border)] bg-card shadow-[0_4px_18px_-12px_rgba(0,0,0,0.5)] transition-colors duration-200 hover:border-primary/40",
+        "group relative block w-full break-inside-avoid overflow-hidden rounded-2xl border shadow-[0_4px_18px_-12px_rgba(0,0,0,0.5)] transition-colors duration-200",
+        tone === "light"
+          ? "border-neutral-200 bg-white hover:border-[#4bbc63]/50"
+          : "border-[var(--color-border)] bg-card hover:border-primary/40",
       )}
     >
       <div className="relative w-full">
@@ -120,7 +134,12 @@ function FeedbackCard({
             <ZoomIn className="size-3" />
             عرض كامل
           </span>
-          <span className="rounded-full bg-[var(--color-red-300)]/90 px-2.5 py-1 text-[10px] font-extrabold text-white shadow-md">
+          <span
+            className={cn(
+              "rounded-full px-2.5 py-1 text-[10px] font-extrabold text-white shadow-md",
+              tone === "light" ? "bg-[#1f5d2e]/90" : "bg-[var(--color-red-300)]/90",
+            )}
+          >
             #{toArabicNumerals(index + 1)}
           </span>
         </div>

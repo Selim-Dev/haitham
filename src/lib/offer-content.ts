@@ -143,19 +143,19 @@ export const OFFER = {
     heading: "محتوى العرض الشامل",
     items: [
       {
-        icon: "📚",
+        img: "/booksImages/game-of-tests.webp",
         badge: null as string | null,
         title: "الكتاب الأساسي: لعبة الاختبارات",
         desc: "الخلاصة اللي اتعلمتها في سنين عشان متغلطش غلطاتي. هندسة عكسية لكل موقف ممكن تتحط فيه.",
       },
       {
-        icon: "💬",
+        img: "/booksImages/topics.webp",
         badge: "🎁 بونص",
         title: "الهدية الأولى: فتح المواضيع",
         desc: "+١٥٠ سؤال لفتح مواضيع وبناء الراحة.. هتحكيلك عن أسرار عمرها ما قالتها لحد.",
       },
       {
-        icon: "😄",
+        img: "/booksImages/naksh.webp",
         badge: "🎁 بونص",
         title: "الهدية الثانية: النكش",
         desc: "+٧٠ نكشة لخلق انجذاب قوي جدًا من العدم.. هتخليها تفكر فيك طول الوقت.",

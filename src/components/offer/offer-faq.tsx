@@ -5,9 +5,8 @@ import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
- * Accordion FAQ for the offer pages. Mirrors the homepage FaqSection collapse
- * (CSS grid-template-rows 0fr → 1fr, no layout thrash) but takes its items as
- * a prop so it can be reused with the offer copy.
+ * Accordion FAQ for the offer pages (light theme). CSS grid-template-rows
+ * 0fr → 1fr collapse, no layout thrash.
  */
 export function OfferFaq({
   items,
@@ -24,10 +23,10 @@ export function OfferFaq({
           <div
             key={item.q}
             className={cn(
-              "rounded-2xl border bg-card transition-colors",
+              "rounded-2xl border bg-white transition-colors",
               isOpen
-                ? "border-primary/40 bg-elevated"
-                : "border-[var(--color-border)] hover:border-[var(--color-border-strong)]",
+                ? "border-green-300 bg-green-50/50"
+                : "border-neutral-200 hover:border-neutral-300",
             )}
           >
             <button
@@ -36,14 +35,14 @@ export function OfferFaq({
               aria-expanded={isOpen}
               className="flex w-full items-center justify-between gap-4 px-5 py-4 text-start"
             >
-              <span className="font-display text-base font-bold text-foreground sm:text-lg">
+              <span className="font-display text-base font-bold text-neutral-900 sm:text-lg">
                 {item.q}
               </span>
               <span
                 aria-hidden="true"
                 className={cn(
-                  "grid size-9 shrink-0 place-items-center rounded-full border border-[var(--color-border-strong)] bg-surface transition-transform duration-300",
-                  isOpen && "rotate-45 border-primary/40 text-primary",
+                  "grid size-9 shrink-0 place-items-center rounded-full border border-neutral-300 bg-neutral-50 text-neutral-500 transition-transform duration-300",
+                  isOpen && "rotate-45 border-green-400 bg-green-50 text-[#2d8541]",
                 )}
               >
                 <Plus className="size-4" />
@@ -56,7 +55,7 @@ export function OfferFaq({
               )}
             >
               <div className="min-h-0">
-                <p className="px-5 pb-5 text-sm leading-relaxed text-muted">
+                <p className="px-5 pb-5 text-sm leading-relaxed text-neutral-600">
                   {item.a}
                 </p>
               </div>

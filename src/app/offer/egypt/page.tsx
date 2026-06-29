@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { MessageCircle } from "lucide-react";
 import { BundleOffer } from "@/components/offer/bundle-offer";
-import { PaymentMethodsCard } from "@/components/payment/payment-methods-card";
+import { OfferEgyptPayment } from "@/components/offer/offer-egypt-payment";
 import type { OfferPricing } from "@/lib/offer-content";
 
 export const metadata: Metadata = {
@@ -31,12 +31,12 @@ export default function OfferEgyptPage() {
       pricing={pricing}
       checkout={
         <div className="flex flex-col gap-5">
-          <PaymentMethodsCard />
+          <OfferEgyptPayment />
           <a
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-l from-[#25d366] to-[#128c4b] px-5 py-4 text-center font-display text-sm font-bold text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25d366]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:text-base"
+            className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-l from-[#128c4b] to-[#0b6b39] px-5 py-4 text-center font-display text-sm font-bold text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#128c4b]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:text-base"
           >
             <MessageCircle className="size-5 shrink-0" />
             بعد التحويل ابعت صورة الإيصال على واتساب وهيوصلك الكتاب فورًا

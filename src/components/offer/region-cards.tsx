@@ -29,12 +29,12 @@ const CARDS: RegionCard[] = [
     title: "أنا من مصر",
     methods: "فودافون كاش • انستاباي • تحويل حساب بنكي",
     cta: "اشتري من مصر",
-    ring: "border-primary/30 hover:border-primary/70",
-    glow: "hover:shadow-[0_30px_80px_-24px_rgba(75,188,99,0.55)]",
-    titleColor: "text-[var(--color-red-300)]",
+    ring: "border-green-200 hover:border-[#4bbc63]/70",
+    glow: "hover:shadow-[0_30px_80px_-28px_rgba(45,133,65,0.45)]",
+    titleColor: "text-[#2d8541]",
     button:
-      "bg-gradient-to-l from-primary to-[var(--color-red-700)] text-primary-foreground shadow-[0_10px_30px_-8px_rgba(75,188,99,0.55)]",
-    sweep: "via-primary/10",
+      "bg-gradient-to-l from-[#3aa551] to-[#1f5d2e] text-white shadow-[0_10px_28px_-10px_rgba(45,133,65,0.55)]",
+    sweep: "via-[#4bbc63]/10",
   },
   {
     variant: "international",
@@ -43,11 +43,11 @@ const CARDS: RegionCard[] = [
     title: "أنا من خارج مصر",
     methods: "PayPal • STC Pay • برق • انجاز • تحويل بنكي • Crypto",
     cta: "اشتري من خارج مصر",
-    ring: "border-violet-500/30 hover:border-violet-400/70",
-    glow: "hover:shadow-[0_30px_80px_-24px_rgba(139,92,246,0.5)]",
-    titleColor: "text-violet-300",
+    ring: "border-violet-200 hover:border-violet-400",
+    glow: "hover:shadow-[0_30px_80px_-28px_rgba(124,77,255,0.4)]",
+    titleColor: "text-violet-700",
     button:
-      "bg-gradient-to-l from-violet-500 to-indigo-600 text-white shadow-[0_10px_30px_-8px_rgba(124,77,255,0.55)]",
+      "bg-gradient-to-l from-violet-600 to-indigo-700 text-white shadow-[0_10px_28px_-10px_rgba(124,77,255,0.5)]",
     sweep: "via-violet-400/10",
   },
 ];
@@ -64,8 +64,8 @@ export function RegionCards({
           key={card.variant}
           href={card.href}
           className={cn(
-            "group relative flex flex-col items-center overflow-hidden rounded-3xl border bg-gradient-to-br from-card via-card to-elevated p-8 text-center shadow-[var(--shadow-card)] transition-all duration-300 ease-[var(--ease-out-expo)]",
-            "hover:-translate-y-2 focus-visible:-translate-y-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+            "group relative flex flex-col items-center overflow-hidden rounded-3xl border bg-white p-8 text-center shadow-sm transition-all duration-300 ease-[var(--ease-out-expo)]",
+            "hover:-translate-y-2 focus-visible:-translate-y-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4bbc63]/50",
             card.ring,
             card.glow,
           )}
@@ -80,7 +80,7 @@ export function RegionCards({
           />
 
           {recommended === card.variant && (
-            <span className="absolute end-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/15 px-3 py-1 text-[11px] font-bold text-[var(--color-red-300)]">
+            <span className="absolute end-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-green-200 bg-green-50 px-3 py-1 text-[11px] font-bold text-[#2d8541]">
               <Sparkles className="size-3" />
               الأنسب لك
             </span>
@@ -88,7 +88,7 @@ export function RegionCards({
 
           <span
             aria-hidden="true"
-            className="mb-5 grid size-20 place-items-center rounded-2xl border border-[var(--color-border-strong)] bg-surface text-5xl shadow-inner transition-transform duration-300 group-hover:-translate-y-1"
+            className="mb-5 grid size-20 place-items-center rounded-2xl border border-neutral-200 bg-neutral-50 text-5xl shadow-inner transition-transform duration-300 group-hover:-translate-y-1"
           >
             {card.flag}
           </span>
@@ -102,7 +102,7 @@ export function RegionCards({
             {card.title}
           </h2>
 
-          <p className="mt-2 min-h-[3rem] max-w-[18rem] text-sm leading-relaxed text-muted">
+          <p className="mt-2 min-h-[3rem] max-w-[18rem] text-sm leading-relaxed text-neutral-600">
             {card.methods}
           </p>
 

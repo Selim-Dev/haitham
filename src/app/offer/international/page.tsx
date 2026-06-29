@@ -33,9 +33,9 @@ export default function OfferInternationalPage() {
           <PaypalHostedButton hostedButtonId={PAYPAL_HOSTED_BUTTON_ID} />
           <Link
             href="/contact"
-            className="flex items-center justify-center gap-2 rounded-2xl border border-[var(--color-border-strong)] bg-card px-5 py-4 text-center text-sm font-bold text-foreground transition-colors hover:border-primary/40 hover:bg-elevated"
+            className="flex items-center justify-center gap-2 rounded-2xl border border-neutral-200 bg-white px-5 py-4 text-center text-sm font-bold text-neutral-700 transition-colors hover:border-[#4bbc63]/40 hover:bg-neutral-50"
           >
-            <Wallet className="size-4 shrink-0 text-[var(--color-red-300)]" />
+            <Wallet className="size-4 shrink-0 text-[#2d8541]" />
             طرق تحويل أخرى (STC Pay • برق • انجاز • تحويل بنكي • Crypto)
           </Link>
         </div>

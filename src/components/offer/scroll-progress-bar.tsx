@@ -36,7 +36,7 @@ export function ScrollProgressBar() {
       className="pointer-events-none fixed inset-x-0 top-0 z-[60] h-[3px]"
     >
       <div
-        className="h-full origin-right bg-gradient-to-l from-[var(--color-red-300)] via-primary to-[var(--color-red-700)] transition-transform duration-150 ease-out"
+        className="h-full origin-right bg-gradient-to-l from-[#4bbc63] via-[#3aa551] to-[#1f5d2e] transition-transform duration-150 ease-out"
         style={{ transform: `scaleX(${progress})` }}
       />
     </div>
