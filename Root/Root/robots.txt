@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /thank-you
+Disallow: /bundle-offer-egypt
+Disallow: /region-select
+
+Sitemap: https://ahaitham74.netlify.app/sitemap.xml

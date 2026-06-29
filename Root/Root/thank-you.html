@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <title>شكراً لشرائك! - أحمد هيثم</title>
+    <meta name="description" content="تم استلام طلبك بنجاح">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            direction: rtl;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background-attachment: fixed;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            /* Safe area insets for iPhone notch/Dynamic Island */
+            padding: max(1.25rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1.25rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+            color: #fff;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Wrapper to allow natural scroll on small screens */
+        .page-wrapper {
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 1rem 0;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.06);
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 1.75rem 1.5rem;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* ── Success header ── */
+        .check-icon {
+            width: 60px;
+            height: 60px;
+            background: #27ae60;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.75rem;
+            box-shadow: 0 4px 20px rgba(39,174,96,0.4);
+            /* Prevent emoji rendering issues on iOS */
+            line-height: 1;
+        }
+
+        h1 {
+            font-size: clamp(1.3rem, 5vw, 1.6rem);
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            line-height: 1.3;
+        }
+
+        .subtitle {
+            font-size: clamp(0.85rem, 3.5vw, 0.95rem);
+            opacity: 0.75;
+            margin-bottom: 1.25rem;
+            line-height: 1.5;
+        }
+
+        /* ── Divider ── */
+        .divider {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin: 1.1rem 0;
+        }
+
+        /* ── Info box ── */
+        .info-box {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 0.9rem 1rem;
+            margin-bottom: 0.75rem;
+            text-align: right;
+        }
+        .info-box h2 {
+            font-size: clamp(0.85rem, 3.5vw, 0.95rem);
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+        .info-box p {
+            font-size: clamp(0.8rem, 3.2vw, 0.88rem);
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* ── Warning box ── */
+        .warn-box {
+            background: rgba(231,76,60,0.15);
+            border: 1px solid rgba(231,76,60,0.35);
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            margin-bottom: 0.75rem;
+            text-align: right;
+        }
+        .warn-box h3 {
+            font-size: clamp(0.82rem, 3.2vw, 0.9rem);
+            font-weight: 700;
+            color: #ff8a80;
+            margin-bottom: 0.3rem;
+        }
+        .warn-box p {
+            font-size: clamp(0.78rem, 3vw, 0.85rem);
+            opacity: 0.85;
+            line-height: 1.6;
+        }
+
+        /* ── Steps ── */
+        .steps { text-align: right; margin-bottom: 0.75rem; }
+        .steps h3 {
+            font-size: clamp(0.82rem, 3.2vw, 0.9rem);
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            opacity: 0.9;
+        }
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.55rem;
+            margin-bottom: 0.45rem;
+        }
+        .step-num {
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-top: 1px;
+            flex-shrink: 0;
+        }
+        .step p {
+            font-size: clamp(0.78rem, 3vw, 0.83rem);
+            line-height: 1.55;
+            opacity: 0.85;
+        }
+
+        /* ── Upsell ── */
+        .upsell {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 14px;
+            padding: 1rem 1.1rem;
+            margin-bottom: 0.9rem;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(231,76,60,0.85);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.65rem;
+            border-radius: 50px;
+            margin-bottom: 0.55rem;
+        }
+        .upsell h2 {
+            font-size: clamp(0.9rem, 3.8vw, 1rem);
+            font-weight: 700;
+            margin-bottom: 0.45rem;
+            line-height: 1.4;
+        }
+        .benefits {
+            list-style: none;
+            margin: 0.4rem 0 0.8rem;
+            text-align: right;
+        }
+        .benefits li {
+            font-size: clamp(0.78rem, 3vw, 0.83rem);
+            opacity: 0.85;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.4rem;
+            line-height: 1.45;
+        }
+        .benefits li::before {
+            content: "✓";
+            color: #2ecc71;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            line-height: 1.45;
+        }
+
+        /* ── Buttons — minimum 44px touch target for iOS HIG ── */
+        .btn-upsell {
+            display: block;
+            width: 100%;
+            min-height: 48px;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: clamp(0.85rem, 3.5vw, 0.9rem);
+            font-weight: 700;
+            line-height: 1.3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.18s ease, transform 0.18s ease;
+        }
+        .btn-upsell:active { opacity: 0.85; transform: scale(0.98); }
+
+        .upsell-note {
+            font-size: clamp(0.72rem, 2.8vw, 0.78rem);
+            opacity: 0.55;
+            margin-top: 0.5rem;
+        }
+
+        /* ── WhatsApp button ── */
+        .btn-whatsapp {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
+            width: 100%;
+            min-height: 48px;
+            padding: 0.8rem 1.5rem;
+            background: #25d366;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: clamp(0.85rem, 3.5vw, 0.9rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.18s ease, transform 0.18s ease;
+        }
+        .btn-whatsapp:active { opacity: 0.85; transform: scale(0.98); }
+        .btn-whatsapp svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .support-note {
+            font-size: clamp(0.72rem, 2.8vw, 0.78rem);
+            opacity: 0.5;
+            margin-top: 0.25rem;
+            line-height: 1.5;
+        }
+
+        .footer {
+            margin-top: 1.1rem;
+            font-size: clamp(0.72rem, 2.8vw, 0.8rem);
+            opacity: 0.5;
+        }
+
+        /* ── iPhone SE / small screens (320px) ── */
+        @media (max-width: 360px) {
+            body { padding: 0.75rem; }
+            .card { padding: 1.25rem 1rem; border-radius: 16px; }
+        }
+
+        /* ── Tall iPhones — center vertically if content fits ── */
+        @media (min-height: 750px) {
+            body { align-items: center; }
+        }
+
+        /* ── Reduce motion ── */
+        @media (prefers-reduced-motion: reduce) {
+            .btn-upsell, .btn-whatsapp { transition: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="card">
+
+            <div class="check-icon">✅</div>
+            <h1>🎉 تم الشراء بنجاح!</h1>
+            <p class="subtitle">مبروك — أنت على أول خطوة نحو تغيير حياتك للأفضل</p>
+
+            <hr class="divider">
+
+            <div class="info-box">
+                <h2>📧 الكتاب في طريقه إليك</h2>
+                <p><strong>هيوصلك على إيميلك أو الوسيلة المختارة خلال 24 ساعة.</strong><br>تأكد إنك فاتح الإيميل وجاهز للاستقبال!</p>
+            </div>
+
+            <div class="warn-box">
+                <h3>⚠️ مهم جداً — اقرأ ده!</h3>
+                <p>أغلب العملاء بيلاقوا الكتاب في الـ <strong>Spam</strong> مش في الـ Inbox.<br>
+                لو مش موجود في Inbox، روح على Spam فوراً 📩 واضغط "ليس رسالة مزعجة".</p>
+            </div>
+
+            <div class="steps">
+                <h3>⚡ خطوات ضمان وصول الكتاب:</h3>
+                <div class="step"><div class="step-num">1</div><p>افتح البريد الإلكتروني اللي اشتريت بيه</p></div>
+                <div class="step"><div class="step-num">2</div><p>افحص الـ <strong>Inbox</strong> أول حاجة</p></div>
+                <div class="step"><div class="step-num">3</div><p>لو مش موجود، روح على <strong>Spam / Junk</strong></p></div>
+                <div class="step"><div class="step-num">4</div><p>اضغط "ليس رسالة مزعجة" علشان الرسائل الجاية توصل في Inbox</p></div>
+            </div>
+
+            <hr class="divider">
+
+            <div class="upsell">
+                <span class="badge">🔥 عرض خاص ليك بس</span>
+                <h2>عايز نتائج أسرع؟<br>احجز جلسة استشارية خاصة معايا</h2>
+                <ul class="benefits">
+                    <li>تحليل شخصي لحالتك وعلاقاتك</li>
+                    <li>حلول عملية مباشرة لمشاكلك الحقيقية</li>
+                    <li>مكالمة خاصة — صوت أو فيديو حسب اختيارك</li>
+                    <li>نتائج حقيقية من أول جلسة</li>
+                </ul>
+                <a href="sessions" class="btn-upsell">اطلع على الجلسات الاستشارية 🗓️</a>
+                <p class="upsell-note">المقاعد محدودة — احجز دلوقتي قبل ما تمتلئ</p>
+            </div>
+
+            <a href="https://wa.me/201515717713?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A7%D8%B4%D8%AA%D8%B1%D9%8A%D8%AA%20%D8%A7%D9%84%D9%83%D8%AA%D8%A7%D8%A8%20%D9%88%D9%85%D8%AD%D8%AA%D8%A7%D8%AC%20%D9%85%D8%B3%D8%A7%D8%B9%D8%AF%D8%A9" target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+                <svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.832 4.584 2.22 6.346L4.5 28.5l7.338-1.7A11.94 11.94 0 0 0 16 27c6.627 0 12-5.373 12-12S22.627 3 16 3Zm0 2c5.523 0 10 4.477 10 10s-4.477 10-10 10c-1.83 0-3.54-.49-5.01-1.35l-.36-.21-3.73.865.892-3.64-.23-.37A9.956 9.956 0 0 1 6 15c0-5.523 4.477-10 10-10Zm-3.5 5.5a1 1 0 0 0-.75.375l-.375.375C10.625 12 10 13 10 14.5c0 1.625 1.125 3.125 1.25 3.375.125.25 2 3.25 4.875 4.5C18 23.5 18 23 18.875 22.875c.875-.125 2-.875 2.25-1.625.25-.75.25-1.375.125-1.5-.125-.125-.375-.25-.875-.5-.5-.25-2.625-1.375-3-1.5-.375-.125-.75 0-1.125.375l-.75.875C15.25 19.375 15 19.5 14.625 19.25c-.375-.25-1.625-.625-3.125-2a11.6 11.6 0 0 1-2.125-2.75c-.25-.5-.125-.75.125-1l.625-.75c.25-.25.25-.75.125-1L9.5 9.75C9.25 9.25 9 9 8.5 8.5Z"/>
+                </svg>
+                تواصل معانا عبر واتساب
+            </a>
+            <p class="support-note">لو بياناتك غلط أو الكتاب ما وصلش بعد 24 ساعة — ابعت لينا هنا مباشرةً</p>
+
+            <p class="footer">شكراً لثقتك في أحمد هيثم ❤️</p>
+        </div>
+    </div>
+</body>
+</html>
