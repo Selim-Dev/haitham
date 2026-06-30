@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Wallet } from "lucide-react";
 import { BundleOffer } from "@/components/offer/bundle-offer";
 import { PaypalHostedButton } from "@/components/offer/paypal-hosted-button";
 import type { OfferPricing } from "@/lib/offer-content";
@@ -8,11 +6,12 @@ import type { OfferPricing } from "@/lib/offer-content";
 export const metadata: Metadata = {
   title: "Game of Tests Bundle Offer — International",
   description:
-    "Get the complete لعبة الاختبارات bundle (3 books) for $17. Pay securely with PayPal, or reach out for STC Pay, Barq, bank transfer & crypto.",
+    "Get the complete لعبة الاختبارات bundle (3 books) for $17. Pay securely with PayPal, or via STC Pay, Barq, bank transfer & crypto.",
 };
 
-// Hosted button id from the source international sales page.
+// Hosted button id + alternative-methods order form from the source page.
 const PAYPAL_HOSTED_BUTTON_ID = "KZXLAWVMTU4MY";
+const TALLY_URL = "https://tally.so/r/ZjEKja";
 
 const pricing: OfferPricing = {
   variant: "international",
@@ -31,13 +30,17 @@ export default function OfferInternationalPage() {
       checkout={
         <div className="flex flex-col gap-4">
           <PaypalHostedButton hostedButtonId={PAYPAL_HOSTED_BUTTON_ID} />
-          <Link
-            href="/contact"
-            className="flex items-center justify-center gap-2 rounded-2xl border border-neutral-200 bg-white px-5 py-4 text-center text-sm font-bold text-neutral-700 transition-colors hover:border-[#4bbc63]/40 hover:bg-neutral-50"
+          <a
+            href={TALLY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex w-full flex-col items-center justify-center gap-0.5 rounded-2xl bg-gradient-to-l from-[#0f9d57] to-[#0a5c34] px-6 py-3.5 text-center font-display text-sm font-bold text-white shadow-[0_14px_34px_-12px_rgba(10,92,52,0.6)] transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f9d57]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
-            <Wallet className="size-4 shrink-0 text-[#2d8541]" />
-            طرق تحويل أخرى (STC Pay • برق • انجاز • تحويل بنكي • Crypto)
-          </Link>
+            <span>📱 طرق تحويل أخرى</span>
+            <span className="text-xs font-semibold text-white/90">
+              (STC Pay • برق • انجاز • تحويل بنكي • Crypto)
+            </span>
+          </a>
         </div>
       }
     />

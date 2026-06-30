@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { MessageCircle } from "lucide-react";
 import { BundleOffer } from "@/components/offer/bundle-offer";
-import { OfferEgyptPayment } from "@/components/offer/offer-egypt-payment";
 import type { OfferPricing } from "@/lib/offer-content";
 
 export const metadata: Metadata = {
@@ -10,8 +8,9 @@ export const metadata: Metadata = {
     "احصل على باقة لعبة الاختبارات الكاملة (٣ كتب) بـ ٣٥٠ جنيه. الدفع عبر فودافون كاش، انستاباي، أو تحويل بنكي.",
 };
 
-// Receipts come in over WhatsApp — same number as the contact page.
-const WHATSAPP_URL = "https://wa.me/201515717713";
+// Egypt checkout collects payment through the Tally order form (Vodafone Cash,
+// Instapay, bank transfer) — same as the source sales page.
+const TALLY_URL = "https://tally.so/r/eqDaOo";
 
 const pricing: OfferPricing = {
   variant: "egypt",
@@ -30,18 +29,14 @@ export default function OfferEgyptPage() {
     <BundleOffer
       pricing={pricing}
       checkout={
-        <div className="flex flex-col gap-5">
-          <OfferEgyptPayment />
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-l from-[#128c4b] to-[#0b6b39] px-5 py-4 text-center font-display text-sm font-bold text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#128c4b]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:text-base"
-          >
-            <MessageCircle className="size-5 shrink-0" />
-            بعد التحويل ابعت صورة الإيصال على واتساب وهيوصلك الكتاب فورًا
-          </a>
-        </div>
+        <a
+          href={TALLY_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-l from-[#3aa551] to-[#1f5d2e] px-6 py-4 text-center font-display text-base font-bold text-white shadow-[0_14px_34px_-12px_rgba(31,93,46,0.6)] transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d8541]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+        >
+          💳 اشتري دلوقتي (فودافون كاش، انستاباي، تحويل بنكي) 🚀
+        </a>
       }
     />
   );
