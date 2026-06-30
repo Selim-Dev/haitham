@@ -1,9 +1,9 @@
 import type { Viewport } from "next";
 
-// Same standalone white landing shell as /offer: no site navbar/footer, light
-// theme + white mobile browser chrome.
+// Standalone landing shell: no site navbar/footer. The thank-you page opens on
+// a dark header/hero, so the mobile browser chrome is dark to match.
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#0A0A0A",
 };
 
 export default function TestGameLayout({
